@@ -768,8 +768,12 @@ export default function CafeApp() {
         const data = await res.json();
         setSettings(data);
         toast({ title: '✅ تم الحفظ', description: 'تم تحديث الإعدادات' });
+      } else {
+        const errorData = await res.json();
+        toast({ title: '❌ خطأ', description: errorData.error || 'فشل في حفظ الإعدادات', variant: 'destructive' });
       }
-    } catch {
+    } catch (error) {
+      console.error('Save settings error:', error);
       toast({ title: '❌ خطأ', description: 'فشل في حفظ الإعدادات', variant: 'destructive' });
     }
   };
