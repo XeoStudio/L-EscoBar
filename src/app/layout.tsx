@@ -29,7 +29,8 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        style={{ background: 'var(--background)', color: 'var(--text-primary)' }}
       >
         <QueryProvider>
           {children}
