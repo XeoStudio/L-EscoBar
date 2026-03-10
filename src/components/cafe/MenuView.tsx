@@ -3155,7 +3155,7 @@ export default function CafeApp() {
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <div className="dialog-body">
+            <div className="dialog-body" style={{ paddingBottom: '8px' }}>
               {/* Table Selection */}
               <div className="order-confirm-section">
                 <div className="order-confirm-section-header">
@@ -3223,17 +3223,17 @@ export default function CafeApp() {
                     </div>
                   ))}
                 </div>
-              </div>
 
-              {/* Total */}
-              <div className="order-total-card">
-                <span className="order-total-label">المجموع</span>
-                <span className="order-total-value">{getOrderTotal().toFixed(2)} {currency}</span>
+                {/* Total - moved inside order summary */}
+                <div className="order-total-card">
+                  <span className="order-total-label">المجموع</span>
+                  <span className="order-total-value">{getOrderTotal().toFixed(2)} {currency}</span>
+                </div>
               </div>
             </div>
-            {/* Footer with separated buttons */}
+            
+            {/* Fixed Footer with buttons */}
             <div className="order-confirm-actions">
-              {/* Confirm Button - Top */}
               <button
                 className="order-confirm-btn"
                 onClick={submitOrder}
@@ -3241,26 +3241,21 @@ export default function CafeApp() {
               >
                 {isSubmitting ? (
                   <>
-                    <RefreshCw className="w-6 h-6 animate-spin" />
+                    <RefreshCw className="w-5 h-5 animate-spin" />
                     <span>جاري الإرسال...</span>
                   </>
                 ) : (
                   <>
-                    <Check className="w-6 h-6" />
+                    <Check className="w-5 h-5" />
                     <span>تأكيد الطلب</span>
                   </>
                 )}
               </button>
-              
-              {/* Spacer */}
-              <div className="order-btn-spacer"></div>
-              
-              {/* Cancel Button - Bottom */}
               <button
                 className="order-cancel-btn"
                 onClick={() => setShowOrderDialog(false)}
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
                 <span>إلغاء</span>
               </button>
             </div>

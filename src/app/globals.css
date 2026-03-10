@@ -940,39 +940,44 @@ body {
   right: 0;
   background: var(--surface);
   border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-  max-height: 92vh;
+  max-height: 85vh;
   overflow: hidden;
   z-index: var(--z-modal);
   padding-bottom: var(--safe-area-bottom);
   animation: slideUp 0.3s ease;
   box-shadow: 0 -8px 40px rgba(61, 35, 20, 0.2);
+  display: flex;
+  flex-direction: column;
 }
 
 .dialog-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 20px;
+  padding: 14px 18px;
   border-bottom: 1px solid var(--border);
   background: var(--surface-raised);
+  flex-shrink: 0;
 }
 
 .dialog-title {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   color: var(--text-primary);
 }
 
 .dialog-body {
-  padding: 20px;
+  padding: 16px;
   overflow-y: auto;
-  max-height: calc(92vh - 160px);
+  flex: 1;
+  min-height: 0;
 }
 
 .dialog-footer {
-  padding: 18px 20px;
+  padding: 14px 18px;
   border-top: 1px solid var(--border);
   background: var(--surface-raised);
+  flex-shrink: 0;
 }
 
 .dialog-handle {
@@ -980,7 +985,8 @@ body {
   height: 4px;
   background: var(--border);
   border-radius: var(--radius-full);
-  margin: 10px auto;
+  margin: 8px auto;
+  flex-shrink: 0;
 }
 
 @media (min-width: 640px) {
@@ -3363,8 +3369,8 @@ body {
    ============================================ */
 
 .order-confirm-section {
-  margin-bottom: 20px;
-  padding: 16px;
+  margin-bottom: 14px;
+  padding: 12px;
   background: var(--surface-raised);
   border-radius: var(--radius-md);
   border: 1px solid var(--border);
@@ -3373,12 +3379,12 @@ body {
 .order-confirm-section-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 14px;
+  gap: 8px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 14px;
-  padding-bottom: 10px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
   border-bottom: 1px solid var(--border);
 }
 
@@ -3391,30 +3397,31 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 24px;
-  gap: 8px;
+  padding: 16px;
+  gap: 6px;
   color: var(--error);
   text-align: center;
+  font-size: 14px;
 }
 
 .order-items-count {
   margin-right: auto;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-muted);
   background: var(--primary-light);
-  padding: 4px 10px;
+  padding: 3px 8px;
   border-radius: var(--radius-full);
 }
 
 .order-tables-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
 }
 
 @media (min-width: 480px) {
   .order-tables-grid {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(6, 1fr);
   }
 }
 
@@ -3424,15 +3431,14 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 700;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   background: var(--surface);
   border: 2px solid var(--border);
   color: var(--text-primary);
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: var(--shadow-sm);
 }
 
 .order-table-btn:hover:not(:disabled) {
@@ -3444,7 +3450,7 @@ body {
   background: var(--gradient-primary);
   border-color: transparent;
   color: white;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-sm);
 }
 
 .order-table-btn.occupied {
@@ -3452,7 +3458,8 @@ body {
   border-color: var(--error);
   color: var(--error);
   cursor: not-allowed;
-  opacity: 0.8;
+  opacity: 0.7;
+  font-size: 14px;
 }
 
 .order-table-btn:disabled {
@@ -3462,13 +3469,15 @@ body {
 .order-items-list {
   display: flex;
   flex-direction: column;
+  max-height: 150px;
+  overflow-y: auto;
 }
 
 .order-item-row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 0;
+  gap: 8px;
+  padding: 8px 0;
   border-bottom: 1px solid var(--border);
 }
 
@@ -3483,29 +3492,29 @@ body {
 
 .order-item-name {
   display: block;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-primary);
 }
 
 .order-item-price {
   display: block;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--primary);
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
 .order-item-qty {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-secondary);
 }
 
 .order-item-total {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--text-primary);
-  min-width: 60px;
+  min-width: 50px;
   text-align: left;
 }
 
@@ -3513,42 +3522,45 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px;
+  padding: 14px 16px;
   background: var(--gradient-primary);
   border-radius: var(--radius-md);
-  margin-top: 8px;
+  margin-top: 4px;
 }
 
 .order-total-label {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.9);
 }
 
 .order-total-value {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 800;
   color: white;
 }
 
 .order-confirm-actions {
-  padding: 16px 20px;
-  background: var(--surface-raised);
-  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 10px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border-top: 2px solid var(--border);
+  flex-shrink: 0;
 }
 
 .order-confirm-btn {
-  width: 100%;
-  min-height: 56px;
+  flex: 2;
+  min-height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
   background: var(--gradient-primary);
   color: white;
   border: none;
   border-radius: var(--radius-md);
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -3570,22 +3582,18 @@ body {
   transform: none;
 }
 
-.order-btn-spacer {
-  height: 12px;
-}
-
 .order-cancel-btn {
-  width: 100%;
-  min-height: 48px;
+  flex: 1;
+  min-height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
   background: var(--surface);
   color: var(--text-secondary);
   border: 2px solid var(--border);
   border-radius: var(--radius-md);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
