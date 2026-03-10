@@ -2,6 +2,17 @@ export interface Settings {
   id: string;
   cafeName: string;
   currency: string;
+  logo?: string | null;
+  primaryColor: string;
+  openingHours?: string | null;
+  closingHours?: string | null;
+  phone?: string | null;
+  address?: string | null;
+  welcomeMessage?: string | null;
+  acceptOrders: boolean;
+  taxRate: number;
+  enableTableService: boolean;
+  enableDelivery: boolean;
   createdAt: string;
   updatedAt: string;
 }

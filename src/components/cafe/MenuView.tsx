@@ -52,7 +52,8 @@ import {
   RefreshCcw as ResetIcon,
   Radio,
   Ban,
-  Volume2
+  Volume2,
+  MapPin
 } from 'lucide-react';
 
 // Sound notification
@@ -210,7 +211,21 @@ export default function CafeApp() {
   
   const [categoryForm, setCategoryForm] = useState({ name: '', nameAr: '', image: '' });
   const [tableForm, setTableForm] = useState({ number: '', seats: '4', description: '' });
-  const [settingsForm, setSettingsForm] = useState({ cafeName: '', currency: 'د.ت' });
+  const [settingsForm, setSettingsForm] = useState({ 
+    cafeName: '', 
+    currency: 'د.ت',
+    logo: '',
+    primaryColor: '#6F4E37',
+    openingHours: '08:00',
+    closingHours: '23:00',
+    phone: '',
+    address: '',
+    welcomeMessage: '',
+    acceptOrders: true,
+    taxRate: 0,
+    enableTableService: true,
+    enableDelivery: false
+  });
 
   // Check auth on mount
   useEffect(() => {
@@ -379,7 +394,21 @@ export default function CafeApp() {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       setSettings(data);
-      setSettingsForm({ cafeName: data.cafeName, currency: data.currency });
+      setSettingsForm({ 
+        cafeName: data.cafeName, 
+        currency: data.currency,
+        logo: data.logo || '',
+        primaryColor: data.primaryColor || '#6F4E37',
+        openingHours: data.openingHours || '08:00',
+        closingHours: data.closingHours || '23:00',
+        phone: data.phone || '',
+        address: data.address || '',
+        welcomeMessage: data.welcomeMessage || '',
+        acceptOrders: data.acceptOrders ?? true,
+        taxRate: data.taxRate ?? 0,
+        enableTableService: data.enableTableService ?? true,
+        enableDelivery: data.enableDelivery ?? false
+      });
     } catch (error) {
       console.error('fetchSettings error:', error);
       throw error;
@@ -1187,9 +1216,15 @@ export default function CafeApp() {
         <header className="app-header">
           <div className="app-header-inner">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-[var(--primary)] flex items-center justify-center">
-                <Store className="w-4 h-4 text-white" />
-              </div>
+              {settings?.logo ? (
+                <div className="w-10 h-10 rounded-lg overflow-hidden bg-[var(--surface-raised)]">
+                  <img src={settings.logo} alt={cafeName} className="w-full h-full object-cover" />
+                </div>
+              ) : (
+                <div className="w-10 h-10 rounded-lg bg-[var(--gradient-primary)] flex items-center justify-center">
+                  <Store className="w-5 h-5 text-white" />
+                </div>
+              )}
               <h1 className="app-title">{cafeName}</h1>
             </div>
             <div className="flex items-center gap-2">
@@ -1874,7 +1909,7 @@ export default function CafeApp() {
             <div className="p-4">
               <h2 className="text-h2 mb-4">الإعدادات</h2>
               
-              {/* Cafe Settings */}
+              {/* Cafe Info Settings */}
               <div className="settings-section">
                 <div className="settings-section-header">
                   <div className="settings-section-icon">
@@ -1884,64 +1919,225 @@ export default function CafeApp() {
                 </div>
                 <div className="settings-section-body">
                   <div className="space-y-4">
-                    <div>
-                      <label className="label">اسم المقهى</label>
+                    <div className="settings-field">
+                      <label className="settings-label">اسم المقهى</label>
                       <input
                         type="text"
-                        className="input"
+                        className="settings-input"
                         value={settingsForm.cafeName}
                         onChange={(e) => setSettingsForm({ ...settingsForm, cafeName: e.target.value })}
+                        placeholder="اسم المقهى"
                       />
                     </div>
-                    <div>
-                      <label className="label">العملة</label>
+                    <div className="settings-field">
+                      <label className="settings-label">شعار المقهى (رابط صورة)</label>
                       <input
                         type="text"
-                        className="input"
-                        value={settingsForm.currency}
-                        onChange={(e) => setSettingsForm({ ...settingsForm, currency: e.target.value })}
+                        className="settings-input"
+                        value={settingsForm.logo}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, logo: e.target.value })}
+                        placeholder="https://example.com/logo.png"
                       />
                     </div>
-                    <button className="btn btn-primary w-full" onClick={saveSettings}>
-                      حفظ الإعدادات
-                    </button>
+                    <div className="settings-field">
+                      <label className="settings-label">رقم الهاتف</label>
+                      <input
+                        type="text"
+                        className="settings-input"
+                        value={settingsForm.phone}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, phone: e.target.value })}
+                        placeholder="+216 XX XXX XXX"
+                      />
+                    </div>
+                    <div className="settings-field">
+                      <label className="settings-label">العنوان</label>
+                      <input
+                        type="text"
+                        className="settings-input"
+                        value={settingsForm.address}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, address: e.target.value })}
+                        placeholder="شارع المثال، المدينة"
+                      />
+                    </div>
+                    <div className="settings-field">
+                      <label className="settings-label">رسالة الترحيب</label>
+                      <input
+                        type="text"
+                        className="settings-input"
+                        value={settingsForm.welcomeMessage}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, welcomeMessage: e.target.value })}
+                        placeholder="مرحباً بك في مقهانا"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Display Settings */}
+              {/* Business Settings */}
+              <div className="settings-section">
+                <div className="settings-section-header">
+                  <div className="settings-section-icon">
+                    <Clock className="w-5 h-5" />
+                  </div>
+                  <div className="settings-section-title">أوقات العمل</div>
+                </div>
+                <div className="settings-section-body">
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="settings-field">
+                        <label className="settings-label">وقت الفتح</label>
+                        <input
+                          type="time"
+                          className="settings-input"
+                          value={settingsForm.openingHours}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, openingHours: e.target.value })}
+                        />
+                      </div>
+                      <div className="settings-field">
+                        <label className="settings-label">وقت الإغلاق</label>
+                        <input
+                          type="time"
+                          className="settings-input"
+                          value={settingsForm.closingHours}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, closingHours: e.target.value })}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Financial Settings */}
+              <div className="settings-section">
+                <div className="settings-section-header">
+                  <div className="settings-section-icon">
+                    <DollarSign className="w-5 h-5" />
+                  </div>
+                  <div className="settings-section-title">الإعدادات المالية</div>
+                </div>
+                <div className="settings-section-body">
+                  <div className="space-y-4">
+                    <div className="settings-field">
+                      <label className="settings-label">العملة</label>
+                      <input
+                        type="text"
+                        className="settings-input"
+                        value={settingsForm.currency}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, currency: e.target.value })}
+                        placeholder="د.ت"
+                      />
+                    </div>
+                    <div className="settings-field">
+                      <label className="settings-label">نسبة الضريبة (%)</label>
+                      <input
+                        type="number"
+                        className="settings-input"
+                        value={settingsForm.taxRate}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, taxRate: parseFloat(e.target.value) || 0 })}
+                        min="0"
+                        max="100"
+                        step="0.1"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Services Settings */}
+              <div className="settings-section">
+                <div className="settings-section-header">
+                  <div className="settings-section-icon">
+                    <UtensilsCrossed className="w-5 h-5" />
+                  </div>
+                  <div className="settings-section-title">الخدمات</div>
+                </div>
+                <div className="settings-section-body">
+                  <div className="settings-toggle">
+                    <div>
+                      <div className="settings-toggle-label">قبول الطلبات</div>
+                      <div className="settings-toggle-description">السماح للعملاء بتقديم طلبات جديدة</div>
+                    </div>
+                    <div 
+                      className={`settings-toggle-switch ${settingsForm.acceptOrders ? 'active' : ''}`}
+                      onClick={() => setSettingsForm({ ...settingsForm, acceptOrders: !settingsForm.acceptOrders })}
+                    />
+                  </div>
+                  <div className="settings-toggle">
+                    <div>
+                      <div className="settings-toggle-label">خدمة الطاولات</div>
+                      <div className="settings-toggle-description">تفعيل نظام حجز الطاولات</div>
+                    </div>
+                    <div 
+                      className={`settings-toggle-switch ${settingsForm.enableTableService ? 'active' : ''}`}
+                      onClick={() => setSettingsForm({ ...settingsForm, enableTableService: !settingsForm.enableTableService })}
+                    />
+                  </div>
+                  <div className="settings-toggle">
+                    <div>
+                      <div className="settings-toggle-label">خدمة التوصيل</div>
+                      <div className="settings-toggle-description">تفعيل خدمة توصيل الطلبات</div>
+                    </div>
+                    <div 
+                      className={`settings-toggle-switch ${settingsForm.enableDelivery ? 'active' : ''}`}
+                      onClick={() => setSettingsForm({ ...settingsForm, enableDelivery: !settingsForm.enableDelivery })}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Appearance Settings */}
               <div className="settings-section">
                 <div className="settings-section-header">
                   <div className="settings-section-icon">
                     <SettingsIcon className="w-5 h-5" />
                   </div>
-                  <div className="settings-section-title">العرض</div>
+                  <div className="settings-section-title">المظهر</div>
                 </div>
                 <div className="settings-section-body">
-                  <div className="settings-row">
-                    <span className="settings-row-label">الوضع الداكن</span>
-                    <div className="settings-row-value">
-                      <button
-                        className={`btn btn-sm ${darkMode ? 'btn-primary' : 'btn-secondary'}`}
-                        onClick={() => setDarkMode(!darkMode)}
-                      >
-                        {darkMode ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
-                      </button>
+                  <div className="settings-field">
+                    <label className="settings-label">اللون الرئيسي</label>
+                    <div className="color-picker-wrapper">
+                      <div 
+                        className="color-picker-preview"
+                        style={{ backgroundColor: settingsForm.primaryColor }}
+                      />
+                      <input
+                        type="text"
+                        className="settings-input color-picker-input"
+                        value={settingsForm.primaryColor}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, primaryColor: e.target.value })}
+                        placeholder="#6F4E37"
+                      />
                     </div>
                   </div>
-                  <div className="settings-row">
-                    <span className="settings-row-label">صوت الإشعارات</span>
-                    <div className="settings-row-value">
-                      <button
-                        className={`btn btn-sm ${soundEnabled ? 'btn-primary' : 'btn-secondary'}`}
-                        onClick={() => setSoundEnabled(!soundEnabled)}
-                      >
-                        {soundEnabled ? <Bell className="w-4 h-4" /> : <BellOff className="w-4 h-4" />}
-                      </button>
+                  <div className="settings-toggle">
+                    <div>
+                      <div className="settings-toggle-label">الوضع الداكن</div>
+                      <div className="settings-toggle-description">تغيير مظهر التطبيق</div>
                     </div>
+                    <div 
+                      className={`settings-toggle-switch ${darkMode ? 'active' : ''}`}
+                      onClick={() => setDarkMode(!darkMode)}
+                    />
+                  </div>
+                  <div className="settings-toggle">
+                    <div>
+                      <div className="settings-toggle-label">صوت الإشعارات</div>
+                      <div className="settings-toggle-description">تشغيل صوت عند وصول طلب جديد</div>
+                    </div>
+                    <div 
+                      className={`settings-toggle-switch ${soundEnabled ? 'active' : ''}`}
+                      onClick={() => setSoundEnabled(!soundEnabled)}
+                    />
                   </div>
                 </div>
               </div>
+
+              {/* Save Button */}
+              <button className="btn btn-primary btn-lg w-full mb-4" onClick={saveSettings}>
+                <Check className="w-5 h-5" />
+                حفظ جميع الإعدادات
+              </button>
 
               {/* Account */}
               <div className="settings-section">
@@ -2214,9 +2410,15 @@ export default function CafeApp() {
       <header className="app-header">
         <div className="app-header-inner">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[var(--primary)] flex items-center justify-center">
-              <Coffee className="w-4 h-4 text-white" />
-            </div>
+            {settings?.logo ? (
+              <div className="w-10 h-10 rounded-lg overflow-hidden bg-[var(--surface-raised)]">
+                <img src={settings.logo} alt={cafeName} className="w-full h-full object-cover" />
+              </div>
+            ) : (
+              <div className="w-10 h-10 rounded-lg bg-[var(--gradient-primary)] flex items-center justify-center">
+                <Coffee className="w-5 h-5 text-white" />
+              </div>
+            )}
             <h1 className="app-title">{cafeName}</h1>
           </div>
           <button 
@@ -2233,6 +2435,45 @@ export default function CafeApp() {
         {/* Home Tab */}
         {customerTab === 'home' && (
           <>
+            {/* Hero Section - Always Show */}
+            <div className="hero-section">
+              {settings?.logo ? (
+                <div className="hero-logo">
+                  <img src={settings.logo} alt={cafeName} />
+                </div>
+              ) : (
+                <div className="hero-logo-placeholder">
+                  <Coffee className="w-10 h-10" />
+                </div>
+              )}
+              <h2 className="hero-title">{cafeName}</h2>
+              {settings?.welcomeMessage && (
+                <p className="hero-subtitle">{settings.welcomeMessage}</p>
+              ) || (
+                <p className="hero-subtitle">مرحباً بك في مقهانا</p>
+              )}
+              {settings?.openingHours && settings?.closingHours && (
+                <div className="hero-status">
+                  <Clock className="w-4 h-4" />
+                  <span>ساعات العمل: {settings.openingHours} - {settings.closingHours}</span>
+                </div>
+              )}
+              {settings && !settings.acceptOrders && (
+                <div className="hero-status closed" style={{ marginTop: '8px' }}>
+                  <Ban className="w-4 h-4" />
+                  <span>غير مستقبلين طلبات حالياً</span>
+                </div>
+              )}
+              {settings?.phone && (
+                <div className="hero-contact">
+                  <a href={`tel:${settings.phone}`} className="hero-phone">
+                    <Volume2 className="w-4 h-4" />
+                    <span>{settings.phone}</span>
+                  </a>
+                </div>
+              )}
+            </div>
+
             {/* Category Chips */}
             <div className="category-chips">
               <button
@@ -2257,15 +2498,15 @@ export default function CafeApp() {
               {filteredProducts.map(product => (
                 <div
                   key={product.id}
-                  className="product-card card-interactive"
-                  onClick={() => addProductToCart(product.id)}
+                  className={`product-card ${settings?.acceptOrders !== false ? 'card-interactive' : 'unavailable'}`}
+                  style={{ opacity: settings?.acceptOrders === false ? 0.6 : 1 }}
                 >
-                  <div className="aspect-square bg-[var(--surface-raised)] overflow-hidden relative">
+                  <div className="product-card-image-wrapper">
                     {product.image ? (
                       <img
                         src={product.image}
                         alt={product.nameAr}
-                        className="w-full h-full object-cover"
+                        className="product-card-image"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
@@ -2273,14 +2514,30 @@ export default function CafeApp() {
                       </div>
                     )}
                     {selectedProducts.has(product.id) && (
-                      <div className="absolute top-2 left-2 w-6 h-6 bg-[var(--primary)] rounded-full flex items-center justify-center text-white text-small font-bold">
-                        {selectedProducts.get(product.id)}
+                      <div className="product-card-badge">
+                        {selectedProducts.get(product.id)} في السلة
                       </div>
                     )}
                   </div>
-                  <div className="p-3">
+                  <div className="product-card-content">
                     <div className="product-card-name">{product.nameAr}</div>
-                    <div className="product-card-price">{product.price} {currency}</div>
+                    {product.descriptionAr && (
+                      <div className="product-card-description">{product.descriptionAr}</div>
+                    )}
+                    <div className="product-card-footer">
+                      <span className="product-card-price">{product.price} {currency}</span>
+                      {settings?.acceptOrders !== false && (
+                        <button 
+                          className="product-card-add"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            addProductToCart(product.id);
+                          }}
+                        >
+                          <Plus className="w-5 h-5" />
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -2290,12 +2547,13 @@ export default function CafeApp() {
                     <Coffee className="w-6 h-6" />
                   </div>
                   <div className="empty-state-title">لا توجد منتجات</div>
+                  <div className="empty-state-description">لا توجد منتجات في هذه الفئة حالياً</div>
                 </div>
               )}
             </div>
 
             {/* Floating Cart Button */}
-            {getCartCount() > 0 && (
+            {getCartCount() > 0 && settings?.acceptOrders !== false && (
               <button
                 className="fab"
                 onClick={() => setCustomerTab('cart')}
@@ -2370,8 +2628,25 @@ export default function CafeApp() {
                   </div>
                   <div className="cart-footer">
                     <div className="cart-total-row">
-                      <span className="cart-total-label">المجموع</span>
-                      <span className="cart-total-value">{getOrderTotal().toFixed(2)} {currency}</span>
+                      <span className="cart-total-label">المجموع الفرعي</span>
+                      <span className="cart-total-value" style={{ fontSize: '16px' }}>{getOrderTotal().toFixed(2)} {currency}</span>
+                    </div>
+                    {settings && settings.taxRate > 0 && (
+                      <div className="cart-total-row" style={{ marginBottom: '8px' }}>
+                        <span className="cart-total-label">الضريبة ({settings.taxRate}%)</span>
+                        <span className="cart-total-value" style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>
+                          {(getOrderTotal() * settings.taxRate / 100).toFixed(2)} {currency}
+                        </span>
+                      </div>
+                    )}
+                    <div className="cart-total-row" style={{ paddingTop: '12px', borderTop: '1px solid var(--border)' }}>
+                      <span className="cart-total-label" style={{ fontWeight: 600 }}>الإجمالي</span>
+                      <span className="cart-total-value">
+                        {settings?.taxRate 
+                          ? (getOrderTotal() * (1 + settings.taxRate / 100)).toFixed(2)
+                          : getOrderTotal().toFixed(2)
+                        } {currency}
+                      </span>
                     </div>
                     <button
                       className="btn btn-primary btn-lg w-full"
@@ -2594,6 +2869,62 @@ export default function CafeApp() {
           <div className="p-4">
             <h2 className="text-h2 mb-4">المزيد</h2>
             
+            {/* Cafe Info */}
+            {(settings?.phone || settings?.address || settings?.openingHours) && (
+              <div className="section-card mb-4">
+                <div className="section-card-header">
+                  <div className="section-card-title">
+                    <div className="section-card-title-icon">
+                      <Store className="w-4 h-4" />
+                    </div>
+                    معلومات المقهى
+                  </div>
+                </div>
+                <div className="section-card-body">
+                  <div className="grouped-list">
+                    {settings?.phone && (
+                      <a 
+                        href={`tel:${settings.phone}`}
+                        className="grouped-list-item"
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <div className="grouped-list-item-image" style={{ background: 'var(--success-light)' }}>
+                          <Volume2 className="w-5 h-5" style={{ color: 'var(--success)' }} />
+                        </div>
+                        <div className="grouped-list-item-content">
+                          <div className="grouped-list-item-title">اتصل بنا</div>
+                          <div className="grouped-list-item-subtitle">{settings.phone}</div>
+                        </div>
+                        <ChevronLeft className="w-5 h-5 text-[var(--text-muted)]" />
+                      </a>
+                    )}
+                    {settings?.address && (
+                      <div className="grouped-list-item">
+                        <div className="grouped-list-item-image" style={{ background: 'var(--info-light)' }}>
+                          <MapPin className="w-5 h-5" style={{ color: 'var(--info)' }} />
+                        </div>
+                        <div className="grouped-list-item-content">
+                          <div className="grouped-list-item-title">العنوان</div>
+                          <div className="grouped-list-item-subtitle">{settings.address}</div>
+                        </div>
+                      </div>
+                    )}
+                    {settings?.openingHours && settings?.closingHours && (
+                      <div className="grouped-list-item">
+                        <div className="grouped-list-item-image" style={{ background: 'var(--warning-light)' }}>
+                          <Clock className="w-5 h-5" style={{ color: 'var(--warning)' }} />
+                        </div>
+                        <div className="grouped-list-item-content">
+                          <div className="grouped-list-item-title">أوقات العمل</div>
+                          <div className="grouped-list-item-subtitle">{settings.openingHours} - {settings.closingHours}</div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+            
             {/* Admin Login */}
             <button
               className="section-card w-full text-right mb-4"
@@ -2621,16 +2952,15 @@ export default function CafeApp() {
                 <div className="settings-section-title">المظهر</div>
               </div>
               <div className="settings-section-body">
-                <div className="settings-row">
-                  <span className="settings-row-label">الوضع الداكن</span>
-                  <div className="settings-row-value">
-                    <button
-                      className={`btn btn-sm ${darkMode ? 'btn-primary' : 'btn-secondary'}`}
-                      onClick={() => setDarkMode(!darkMode)}
-                    >
-                      {darkMode ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
-                    </button>
+                <div className="settings-toggle">
+                  <div>
+                    <div className="settings-toggle-label">الوضع الداكن</div>
+                    <div className="settings-toggle-description">تغيير مظهر التطبيق</div>
                   </div>
+                  <div 
+                    className={`settings-toggle-switch ${darkMode ? 'active' : ''}`}
+                    onClick={() => setDarkMode(!darkMode)}
+                  />
                 </div>
               </div>
             </div>
@@ -2638,11 +2968,18 @@ export default function CafeApp() {
             {/* App Info */}
             <div className="section-card">
               <div className="section-card-body-padded text-center">
-                <div className="flex items-center justify-center gap-2 mb-2">
-                  <Coffee className="w-5 h-5 text-[var(--primary)]" />
-                  <span className="font-semibold">{cafeName}</span>
-                </div>
-                <div className="text-small text-[var(--text-muted)]">الإصدار 1.0.0</div>
+                {settings?.logo ? (
+                  <div className="w-16 h-16 mx-auto mb-3 rounded-xl overflow-hidden">
+                    <img src={settings.logo} alt={cafeName} className="w-full h-full object-cover" />
+                  </div>
+                ) : (
+                  <div className="w-16 h-16 mx-auto mb-3 rounded-xl bg-[var(--gradient-primary)] flex items-center justify-center">
+                    <Coffee className="w-8 h-8 text-white" />
+                  </div>
+                )}
+                <div className="font-semibold text-lg mb-1">{cafeName}</div>
+                <div className="text-small text-[var(--text-muted)]">نظام إدارة المقهى</div>
+                <div className="text-small text-[var(--text-muted)] mt-1">الإصدار 2.0.0</div>
               </div>
             </div>
           </div>

@@ -6,18 +6,28 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
+  provider  = "sqlite"
   url       = env("DATABASE_URL")
-  directUrl  = env("DIRECT_URL")
 }
 
 // إعدادات التطبيق
 model Settings {
-  id          String   @id @default(cuid())
-  cafeName    String   @default("L'EscoBar")
-  currency    String   @default("د.ت")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                  String   @id @default(cuid())
+  cafeName            String   @default("L'EscoBar")
+  currency            String   @default("د.ت")
+  logo                String?  // شعار المقهى
+  primaryColor        String   @default("#6F4E37") // اللون الرئيسي (بني القهوة)
+  openingHours        String?  @default("08:00") // وقت الفتح
+  closingHours        String?  @default("23:00") // وقت الإغلاق
+  phone               String?  // رقم الهاتف
+  address             String?  // العنوان
+  welcomeMessage      String?  @default("مرحباً بك في مقهانا") // رسالة الترحيب
+  acceptOrders        Boolean  @default(true) // تفعيل/تعطيل الطلبات
+  taxRate             Float    @default(0) // نسبة الضريبة
+  enableTableService  Boolean  @default(true) // تفعيل خدمة الطاولات
+  enableDelivery      Boolean  @default(false) // تفعيل خدمة التوصيل
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
   @@map("settings")
 }
@@ -77,7 +87,7 @@ model Order {
   tableNumber Int
   status      OrderStatus @default(NEW)
   total       Float       @default(0)
-  notes       String?     @db.Text
+  notes       String?
   orderItems  OrderItem[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
@@ -97,7 +107,7 @@ model OrderItem {
   productName String
   price       Float
   quantity    Int      @default(1)
-  notes       String?  @db.Text
+  notes       String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   product     Product  @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
