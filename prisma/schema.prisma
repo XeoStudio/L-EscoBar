@@ -1,0 +1,132 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl  = env("DIRECT_URL")
+}
+
+// إعدادات التطبيق
+model Settings {
+  id          String   @id @default(cuid())
+  cafeName    String   @default("L'EscoBar")
+  currency    String   @default("د.ت")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("settings")
+}
+
+// فئات المنتجات
+model Category {
+  id        String     @id @default(cuid())
+  name      String
+  nameAr    String
+  image     String?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  products  Product[]
+
+  @@map("categories")
+}
+
+// المنتجات
+model Product {
+  id            String      @id @default(cuid())
+  name          String
+  nameAr        String
+  description   String?
+  descriptionAr String?
+  price         Float
+  image         String?
+  available     Boolean     @default(true)
+  categoryId    String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  orderItems    OrderItem[]
+  category      Category    @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([categoryId])
+  @@map("products")
+}
+
+// الطاولات
+model Table {
+  id          String   @id @default(cuid())
+  number      Int      @unique
+  seats       Int      @default(4)
+  description String?
+  active      Boolean  @default(true)
+  orders      Order[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("tables")
+}
+
+// الطلبات
+model Order {
+  id          String      @id @default(cuid())
+  orderCode   String?     @unique // كود التتبع للعميل (اختياري للطلبات القديمة)
+  tableId     String
+  tableNumber Int
+  status      OrderStatus @default(NEW)
+  total       Float       @default(0)
+  notes       String?     @db.Text
+  orderItems  OrderItem[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  table       Table       @relation(fields: [tableId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([tableId])
+  @@index([status])
+  @@index([orderCode])
+  @@map("orders")
+}
+
+// عناصر الطلب
+model OrderItem {
+  id          String   @id @default(cuid())
+  orderId     String
+  productId   String
+  productName String
+  price       Float
+  quantity    Int      @default(1)
+  notes       String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  product     Product  @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@index([productId])
+  @@map("order_items")
+}
+
+// حالة الطلب - سير عمل كامل
+enum OrderStatus {
+  NEW       // طلب جديد (لم يُرَ من قبل)
+  ACCEPTED  // تم قبول الطلب
+  PREPARING // قيد التحضير
+  READY     // جاهز للاستلام
+  SERVED    // تم تقديمه
+  PAID      // تم الدفع
+  CANCELLED // ملغي
+}
+
+// صاحب المقهى (المسؤول)
+model Admin {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("admins")
+}
