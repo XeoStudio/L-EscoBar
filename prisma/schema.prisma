@@ -6,8 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider  = "sqlite"
+  provider  = "postgresql"
   url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // إعدادات التطبيق
@@ -87,7 +88,7 @@ model Order {
   tableNumber Int
   status      OrderStatus @default(NEW)
   total       Float       @default(0)
-  notes       String?
+  notes       String?     @db.Text
   orderItems  OrderItem[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
@@ -107,7 +108,7 @@ model OrderItem {
   productName String
   price       Float
   quantity    Int      @default(1)
-  notes       String?
+  notes       String?  @db.Text
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   product     Product  @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)

@@ -71,7 +71,7 @@ export type OrderStatus = 'NEW' | 'ACCEPTED' | 'PREPARING' | 'READY' | 'SERVED' 
 
 export interface Order {
   id: string;
-  orderCode: string;  // كود التتبع للعميل
+  orderCode?: string | null;
   tableId: string;
   tableNumber: number;
   status: OrderStatus;
