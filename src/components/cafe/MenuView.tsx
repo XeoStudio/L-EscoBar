@@ -2672,19 +2672,20 @@ export default function CafeApp() {
         {/* Track Tab */}
         {customerTab === 'track' && (
           <div className="track-page">
-            {/* Hero Header */}
-            <div className="track-hero">
-              <div className="track-hero-icon">
-                <Search className="w-8 h-8" />
+            {/* Unified Card with Hero + Search */}
+            <div className="track-unified-card">
+              {/* Hero Section */}
+              <div className="track-hero">
+                <div className="track-hero-icon">
+                  <Search className="w-6 h-6" />
+                </div>
+                <h2 className="track-hero-title">تتبع طلبك</h2>
+                <p className="track-hero-subtitle">أدخل كود التتبع لمعرفة حالة طلبك</p>
               </div>
-              <h2 className="track-hero-title">تتبع طلبك</h2>
-              <p className="track-hero-subtitle">أدخل كود التتبع لمعرفة حالة طلبك</p>
-            </div>
-            
-            {/* Search Section */}
-            <div className="track-search-section">
-              <div className="track-search-card">
-                <div className="track-input-wrapper">
+              
+              {/* Search Input - Connected to Hero */}
+              <div className="track-search-box">
+                <div className="track-input-row">
                   <input
                     type="text"
                     className="track-code-input"
@@ -2706,52 +2707,51 @@ export default function CafeApp() {
                   </button>
                 </div>
                 <div className="track-input-hint">الكود مكون من 6 أحرف وأرقام</div>
+                
+                {/* Quick Access to Last Order */}
+                {lastOrderCode && !trackedOrder && (
+                  <button 
+                    className="track-last-order-btn"
+                    onClick={() => {
+                      setTrackingCode(lastOrderCode);
+                      setTimeout(trackOrder, 100);
+                    }}
+                  >
+                    <ClipboardList className="w-4 h-4" />
+                    <span>آخر طلب: <strong>{lastOrderCode}</strong></span>
+                  </button>
+                )}
               </div>
-              
-              {/* Quick Access to Last Order */}
-              {lastOrderCode && !trackedOrder && (
-                <button 
-                  className="track-last-order-btn"
-                  onClick={() => {
-                    setTrackingCode(lastOrderCode);
-                    setTimeout(trackOrder, 100);
-                  }}
-                >
-                  <ClipboardList className="w-5 h-5" />
-                  <span>تتبع طلبك الأخير: <strong>{lastOrderCode}</strong></span>
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-              )}
             </div>
 
             {/* Tracked Order Display */}
             {trackedOrder ? (
-              <div className="track-order-details">
+              <div className="track-order-content">
                 {/* Order Status Header */}
-                <div className="track-status-header">
-                  <div className="track-status-info">
-                    <div className="track-code-large">{trackedOrder.orderCode}</div>
-                    <div className="track-table-badge">
-                      <TableIcon className="w-4 h-4" />
-                      <span>طاولة {trackedOrder.tableNumber}</span>
-                    </div>
-                  </div>
-                  <div className="track-status-badge-wrapper">
+                <div className="track-status-card">
+                  <div className="track-status-top">
+                    <div className="track-code-display">{trackedOrder.orderCode}</div>
                     {trackedOrder.status !== 'PAID' && trackedOrder.status !== 'CANCELLED' && (
-                      <div className="track-live-badge">
-                        <span className="track-live-dot"></span>
-                        <span>مباشر</span>
+                      <div className="track-live-tag">
+                        <span className="track-live-pulse"></span>
+                        مباشر
                       </div>
                     )}
-                    <div className={`track-status-pill track-status-${trackedOrder.status.toLowerCase()}`}>
+                  </div>
+                  <div className="track-status-bottom">
+                    <div className="track-table-tag">
+                      <TableIcon className="w-4 h-4" />
+                      طاولة {trackedOrder.tableNumber}
+                    </div>
+                    <div className={`track-status-tag track-status-${trackedOrder.status.toLowerCase()}`}>
                       {ORDER_STATUS_AR[trackedOrder.status]}
                     </div>
                   </div>
                 </div>
 
                 {/* Timeline Section */}
-                <div className="track-timeline-section">
-                  <div className="track-timeline-title">
+                <div className="track-section-card">
+                  <div className="track-section-header">
                     <Clock className="w-4 h-4" />
                     <span>مراحل الطلب</span>
                   </div>
@@ -2768,21 +2768,19 @@ export default function CafeApp() {
                       return (
                         <div 
                           key={status} 
-                          className={`track-timeline-item ${isCompleted ? 'completed' : ''} ${isCurrent ? 'current' : ''} ${isCancelled && isCurrent ? 'cancelled' : ''}`}
+                          className={`track-step ${isCompleted ? 'done' : ''} ${isCurrent ? 'active' : ''} ${isCancelled && isCurrent ? 'cancelled' : ''}`}
                         >
-                          <div className="track-timeline-line">
-                            {index > 0 && <div className={`track-timeline-line-inner ${isPast ? 'filled' : ''}`} />}
+                          <div className="track-step-line">
+                            {index > 0 && <div className={`track-step-fill ${isPast ? 'filled' : ''}`} />}
                           </div>
-                          <div className="track-timeline-node">
-                            <div className={`track-timeline-dot ${isCompleted ? 'completed' : ''} ${isCurrent ? 'current' : ''} ${isCancelled && isCurrent ? 'cancelled' : ''}`}>
-                              {isCompleted && !isCancelled ? (
-                                <Check className="w-3 h-3" />
-                              ) : isCancelled && isCurrent ? (
-                                <X className="w-3 h-3" />
-                              ) : null}
-                            </div>
-                            <span className="track-timeline-label">{ORDER_STATUS_AR[status as keyof typeof ORDER_STATUS_AR]}</span>
+                          <div className="track-step-dot">
+                            {isCompleted && !isCancelled ? (
+                              <Check className="w-3 h-3" />
+                            ) : isCancelled && isCurrent ? (
+                              <X className="w-3 h-3" />
+                            ) : null}
                           </div>
+                          <span className="track-step-text">{ORDER_STATUS_AR[status as keyof typeof ORDER_STATUS_AR]}</span>
                         </div>
                       );
                     })}
@@ -2790,59 +2788,56 @@ export default function CafeApp() {
                   
                   {/* Special Status Messages */}
                   {trackedOrder.status === 'CANCELLED' && (
-                    <div className="track-status-message track-status-cancelled">
+                    <div className="track-alert track-alert-error">
                       <AlertTriangle className="w-5 h-5" />
                       <span>تم إلغاء هذا الطلب</span>
                     </div>
                   )}
                   
                   {trackedOrder.status === 'READY' && (
-                    <div className="track-status-message track-status-ready">
+                    <div className="track-alert track-alert-success">
                       <PackageCheck className="w-5 h-5" />
                       <div>
-                        <span className="track-status-message-title">طلبك جاهز!</span>
-                        <span className="track-status-message-desc">يمكنك المرور لاستلامه الآن</span>
+                        <div className="track-alert-title">طلبك جاهز!</div>
+                        <div className="track-alert-sub">يمكنك المرور لاستلامه</div>
                       </div>
                     </div>
                   )}
                 </div>
 
                 {/* Order Items */}
-                <div className="track-items-section">
-                  <div className="track-items-header">
+                <div className="track-section-card">
+                  <div className="track-section-header">
                     <Coffee className="w-4 h-4" />
-                    <span>المنتجات المطلوبة</span>
-                    <span className="track-items-count">{trackedOrder.orderItems.length}</span>
+                    <span>المنتجات</span>
+                    <span className="track-count-badge">{trackedOrder.orderItems.length}</span>
                   </div>
-                  <div className="track-items-list">
+                  <div className="track-items">
                     {trackedOrder.orderItems.map((item) => (
-                      <div key={item.id} className="track-item-row">
+                      <div key={item.id} className="track-item">
                         <div className="track-item-info">
                           <span className="track-item-name">{item.productName}</span>
                           <span className="track-item-price">{item.price} {currency}</span>
                         </div>
-                        <div className="track-item-qty">×{item.quantity}</div>
-                        <div className="track-item-total">{(item.price * item.quantity).toFixed(2)}</div>
+                        <span className="track-item-qty">×{item.quantity}</span>
+                        <span className="track-item-total">{(item.price * item.quantity).toFixed(2)}</span>
                       </div>
                     ))}
                   </div>
-                  <div className="track-total-row">
-                    <span>المجموع الكلي</span>
+                  <div className="track-total">
+                    <span>المجموع</span>
                     <span>{trackedOrder.total.toFixed(2)} {currency}</span>
                   </div>
                 </div>
 
                 {/* Order Meta */}
-                <div className="track-meta-section">
+                <div className="track-meta-row">
                   <div className="track-meta-item">
                     <Clock className="w-4 h-4" />
                     <div>
-                      <span className="track-meta-label">وقت الطلب</span>
+                      <span className="track-meta-label">الوقت</span>
                       <span className="track-meta-value">
-                        {new Date(trackedOrder.createdAt).toLocaleTimeString('ar-SA', { 
-                          hour: '2-digit', 
-                          minute: '2-digit' 
-                        })}
+                        {new Date(trackedOrder.createdAt).toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' })}
                       </span>
                     </div>
                   </div>
@@ -2851,25 +2846,20 @@ export default function CafeApp() {
                     <div>
                       <span className="track-meta-label">التاريخ</span>
                       <span className="track-meta-value">
-                        {new Date(trackedOrder.createdAt).toLocaleDateString('ar-SA', { 
-                          day: 'numeric',
-                          month: 'short'
-                        })}
+                        {new Date(trackedOrder.createdAt).toLocaleDateString('ar-SA', { day: 'numeric', month: 'short' })}
                       </span>
                     </div>
                   </div>
                 </div>
               </div>
             ) : (
-              !lastOrderCode && (
-                <div className="track-empty-state">
-                  <div className="track-empty-icon">
-                    <Search className="w-12 h-12" />
-                  </div>
-                  <div className="track-empty-title">لا يوجد طلب للتتبع</div>
-                  <div className="track-empty-desc">أدخل كود التتبع الخاص بك أعلاه</div>
+              <div className="track-empty">
+                <div className="track-empty-icon">
+                  <ClipboardList className="w-8 h-8" />
                 </div>
-              )
+                <div className="track-empty-text">لا يوجد طلب للتتبع</div>
+                <div className="track-empty-hint">أدخل الكود أعلاه لمتابعة طلبك</div>
+              </div>
             )}
           </div>
         )}
