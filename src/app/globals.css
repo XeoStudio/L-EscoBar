@@ -3644,3 +3644,537 @@ body {
   font-family: monospace;
   letter-spacing: 4px;
 }
+
+/* ============================================
+   TRACKING PAGE - Professional Design
+   ============================================ */
+
+.track-page {
+  min-height: calc(100vh - 64px - 68px);
+  background: var(--background);
+}
+
+.track-hero {
+  background: var(--gradient-primary);
+  padding: 32px 20px;
+  text-align: center;
+  color: white;
+}
+
+.track-hero-icon {
+  width: 64px;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  backdrop-filter: blur(8px);
+}
+
+.track-hero-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.track-hero-subtitle {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.track-search-section {
+  padding: 20px 16px;
+  background: var(--surface);
+  margin-top: -16px;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  position: relative;
+  z-index: 10;
+}
+
+.track-search-card {
+  background: var(--surface-raised);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+}
+
+.track-input-wrapper {
+  display: flex;
+  gap: 10px;
+}
+
+.track-code-input {
+  flex: 1;
+  height: 52px;
+  padding: 0 16px;
+  font-size: 20px;
+  font-weight: 700;
+  font-family: monospace;
+  letter-spacing: 4px;
+  text-align: center;
+  text-transform: uppercase;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.track-code-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+.track-code-input::placeholder {
+  color: var(--text-muted);
+  font-weight: 400;
+  letter-spacing: 2px;
+}
+
+.track-search-btn {
+  width: 52px;
+  height: 52px;
+  background: var(--gradient-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.track-search-btn:hover:not(:disabled) {
+  transform: scale(1.05);
+}
+
+.track-search-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.track-input-hint {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 10px;
+}
+
+.track-last-order-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px;
+  margin-top: 12px;
+  background: var(--primary-light);
+  border: 2px dashed var(--primary);
+  border-radius: var(--radius-md);
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.track-last-order-btn:hover {
+  background: var(--primary);
+  border-style: solid;
+  color: white;
+}
+
+.track-order-details {
+  padding: 0 16px 16px;
+}
+
+/* Status Header */
+.track-status-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+.track-status-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.track-code-large {
+  font-size: 28px;
+  font-weight: 800;
+  font-family: monospace;
+  letter-spacing: 3px;
+  color: var(--primary);
+}
+
+.track-table-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: var(--surface-raised);
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  width: fit-content;
+}
+
+.track-status-badge-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.track-live-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: var(--success-light);
+  color: var(--success);
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.track-live-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--success);
+  border-radius: 50%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.track-status-pill {
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.track-status-new { background: var(--warning-light); color: var(--warning); }
+.track-status-accepted { background: var(--info-light); color: var(--info); }
+.track-status-preparing { background: #EDE9FE; color: #7C3AED; }
+.track-status-ready { background: var(--success-light); color: var(--success); }
+.track-status-served { background: #E0E7FF; color: #4F46E5; }
+.track-status-paid { background: var(--surface-raised); color: var(--text-muted); }
+.track-status-cancelled { background: var(--error-light); color: var(--error); }
+
+/* Timeline Section */
+.track-timeline-section {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+.track-timeline-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.track-timeline-title svg {
+  color: var(--primary);
+}
+
+.track-timeline {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 4px;
+}
+
+.track-timeline-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.track-timeline-line {
+  height: 20px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0 4px;
+}
+
+.track-timeline-line-inner {
+  flex: 1;
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.track-timeline-line-inner.filled {
+  background: var(--success);
+}
+
+.track-timeline-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.track-timeline-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+  border: 3px solid var(--border);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.track-timeline-dot.completed {
+  background: var(--success);
+  border-color: var(--success);
+}
+
+.track-timeline-dot.current {
+  background: var(--primary);
+  border-color: var(--primary);
+  animation: pulse 2s ease infinite;
+}
+
+.track-timeline-dot.cancelled {
+  background: var(--error);
+  border-color: var(--error);
+}
+
+.track-timeline-label {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 6px;
+  line-height: 1.2;
+  max-width: 50px;
+}
+
+.track-timeline-item.completed .track-timeline-label,
+.track-timeline-item.current .track-timeline-label {
+  color: var(--text-primary);
+}
+
+/* Status Messages */
+.track-status-message {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  margin-top: 16px;
+}
+
+.track-status-cancelled {
+  background: var(--error-light);
+  color: var(--error);
+}
+
+.track-status-ready {
+  background: var(--success-light);
+  color: var(--success);
+}
+
+.track-status-message-title {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.track-status-message-desc {
+  display: block;
+  font-size: 13px;
+  opacity: 0.9;
+  margin-top: 2px;
+}
+
+/* Items Section */
+.track-items-section {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+.track-items-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.track-items-header svg {
+  color: var(--primary);
+}
+
+.track-items-count {
+  margin-right: auto;
+  font-size: 12px;
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+}
+
+.track-items-list {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.track-item-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.track-item-row:last-child {
+  border-bottom: none;
+}
+
+.track-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.track-item-name {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.track-item-price {
+  display: block;
+  font-size: 12px;
+  color: var(--primary);
+  margin-top: 2px;
+}
+
+.track-item-qty {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.track-item-total {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  min-width: 50px;
+  text-align: left;
+}
+
+.track-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0 0;
+  margin-top: 4px;
+  border-top: 2px solid var(--border);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* Meta Section */
+.track-meta-section {
+  display: flex;
+  gap: 12px;
+}
+
+.track-meta-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px;
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.track-meta-item svg {
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.track-meta-label {
+  display: block;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.track-meta-value {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 2px;
+}
+
+/* Empty State */
+.track-empty-state {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.track-empty-icon {
+  width: 80px;
+  height: 80px;
+  background: var(--surface-raised);
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  color: var(--text-muted);
+}
+
+.track-empty-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.track-empty-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+}

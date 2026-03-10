@@ -2671,24 +2671,30 @@ export default function CafeApp() {
 
         {/* Track Tab */}
         {customerTab === 'track' && (
-          <div className="p-4">
-            <h2 className="text-h2 mb-4">تتبع الطلب</h2>
+          <div className="track-page">
+            {/* Hero Header */}
+            <div className="track-hero">
+              <div className="track-hero-icon">
+                <Search className="w-8 h-8" />
+              </div>
+              <h2 className="track-hero-title">تتبع طلبك</h2>
+              <p className="track-hero-subtitle">أدخل كود التتبع لمعرفة حالة طلبك</p>
+            </div>
             
-            {/* Search Input */}
-            <div className="section-card mb-4">
-              <div className="section-card-body">
-                <div className="flex gap-2">
+            {/* Search Section */}
+            <div className="track-search-section">
+              <div className="track-search-card">
+                <div className="track-input-wrapper">
                   <input
                     type="text"
-                    className="input flex-1"
-                    placeholder="أدخل كود التتبع (مثل: ABC123)"
+                    className="track-code-input"
+                    placeholder="ABC123"
                     value={trackingCode}
                     onChange={(e) => setTrackingCode(e.target.value.toUpperCase())}
                     maxLength={6}
-                    style={{ textAlign: 'center', letterSpacing: '2px', fontWeight: 'bold' }}
                   />
                   <button
-                    className="btn btn-primary"
+                    className="track-search-btn"
                     onClick={trackOrder}
                     disabled={isTrackingLoading || !trackingCode.trim()}
                   >
@@ -2699,171 +2705,171 @@ export default function CafeApp() {
                     )}
                   </button>
                 </div>
+                <div className="track-input-hint">الكود مكون من 6 أحرف وأرقام</div>
               </div>
+              
+              {/* Quick Access to Last Order */}
+              {lastOrderCode && !trackedOrder && (
+                <button 
+                  className="track-last-order-btn"
+                  onClick={() => {
+                    setTrackingCode(lastOrderCode);
+                    setTimeout(trackOrder, 100);
+                  }}
+                >
+                  <ClipboardList className="w-5 h-5" />
+                  <span>تتبع طلبك الأخير: <strong>{lastOrderCode}</strong></span>
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+              )}
             </div>
 
             {/* Tracked Order Display */}
             {trackedOrder ? (
-              <div className="space-y-4">
-                {/* Order Status Timeline */}
-                <div className="section-card">
-                  <div className="section-card-header">
-                    <div className="section-card-title">
-                      <div className="section-card-title-icon" style={{ background: 'var(--primary-light)' }}>
-                        <ClipboardList className="w-4 h-4" style={{ color: 'var(--primary)' }} />
-                      </div>
-                      حالة الطلب
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {/* Live indicator */}
-                      {trackedOrder.status !== 'PAID' && trackedOrder.status !== 'CANCELLED' && (
-                        <div className="live-indicator">
-                          <Radio className="w-3 h-3" />
-                          <span>مباشر</span>
-                        </div>
-                      )}
-                      <div className="order-code-badge">{trackedOrder.orderCode}</div>
+              <div className="track-order-details">
+                {/* Order Status Header */}
+                <div className="track-status-header">
+                  <div className="track-status-info">
+                    <div className="track-code-large">{trackedOrder.orderCode}</div>
+                    <div className="track-table-badge">
+                      <TableIcon className="w-4 h-4" />
+                      <span>طاولة {trackedOrder.tableNumber}</span>
                     </div>
                   </div>
-                  <div className="section-card-body">
-                    <div className="order-timeline-enhanced">
-                      {['NEW', 'ACCEPTED', 'PREPARING', 'READY', 'SERVED', 'PAID'].map((status, index) => {
-                        const statusOrder = ['NEW', 'ACCEPTED', 'PREPARING', 'READY', 'SERVED', 'PAID'];
-                        const currentIndex = statusOrder.indexOf(trackedOrder.status);
-                        const isCompleted = index <= currentIndex && currentIndex !== -1;
-                        const isCurrent = status === trackedOrder.status;
-                        const isCancelled = trackedOrder.status === 'CANCELLED';
-                        const isPast = index < currentIndex && currentIndex !== -1;
-                        
-                        return (
-                          <div 
-                            key={status} 
-                            className={`timeline-item-enhanced ${isCompleted ? 'completed' : ''} ${isCurrent ? 'current' : ''} ${isCancelled && isCurrent ? 'cancelled' : ''} ${isPast ? 'past' : ''}`}
-                          >
-                            <div className="timeline-connector">
-                              {index > 0 && <div className={`timeline-line ${isPast ? 'filled' : ''}`} />}
-                            </div>
-                            <div className="timeline-node">
-                              <div className={`timeline-icon-wrapper ${isCompleted ? 'completed' : ''} ${isCurrent ? 'current' : ''} ${isCancelled && isCurrent ? 'cancelled' : ''}`}>
-                                {isCompleted && !isCancelled ? (
-                                  <Check className="w-4 h-4" />
-                                ) : isCancelled && isCurrent ? (
-                                  <X className="w-4 h-4" />
-                                ) : (
-                                  <div className="w-2 h-2 rounded-full bg-current" />
-                                )}
-                              </div>
-                              <div className="timeline-label-enhanced">{ORDER_STATUS_AR[status as keyof typeof ORDER_STATUS_AR]}</div>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                    
-                    {trackedOrder.status === 'CANCELLED' && (
-                      <div className="mt-4 p-3 rounded-lg animate-pulse-subtle" style={{ background: 'var(--error-light)', color: 'var(--error)' }}>
-                        <div className="flex items-center gap-2">
-                          <AlertTriangle className="w-5 h-5" />
-                          <span className="font-medium">تم إلغاء الطلب</span>
-                        </div>
+                  <div className="track-status-badge-wrapper">
+                    {trackedOrder.status !== 'PAID' && trackedOrder.status !== 'CANCELLED' && (
+                      <div className="track-live-badge">
+                        <span className="track-live-dot"></span>
+                        <span>مباشر</span>
                       </div>
                     )}
-                    
-                    {trackedOrder.status === 'READY' && (
-                      <div className="mt-4 p-4 rounded-lg animate-bounce-subtle" style={{ background: 'var(--success-light)', color: 'var(--success)' }}>
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: 'var(--success)' }}>
-                            <PackageCheck className="w-5 h-5 text-white" />
-                          </div>
-                          <div>
-                            <span className="font-bold text-lg">طلبك جاهز للاستلام!</span>
-                            <p className="text-small opacity-80">يمكنك المرور لاستلام طلبك</p>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Order Details */}
-                <div className="section-card">
-                  <div className="section-card-header">
-                    <div className="section-card-title">
-                      <div className="section-card-title-icon" style={{ background: 'var(--info-light)' }}>
-                        <Coffee className="w-4 h-4" style={{ color: 'var(--info)' }} />
-                      </div>
-                      تفاصيل الطلب
-                    </div>
-                  </div>
-                  <div className="section-card-body">
-                    <div className="grouped-list">
-                      {trackedOrder.orderItems.map((item) => (
-                        <div key={item.id} className="grouped-list-item">
-                          <div className="grouped-list-item-content">
-                            <div className="grouped-list-item-title">{item.productName}</div>
-                            <div className="grouped-list-item-subtitle">{item.price} {currency}</div>
-                          </div>
-                          <div className="text-body font-medium">×{item.quantity}</div>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="cart-total-row mt-4 pt-4 border-t border-[var(--border)]">
-                      <span className="cart-total-label">المجموع</span>
-                      <span className="cart-total-value">{trackedOrder.total.toFixed(2)} {currency}</span>
+                    <div className={`track-status-pill track-status-${trackedOrder.status.toLowerCase()}`}>
+                      {ORDER_STATUS_AR[trackedOrder.status]}
                     </div>
                   </div>
                 </div>
 
-                {/* Table Info */}
-                <div className="section-card">
-                  <div className="section-card-body">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'var(--primary-light)' }}>
-                          <TableIcon className="w-5 h-5" style={{ color: 'var(--primary)' }} />
+                {/* Timeline Section */}
+                <div className="track-timeline-section">
+                  <div className="track-timeline-title">
+                    <Clock className="w-4 h-4" />
+                    <span>مراحل الطلب</span>
+                  </div>
+                  
+                  <div className="track-timeline">
+                    {['NEW', 'ACCEPTED', 'PREPARING', 'READY', 'SERVED', 'PAID'].map((status, index) => {
+                      const statusOrder = ['NEW', 'ACCEPTED', 'PREPARING', 'READY', 'SERVED', 'PAID'];
+                      const currentIndex = statusOrder.indexOf(trackedOrder.status);
+                      const isCompleted = index <= currentIndex && currentIndex !== -1;
+                      const isCurrent = status === trackedOrder.status;
+                      const isCancelled = trackedOrder.status === 'CANCELLED';
+                      const isPast = index < currentIndex && currentIndex !== -1;
+                      
+                      return (
+                        <div 
+                          key={status} 
+                          className={`track-timeline-item ${isCompleted ? 'completed' : ''} ${isCurrent ? 'current' : ''} ${isCancelled && isCurrent ? 'cancelled' : ''}`}
+                        >
+                          <div className="track-timeline-line">
+                            {index > 0 && <div className={`track-timeline-line-inner ${isPast ? 'filled' : ''}`} />}
+                          </div>
+                          <div className="track-timeline-node">
+                            <div className={`track-timeline-dot ${isCompleted ? 'completed' : ''} ${isCurrent ? 'current' : ''} ${isCancelled && isCurrent ? 'cancelled' : ''}`}>
+                              {isCompleted && !isCancelled ? (
+                                <Check className="w-3 h-3" />
+                              ) : isCancelled && isCurrent ? (
+                                <X className="w-3 h-3" />
+                              ) : null}
+                            </div>
+                            <span className="track-timeline-label">{ORDER_STATUS_AR[status as keyof typeof ORDER_STATUS_AR]}</span>
+                          </div>
                         </div>
-                        <div>
-                          <div className="text-small text-[var(--text-muted)]">رقم الطاولة</div>
-                          <div className="text-h3">{trackedOrder.tableNumber}</div>
-                        </div>
+                      );
+                    })}
+                  </div>
+                  
+                  {/* Special Status Messages */}
+                  {trackedOrder.status === 'CANCELLED' && (
+                    <div className="track-status-message track-status-cancelled">
+                      <AlertTriangle className="w-5 h-5" />
+                      <span>تم إلغاء هذا الطلب</span>
+                    </div>
+                  )}
+                  
+                  {trackedOrder.status === 'READY' && (
+                    <div className="track-status-message track-status-ready">
+                      <PackageCheck className="w-5 h-5" />
+                      <div>
+                        <span className="track-status-message-title">طلبك جاهز!</span>
+                        <span className="track-status-message-desc">يمكنك المرور لاستلامه الآن</span>
                       </div>
-                      <div className="text-left">
-                        <div className="text-small text-[var(--text-muted)]">وقت الطلب</div>
-                        <div className="text-body">
-                          {new Date(trackedOrder.createdAt).toLocaleTimeString('ar-SA', { 
-                            hour: '2-digit', 
-                            minute: '2-digit' 
-                          })}
+                    </div>
+                  )}
+                </div>
+
+                {/* Order Items */}
+                <div className="track-items-section">
+                  <div className="track-items-header">
+                    <Coffee className="w-4 h-4" />
+                    <span>المنتجات المطلوبة</span>
+                    <span className="track-items-count">{trackedOrder.orderItems.length}</span>
+                  </div>
+                  <div className="track-items-list">
+                    {trackedOrder.orderItems.map((item) => (
+                      <div key={item.id} className="track-item-row">
+                        <div className="track-item-info">
+                          <span className="track-item-name">{item.productName}</span>
+                          <span className="track-item-price">{item.price} {currency}</span>
                         </div>
+                        <div className="track-item-qty">×{item.quantity}</div>
+                        <div className="track-item-total">{(item.price * item.quantity).toFixed(2)}</div>
                       </div>
+                    ))}
+                  </div>
+                  <div className="track-total-row">
+                    <span>المجموع الكلي</span>
+                    <span>{trackedOrder.total.toFixed(2)} {currency}</span>
+                  </div>
+                </div>
+
+                {/* Order Meta */}
+                <div className="track-meta-section">
+                  <div className="track-meta-item">
+                    <Clock className="w-4 h-4" />
+                    <div>
+                      <span className="track-meta-label">وقت الطلب</span>
+                      <span className="track-meta-value">
+                        {new Date(trackedOrder.createdAt).toLocaleTimeString('ar-SA', { 
+                          hour: '2-digit', 
+                          minute: '2-digit' 
+                        })}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="track-meta-item">
+                    <Calendar className="w-4 h-4" />
+                    <div>
+                      <span className="track-meta-label">التاريخ</span>
+                      <span className="track-meta-value">
+                        {new Date(trackedOrder.createdAt).toLocaleDateString('ar-SA', { 
+                          day: 'numeric',
+                          month: 'short'
+                        })}
+                      </span>
                     </div>
                   </div>
                 </div>
               </div>
             ) : (
-              <div className="empty-state">
-                <div className="empty-state-icon">
-                  <Search className="w-6 h-6" />
+              !lastOrderCode && (
+                <div className="track-empty-state">
+                  <div className="track-empty-icon">
+                    <Search className="w-12 h-12" />
+                  </div>
+                  <div className="track-empty-title">لا يوجد طلب للتتبع</div>
+                  <div className="track-empty-desc">أدخل كود التتبع الخاص بك أعلاه</div>
                 </div>
-                <div className="empty-state-title">أدخل كود التتبع</div>
-                <div className="empty-state-description">
-                  {lastOrderCode 
-                    ? `كود طلبك الأخير: ${lastOrderCode}` 
-                    : 'أدخل الكود المكون من 6 أحرف لمتابعة طلبك'
-                  }
-                </div>
-                {lastOrderCode && (
-                  <button 
-                    className="btn btn-primary mt-4"
-                    onClick={() => {
-                      setTrackingCode(lastOrderCode);
-                      setTimeout(trackOrder, 100);
-                    }}
-                  >
-                    تتبع طلبي الأخير
-                  </button>
-                )}
-              </div>
+              )
             )}
           </div>
         )}
