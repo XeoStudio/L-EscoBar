@@ -1,8 +1,16 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 
+function hasDatabaseConfig() {
+  return Boolean(process.env.DATABASE_URL);
+}
+
 // GET - جلب جميع الفئات
 export async function GET() {
+  if (!hasDatabaseConfig()) {
+    return NextResponse.json([]);
+  }
+
   try {
     const categories = await db.category.findMany({
       include: {
@@ -21,6 +29,13 @@ export async function GET() {
 
 // POST - إضافة فئة جديدة
 export async function POST(request: Request) {
+  if (!hasDatabaseConfig()) {
+    return NextResponse.json(
+      { error: 'قاعدة البيانات غير مهيأة محلياً.' },
+      { status: 503 }
+    );
+  }
+
   try {
     const body = await request.json();
     const { name, nameAr, image } = body;

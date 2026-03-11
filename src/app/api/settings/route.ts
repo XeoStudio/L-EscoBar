@@ -1,25 +1,35 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 
+const DEFAULT_SETTINGS = {
+  cafeName: "L'EscoBar",
+  currency: 'د.ت',
+  primaryColor: '#6F4E37',
+  openingHours: '08:00',
+  closingHours: '23:00',
+  welcomeMessage: 'مرحباً بك في مقهانا',
+  acceptOrders: true,
+  taxRate: 0,
+  enableTableService: true,
+  enableDelivery: false,
+};
+
+function hasDatabaseConfig() {
+  return Boolean(process.env.DATABASE_URL);
+}
+
 // GET - جلب الإعدادات
 export async function GET() {
+  if (!hasDatabaseConfig()) {
+    return NextResponse.json(DEFAULT_SETTINGS);
+  }
+
   try {
     let settings = await db.settings.findFirst();
     
     if (!settings) {
       settings = await db.settings.create({
-        data: {
-          cafeName: "L'EscoBar",
-          currency: 'د.ت',
-          primaryColor: '#6F4E37',
-          openingHours: '08:00',
-          closingHours: '23:00',
-          welcomeMessage: 'مرحباً بك في مقهانا',
-          acceptOrders: true,
-          taxRate: 0,
-          enableTableService: true,
-          enableDelivery: false
-        }
+        data: DEFAULT_SETTINGS
       });
     }
     
@@ -32,6 +42,13 @@ export async function GET() {
 
 // PUT - تحديث الإعدادات
 export async function PUT(request: Request) {
+  if (!hasDatabaseConfig()) {
+    return NextResponse.json(
+      { error: 'قاعدة البيانات غير مهيأة محلياً. أضف DATABASE_URL لحفظ الإعدادات.' },
+      { status: 503 }
+    );
+  }
+
   try {
     const body = await request.json();
     const { 
@@ -55,19 +72,20 @@ export async function PUT(request: Request) {
     if (!settings) {
       settings = await db.settings.create({
         data: {
-          cafeName: cafeName || "L'EscoBar",
-          currency: currency || 'د.ت',
+          ...DEFAULT_SETTINGS,
+          cafeName: cafeName || DEFAULT_SETTINGS.cafeName,
+          currency: currency || DEFAULT_SETTINGS.currency,
           logo: logo || null,
-          primaryColor: primaryColor || '#6F4E37',
-          openingHours: openingHours || '08:00',
-          closingHours: closingHours || '23:00',
+          primaryColor: primaryColor || DEFAULT_SETTINGS.primaryColor,
+          openingHours: openingHours || DEFAULT_SETTINGS.openingHours,
+          closingHours: closingHours || DEFAULT_SETTINGS.closingHours,
           phone: phone || null,
           address: address || null,
-          welcomeMessage: welcomeMessage || 'مرحباً بك في مقهانا',
-          acceptOrders: acceptOrders !== undefined ? acceptOrders : true,
-          taxRate: taxRate !== undefined ? taxRate : 0,
-          enableTableService: enableTableService !== undefined ? enableTableService : true,
-          enableDelivery: enableDelivery !== undefined ? enableDelivery : false
+          welcomeMessage: welcomeMessage || DEFAULT_SETTINGS.welcomeMessage,
+          acceptOrders: acceptOrders !== undefined ? acceptOrders : DEFAULT_SETTINGS.acceptOrders,
+          taxRate: taxRate !== undefined ? taxRate : DEFAULT_SETTINGS.taxRate,
+          enableTableService: enableTableService !== undefined ? enableTableService : DEFAULT_SETTINGS.enableTableService,
+          enableDelivery: enableDelivery !== undefined ? enableDelivery : DEFAULT_SETTINGS.enableDelivery
         }
       });
     } else {

@@ -1,8 +1,16 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 
+function hasDatabaseConfig() {
+  return Boolean(process.env.DATABASE_URL);
+}
+
 // GET - جلب جميع المنتجات
 export async function GET(request: Request) {
+  if (!hasDatabaseConfig()) {
+    return NextResponse.json([]);
+  }
+
   try {
     const { searchParams } = new URL(request.url);
     const categoryId = searchParams.get('categoryId');
@@ -35,6 +43,13 @@ export async function GET(request: Request) {
 
 // POST - إضافة منتج جديد
 export async function POST(request: Request) {
+  if (!hasDatabaseConfig()) {
+    return NextResponse.json(
+      { error: 'قاعدة البيانات غير مهيأة محلياً.' },
+      { status: 503 }
+    );
+  }
+
   try {
     const body = await request.json();
     const { name, nameAr, description, descriptionAr, price, image, categoryId, available } = body;

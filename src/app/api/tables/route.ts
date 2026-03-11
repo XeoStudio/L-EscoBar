@@ -1,8 +1,16 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 
+function hasDatabaseConfig() {
+  return Boolean(process.env.DATABASE_URL);
+}
+
 // GET - جلب جميع الطاولات مع حالة الاحتلال
 export async function GET() {
+  if (!hasDatabaseConfig()) {
+    return NextResponse.json([]);
+  }
+
   try {
     // جلب جميع الطاولات
     const tables = await db.table.findMany({
@@ -41,6 +49,13 @@ export async function GET() {
 
 // POST - إضافة طاولة جديدة
 export async function POST(request: Request) {
+  if (!hasDatabaseConfig()) {
+    return NextResponse.json(
+      { error: 'قاعدة البيانات غير مهيأة محلياً.' },
+      { status: 503 }
+    );
+  }
+
   try {
     const body = await request.json();
     const { number, seats, description } = body;
@@ -78,6 +93,13 @@ export async function POST(request: Request) {
 
 // DELETE - حذف طاولة
 export async function DELETE(request: Request) {
+  if (!hasDatabaseConfig()) {
+    return NextResponse.json(
+      { error: 'قاعدة البيانات غير مهيأة محلياً.' },
+      { status: 503 }
+    );
+  }
+
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');

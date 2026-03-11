@@ -2,6 +2,10 @@ import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { Prisma } from '@prisma/client';
 
+function hasDatabaseConfig() {
+  return Boolean(process.env.DATABASE_URL);
+}
+
 // Generate a unique order code (6 characters, alphanumeric)
 function generateOrderCode(): string {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -14,6 +18,10 @@ function generateOrderCode(): string {
 
 // GET - جلب جميع الطلبات
 export async function GET(request: Request) {
+  if (!hasDatabaseConfig()) {
+    return NextResponse.json([]);
+  }
+
   try {
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status');
@@ -51,6 +59,13 @@ export async function GET(request: Request) {
 
 // POST - إنشاء طلب جديد مع حماية قوية من التزامن
 export async function POST(request: Request) {
+  if (!hasDatabaseConfig()) {
+    return NextResponse.json(
+      { error: 'قاعدة البيانات غير مهيأة محلياً.' },
+      { status: 503 }
+    );
+  }
+
   try {
     const body = await request.json();
     const { tableId, tableNumber, items, notes } = body;
@@ -63,7 +78,13 @@ export async function POST(request: Request) {
 
     // حساب المجموع أولاً
     let total = 0;
-    const orderItemsData = [];
+    const orderItemsData: Array<{
+      productId: string;
+      productName: string;
+      price: number;
+      quantity: number;
+      notes: string | null;
+    }> = [];
 
     for (const item of items) {
       const product = await db.product.findUnique({

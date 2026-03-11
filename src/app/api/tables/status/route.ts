@@ -2,8 +2,20 @@ import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { Prisma } from '@prisma/client';
 
+function hasDatabaseConfig() {
+  return Boolean(process.env.DATABASE_URL);
+}
+
 // GET - جلب الطاولات مع حالتها (مشغولة/متاحة) - محسّن للسرعة
 export async function GET() {
+  if (!hasDatabaseConfig()) {
+    return NextResponse.json([], {
+      headers: {
+        'Cache-Control': 'no-store, max-age=0',
+      },
+    });
+  }
+
   try {
     // استعلام واحد مُحسّن باستخدام raw query للسرعة القصوى
     const result = await db.$queryRaw<Array<{
