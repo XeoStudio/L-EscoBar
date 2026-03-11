@@ -2700,9 +2700,15 @@ export default function CafeApp() {
                     disabled={isTrackingLoading || !trackingCode.trim()}
                   >
                     {isTrackingLoading ? (
-                      <RefreshCw className="w-5 h-5 animate-spin" />
+                      <>
+                        <RefreshCw className="w-4 h-4 animate-spin" />
+                        <span>Tracking...</span>
+                      </>
                     ) : (
-                      <Search className="w-5 h-5" />
+                      <>
+                        <Search className="w-4 h-4" />
+                        <span>Start Tracking</span>
+                      </>
                     )}
                   </button>
                 </div>

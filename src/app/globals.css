@@ -3703,6 +3703,7 @@ body {
 .track-input-row {
   display: flex;
   gap: 8px;
+  align-items: stretch;
 }
 
 .track-code-input {
@@ -3734,22 +3735,57 @@ body {
 }
 
 .track-search-btn {
-  width: 48px;
+  min-width: 132px;
   height: 48px;
   background: var(--gradient-primary);
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: var(--radius-sm);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 6px;
+  padding: 0 14px;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
   cursor: pointer;
   flex-shrink: 0;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+}
+
+.track-search-btn span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track-search-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .track-search-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+@media (max-width: 420px) {
+  .track-input-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .track-code-input {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .track-search-btn {
+    width: 100%;
+    min-width: 0;
+    height: 50px;
+    padding: 0 12px;
+  }
 }
 
 .track-input-hint {
@@ -4163,8 +4199,14 @@ body {
   }
   
   .track-search-btn {
-    width: 56px;
+    min-width: 152px;
     height: 56px;
+    font-size: 15px;
+  }
+
+  .track-search-btn svg {
+    width: 18px;
+    height: 18px;
   }
   
   .track-code-display {
