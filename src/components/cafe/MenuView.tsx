@@ -32,8 +32,6 @@ import {
   Edit,
   Trash2,
   Search,
-  Moon,
-  Sun,
   ChevronLeft,
   ChevronRight,
   RefreshCw,
@@ -1453,7 +1451,6 @@ const buildThemeSuggestions = (primaryColor: string) => {
 };
 
 export default function CafeApp() {
-  const THEME_STORAGE_KEY = 'lescobar-theme';
 
   // Settings State
   const [settings, setSettings] = useState<Settings | null>(null);
@@ -1492,10 +1489,7 @@ export default function CafeApp() {
   const [isTableDialogOpen, setIsTableDialogOpen] = useState(false);
   const [reportPeriod, setReportPeriod] = useState('today');
   const [soundEnabled, setSoundEnabled] = useState(true);
-  const [darkMode, setDarkMode] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return localStorage.getItem(THEME_STORAGE_KEY) === 'dark';
-  });
+  const darkMode = false;
   const [orderFilter, setOrderFilter] = useState<OrderStatus | 'all'>('all');
   
   // Database management states
@@ -1758,21 +1752,6 @@ export default function CafeApp() {
     }
     prevOrdersCountRef.current = orders.length;
   }, [orders, isAdminAuthenticated, soundEnabled]);
-
-  const toggleDarkMode = () => {
-    setDarkMode((prev) => !prev);
-  };
-
-  // Dark mode effect (device-local only)
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem(THEME_STORAGE_KEY, 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem(THEME_STORAGE_KEY, 'light');
-    }
-  }, [darkMode]);
 
   // Sound notification for READY status in customer tracking
   useEffect(() => {
@@ -2783,12 +2762,6 @@ export default function CafeApp() {
               <h1 className="app-title">{cafeName}</h1>
             </div>
             <div className="flex items-center gap-2">
-              <button 
-                className="btn btn-ghost btn-icon"
-                onClick={toggleDarkMode}
-              >
-                {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-              </button>
               <button 
                 className="btn btn-ghost btn-icon"
                 onClick={handleLogout}
@@ -3930,16 +3903,6 @@ export default function CafeApp() {
 
                   <div className="settings-toggle">
                     <div>
-                      <div className="settings-toggle-label">{t('darkMode')}</div>
-                      <div className="settings-toggle-description">{t('darkModeDesc')}</div>
-                    </div>
-                    <div 
-                      className={`settings-toggle-switch ${darkMode ? 'active' : ''}`}
-                      onClick={toggleDarkMode}
-                    />
-                  </div>
-                  <div className="settings-toggle">
-                    <div>
                       <div className="settings-toggle-label">{t('notificationsSound')}</div>
                       <div className="settings-toggle-description">{t('notificationsSoundDesc')}</div>
                     </div>
@@ -4751,28 +4714,6 @@ export default function CafeApp() {
                 <ChevronLeft className="w-5 h-5 text-[var(--text-muted)]" />
               </div>
             </button>
-
-            {/* Display Settings */}
-            <div className="settings-section mb-4">
-              <div className="settings-section-header">
-                <div className="settings-section-icon">
-                  <Moon className="w-5 h-5" />
-                </div>
-                  <div className="settings-section-title">{t('display')}</div>
-              </div>
-              <div className="settings-section-body">
-                <div className="settings-toggle">
-                  <div>
-                      <div className="settings-toggle-label">{t('darkMode')}</div>
-                      <div className="settings-toggle-description">{t('darkModeDesc')}</div>
-                  </div>
-                  <div 
-                    className={`settings-toggle-switch ${darkMode ? 'active' : ''}`}
-                    onClick={toggleDarkMode}
-                  />
-                </div>
-              </div>
-            </div>
 
             {/* App Info */}
             <div className="section-card">
