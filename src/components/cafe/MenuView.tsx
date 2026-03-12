@@ -137,6 +137,14 @@ type CustomerTab = 'home' | 'cart' | 'track' | 'more';
 // Admin tabs
 type AdminTab = 'dashboard' | 'orders' | 'menu' | 'database' | 'settings';
 
+const DEFAULT_THEME_COLORS = {
+  primaryColor: '#6F4E37',
+  accentColor: '#D4A574',
+  backgroundColor: '#FDF8F3',
+  surfaceColor: '#FFFFFF',
+  textPrimaryColor: '#3D2314',
+};
+
 export default function CafeApp() {
   const THEME_STORAGE_KEY = 'lescobar-theme';
 
@@ -220,7 +228,11 @@ export default function CafeApp() {
     cafeName: '', 
     currency: 'د.ت',
     logo: '',
-    primaryColor: '#6F4E37',
+    primaryColor: DEFAULT_THEME_COLORS.primaryColor,
+    accentColor: DEFAULT_THEME_COLORS.accentColor,
+    backgroundColor: DEFAULT_THEME_COLORS.backgroundColor,
+    surfaceColor: DEFAULT_THEME_COLORS.surfaceColor,
+    textPrimaryColor: DEFAULT_THEME_COLORS.textPrimaryColor,
     openingHours: '08:00',
     closingHours: '23:00',
     phone: '',
@@ -232,6 +244,30 @@ export default function CafeApp() {
     enableDelivery: false
   });
 
+  const applyThemeColors = useCallback((colors?: {
+    primaryColor?: string;
+    accentColor?: string;
+    backgroundColor?: string;
+    surfaceColor?: string;
+    textPrimaryColor?: string;
+  }) => {
+    if (typeof document === 'undefined') return;
+
+    const rootStyle = document.documentElement.style;
+
+    const primary = colors?.primaryColor || DEFAULT_THEME_COLORS.primaryColor;
+    const accent = colors?.accentColor || DEFAULT_THEME_COLORS.accentColor;
+    const background = colors?.backgroundColor || DEFAULT_THEME_COLORS.backgroundColor;
+    const surface = colors?.surfaceColor || DEFAULT_THEME_COLORS.surfaceColor;
+    const textPrimary = colors?.textPrimaryColor || DEFAULT_THEME_COLORS.textPrimaryColor;
+
+    rootStyle.setProperty('--primary', primary);
+    rootStyle.setProperty('--accent', accent);
+    rootStyle.setProperty('--background', background);
+    rootStyle.setProperty('--surface', surface);
+    rootStyle.setProperty('--text-primary', textPrimary);
+  }, []);
+
   // Check auth on mount
   useEffect(() => {
     checkAuth();
@@ -239,8 +275,9 @@ export default function CafeApp() {
 
   // Fetch initial data
   useEffect(() => {
+    applyThemeColors();
     fetchAllData();
-  }, []);
+  }, [applyThemeColors]);
 
   // Realtime polling for admin - always poll when authenticated
   useEffect(() => {
@@ -409,7 +446,11 @@ export default function CafeApp() {
         cafeName: data.cafeName, 
         currency: data.currency,
         logo: data.logo || '',
-        primaryColor: data.primaryColor || '#6F4E37',
+        primaryColor: data.primaryColor || DEFAULT_THEME_COLORS.primaryColor,
+        accentColor: data.accentColor || DEFAULT_THEME_COLORS.accentColor,
+        backgroundColor: data.backgroundColor || DEFAULT_THEME_COLORS.backgroundColor,
+        surfaceColor: data.surfaceColor || DEFAULT_THEME_COLORS.surfaceColor,
+        textPrimaryColor: data.textPrimaryColor || DEFAULT_THEME_COLORS.textPrimaryColor,
         openingHours: data.openingHours || '08:00',
         closingHours: data.closingHours || '23:00',
         phone: data.phone || '',
@@ -419,6 +460,13 @@ export default function CafeApp() {
         taxRate: data.taxRate ?? 0,
         enableTableService: data.enableTableService ?? true,
         enableDelivery: data.enableDelivery ?? false
+      });
+      applyThemeColors({
+        primaryColor: data.primaryColor,
+        accentColor: data.accentColor,
+        backgroundColor: data.backgroundColor,
+        surfaceColor: data.surfaceColor,
+        textPrimaryColor: data.textPrimaryColor,
       });
     } catch (error) {
       console.error('fetchSettings error:', error);
@@ -778,6 +826,13 @@ export default function CafeApp() {
       if (res.ok) {
         const data = await res.json();
         setSettings(data);
+        applyThemeColors({
+          primaryColor: data.primaryColor,
+          accentColor: data.accentColor,
+          backgroundColor: data.backgroundColor,
+          surfaceColor: data.surfaceColor,
+          textPrimaryColor: data.textPrimaryColor,
+        });
         toast({ title: '✅ تم الحفظ', description: 'تم تحديث الإعدادات' });
       } else {
         const errorData = await res.json();
@@ -2077,22 +2132,137 @@ export default function CafeApp() {
                   <div className="settings-section-title">المظهر</div>
                 </div>
                 <div className="settings-section-body">
-                  <div className="settings-field">
-                    <label className="settings-label">اللون الرئيسي</label>
-                    <div className="color-picker-wrapper">
-                      <div 
-                        className="color-picker-preview"
-                        style={{ backgroundColor: settingsForm.primaryColor }}
-                      />
-                      <input
-                        type="text"
-                        className="settings-input color-picker-input"
-                        value={settingsForm.primaryColor}
-                        onChange={(e) => setSettingsForm({ ...settingsForm, primaryColor: e.target.value })}
-                        placeholder="#6F4E37"
-                      />
+                  <div className="settings-row">
+                    <div className="settings-field">
+                      <label className="settings-label">اللون الرئيسي</label>
+                      <div className="color-picker-wrapper">
+                        <input
+                          type="color"
+                          className="color-picker-preview"
+                          value={settingsForm.primaryColor}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setSettingsForm({ ...settingsForm, primaryColor: value });
+                            applyThemeColors({ ...settingsForm, primaryColor: value });
+                          }}
+                        />
+                        <input
+                          type="text"
+                          className="settings-input color-picker-input"
+                          value={settingsForm.primaryColor}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, primaryColor: e.target.value })}
+                          placeholder="#6F4E37"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="settings-field">
+                      <label className="settings-label">لون الإبراز</label>
+                      <div className="color-picker-wrapper">
+                        <input
+                          type="color"
+                          className="color-picker-preview"
+                          value={settingsForm.accentColor}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setSettingsForm({ ...settingsForm, accentColor: value });
+                            applyThemeColors({ ...settingsForm, accentColor: value });
+                          }}
+                        />
+                        <input
+                          type="text"
+                          className="settings-input color-picker-input"
+                          value={settingsForm.accentColor}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, accentColor: e.target.value })}
+                          placeholder="#D4A574"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="settings-field">
+                      <label className="settings-label">لون الخلفية</label>
+                      <div className="color-picker-wrapper">
+                        <input
+                          type="color"
+                          className="color-picker-preview"
+                          value={settingsForm.backgroundColor}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setSettingsForm({ ...settingsForm, backgroundColor: value });
+                            applyThemeColors({ ...settingsForm, backgroundColor: value });
+                          }}
+                        />
+                        <input
+                          type="text"
+                          className="settings-input color-picker-input"
+                          value={settingsForm.backgroundColor}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, backgroundColor: e.target.value })}
+                          placeholder="#FDF8F3"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="settings-field">
+                      <label className="settings-label">لون الأسطح</label>
+                      <div className="color-picker-wrapper">
+                        <input
+                          type="color"
+                          className="color-picker-preview"
+                          value={settingsForm.surfaceColor}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setSettingsForm({ ...settingsForm, surfaceColor: value });
+                            applyThemeColors({ ...settingsForm, surfaceColor: value });
+                          }}
+                        />
+                        <input
+                          type="text"
+                          className="settings-input color-picker-input"
+                          value={settingsForm.surfaceColor}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, surfaceColor: e.target.value })}
+                          placeholder="#FFFFFF"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="settings-field">
+                      <label className="settings-label">لون النص الأساسي</label>
+                      <div className="color-picker-wrapper">
+                        <input
+                          type="color"
+                          className="color-picker-preview"
+                          value={settingsForm.textPrimaryColor}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setSettingsForm({ ...settingsForm, textPrimaryColor: value });
+                            applyThemeColors({ ...settingsForm, textPrimaryColor: value });
+                          }}
+                        />
+                        <input
+                          type="text"
+                          className="settings-input color-picker-input"
+                          value={settingsForm.textPrimaryColor}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, textPrimaryColor: e.target.value })}
+                          placeholder="#3D2314"
+                        />
+                      </div>
                     </div>
                   </div>
+
+                  <button
+                    className="btn btn-secondary w-full mt-2"
+                    type="button"
+                    onClick={() => {
+                      setSettingsForm({
+                        ...settingsForm,
+                        ...DEFAULT_THEME_COLORS,
+                      });
+                      applyThemeColors(DEFAULT_THEME_COLORS);
+                    }}
+                  >
+                    إعادة ألوان الثيم الافتراضية
+                  </button>
+
                   <div className="settings-toggle">
                     <div>
                       <div className="settings-toggle-label">الوضع الداكن</div>

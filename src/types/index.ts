@@ -4,6 +4,10 @@ export interface Settings {
   currency: string;
   logo?: string | null;
   primaryColor: string;
+  accentColor: string;
+  backgroundColor: string;
+  surfaceColor: string;
+  textPrimaryColor: string;
   openingHours?: string | null;
   closingHours?: string | null;
   phone?: string | null;

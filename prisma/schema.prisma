@@ -18,6 +18,10 @@ model Settings {
   currency            String   @default("د.ت")
   logo                String?  // شعار المقهى
   primaryColor        String   @default("#6F4E37") // اللون الرئيسي (بني القهوة)
+  accentColor         String   @default("#D4A574") // لون إبراز ثانوي
+  backgroundColor     String   @default("#FDF8F3") // لون خلفية التطبيق
+  surfaceColor        String   @default("#FFFFFF") // لون البطاقات والعناصر
+  textPrimaryColor    String   @default("#3D2314") // لون النص الأساسي
   openingHours        String?  @default("08:00") // وقت الفتح
   closingHours        String?  @default("23:00") // وقت الإغلاق
   phone               String?  // رقم الهاتف
