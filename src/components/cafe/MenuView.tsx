@@ -2054,16 +2054,6 @@ export default function CafeApp() {
                       onClick={() => setSettingsForm({ ...settingsForm, acceptOrders: !settingsForm.acceptOrders })}
                     />
                   </div>
-                  <div className="settings-toggle">
-                    <div>
-                      <div className="settings-toggle-label">خدمة الطاولات</div>
-                      <div className="settings-toggle-description">تفعيل نظام حجز الطاولات</div>
-                    </div>
-                    <div 
-                      className={`settings-toggle-switch ${settingsForm.enableTableService ? 'active' : ''}`}
-                      onClick={() => setSettingsForm({ ...settingsForm, enableTableService: !settingsForm.enableTableService })}
-                    />
-                  </div>
                 </div>
               </div>
 
