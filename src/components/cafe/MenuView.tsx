@@ -145,11 +145,28 @@ const DEFAULT_THEME_COLORS = {
   textPrimaryColor: '#3D2314',
 };
 
-const THEME_PRESETS = [
+type ThemePresetMode = 'light' | 'dark';
+
+type ThemePreset = {
+  id: string;
+  name: string;
+  description: string;
+  mode: ThemePresetMode;
+  colors: {
+    primaryColor: string;
+    accentColor: string;
+    backgroundColor: string;
+    surfaceColor: string;
+    textPrimaryColor: string;
+  };
+};
+
+const THEME_PRESETS: ThemePreset[] = [
   {
     id: 'coffee-classic',
     name: 'قهوة كلاسيك',
     description: 'دافئ واحترافي للمقاهي',
+    mode: 'light',
     colors: {
       primaryColor: '#6F4E37',
       accentColor: '#D4A574',
@@ -162,6 +179,7 @@ const THEME_PRESETS = [
     id: 'espresso-dark',
     name: 'إسبريسو داكن',
     description: 'طابع قوي ولمسة فاخرة',
+    mode: 'light',
     colors: {
       primaryColor: '#3B2A24',
       accentColor: '#B88A5A',
@@ -174,6 +192,7 @@ const THEME_PRESETS = [
     id: 'latte-cream',
     name: 'لاتيه كريمي',
     description: 'ألوان ناعمة ومريحة للقراءة',
+    mode: 'light',
     colors: {
       primaryColor: '#8A6C55',
       accentColor: '#D9B38C',
@@ -186,6 +205,7 @@ const THEME_PRESETS = [
     id: 'mocha-bronze',
     name: 'موكا برونزي',
     description: 'مزيج دافئ بطابع عصري',
+    mode: 'light',
     colors: {
       primaryColor: '#704C3A',
       accentColor: '#C98B63',
@@ -198,6 +218,7 @@ const THEME_PRESETS = [
     id: 'emerald-fresh',
     name: 'زمردي منعش',
     description: 'إحساس عصري وحيوي',
+    mode: 'light',
     colors: {
       primaryColor: '#1F7A5A',
       accentColor: '#48BFA3',
@@ -210,6 +231,7 @@ const THEME_PRESETS = [
     id: 'mint-breeze',
     name: 'نسيم النعناع',
     description: 'خيار خفيف وطبيعي',
+    mode: 'light',
     colors: {
       primaryColor: '#2F8F77',
       accentColor: '#6FD0BA',
@@ -222,6 +244,7 @@ const THEME_PRESETS = [
     id: 'midnight-lounge',
     name: 'ليلي أنيق',
     description: 'ستايل فاخر للمقاهي الراقية',
+    mode: 'light',
     colors: {
       primaryColor: '#243447',
       accentColor: '#C9A227',
@@ -234,6 +257,7 @@ const THEME_PRESETS = [
     id: 'royal-blue',
     name: 'أزرق ملكي',
     description: 'مظهر رسمي وواثق',
+    mode: 'light',
     colors: {
       primaryColor: '#2E4F9B',
       accentColor: '#7FA2FF',
@@ -246,6 +270,7 @@ const THEME_PRESETS = [
     id: 'charcoal-modern',
     name: 'فحمي حديث',
     description: 'تجربة احترافية نظيفة',
+    mode: 'light',
     colors: {
       primaryColor: '#2E2E32',
       accentColor: '#8F97A3',
@@ -258,6 +283,7 @@ const THEME_PRESETS = [
     id: 'sunset-vibe',
     name: 'غروب دافئ',
     description: 'ألوان ناعمة ومبهجة',
+    mode: 'light',
     colors: {
       primaryColor: '#B55239',
       accentColor: '#F3A357',
@@ -270,6 +296,7 @@ const THEME_PRESETS = [
     id: 'berry-bloom',
     name: 'توت مزهر',
     description: 'ستايل مرح ومختلف',
+    mode: 'light',
     colors: {
       primaryColor: '#8B2E5D',
       accentColor: '#E08DB4',
@@ -282,6 +309,7 @@ const THEME_PRESETS = [
     id: 'amber-market',
     name: 'سوق كهرماني',
     description: 'دفء واضح مع تباين ممتاز',
+    mode: 'light',
     colors: {
       primaryColor: '#9A4E1D',
       accentColor: '#F2A65A',
@@ -294,6 +322,7 @@ const THEME_PRESETS = [
     id: 'olive-garden',
     name: 'حديقة زيتونية',
     description: 'هوية هادئة بطابع طبيعي',
+    mode: 'light',
     colors: {
       primaryColor: '#586C3D',
       accentColor: '#A9C67A',
@@ -306,12 +335,65 @@ const THEME_PRESETS = [
     id: 'desert-sand',
     name: 'رمال الصحراء',
     description: 'ألوان عربية كلاسيكية عصرية',
+    mode: 'light',
     colors: {
       primaryColor: '#A86E3B',
       accentColor: '#E5B97A',
       backgroundColor: '#FFF8F0',
       surfaceColor: '#FFFFFF',
       textPrimaryColor: '#4B2D16',
+    },
+  },
+  {
+    id: 'night-roast',
+    name: 'حمصة ليلية',
+    description: 'داكن مريح للعين في الليل',
+    mode: 'dark',
+    colors: {
+      primaryColor: '#7D5A42',
+      accentColor: '#C49A6C',
+      backgroundColor: '#15110E',
+      surfaceColor: '#1F1813',
+      textPrimaryColor: '#F2E8DF',
+    },
+  },
+  {
+    id: 'deep-ocean-dark',
+    name: 'محيط عميق',
+    description: 'ألوان باردة وتباين مريح',
+    mode: 'dark',
+    colors: {
+      primaryColor: '#3C5A8B',
+      accentColor: '#6FA8FF',
+      backgroundColor: '#0F1620',
+      surfaceColor: '#192330',
+      textPrimaryColor: '#E9F0FF',
+    },
+  },
+  {
+    id: 'forest-night',
+    name: 'غابة ليلية',
+    description: 'داكن طبيعي بإضاءة منخفضة',
+    mode: 'dark',
+    colors: {
+      primaryColor: '#3A6B58',
+      accentColor: '#5DBA9A',
+      backgroundColor: '#0F1814',
+      surfaceColor: '#16231D',
+      textPrimaryColor: '#E5F5EE',
+    },
+  },
+  {
+    id: 'plum-night',
+    name: 'برقوق ليلي',
+    description: 'هوية فاخرة مع راحة بصرية',
+    mode: 'dark',
+    colors: {
+      primaryColor: '#6A4C7A',
+      accentColor: '#B087C8',
+      backgroundColor: '#14101A',
+      surfaceColor: '#1D1626',
+      textPrimaryColor: '#F1E8FA',
     },
   },
 ];
@@ -539,6 +621,16 @@ export default function CafeApp() {
   const themeSuggestions = useMemo(
     () => buildThemeSuggestions(settingsForm.primaryColor),
     [settingsForm.primaryColor]
+  );
+
+  const recommendedThemePresets = useMemo(
+    () => THEME_PRESETS.filter((preset) => preset.mode === (darkMode ? 'dark' : 'light')),
+    [darkMode]
+  );
+
+  const alternativeThemePresets = useMemo(
+    () => THEME_PRESETS.filter((preset) => preset.mode !== (darkMode ? 'dark' : 'light')),
+    [darkMode]
   );
 
   const updateThemeColor = (
@@ -2431,9 +2523,17 @@ export default function CafeApp() {
                 </div>
                 <div className="settings-section-body">
                   <div className="settings-field">
-                    <label className="settings-label">قوالب جاهزة</label>
+                    <label className="settings-label">قوالب ذكية حسب الوضع الحالي</label>
+                    <div className="theme-preset-hint">
+                      {darkMode
+                        ? 'الوضع الداكن مفعل: نعرض قوالب بإضاءة منخفضة وألوان مريحة للعين.'
+                        : 'الوضع الفاتح مفعل: نعرض قوالب واضحة ومضيئة للاستخدام النهاري.'}
+                    </div>
+                    <div className="theme-preset-group-title">
+                      {darkMode ? 'موصى به للوضع الداكن' : 'موصى به للوضع الفاتح'}
+                    </div>
                     <div className="theme-preset-grid">
-                      {THEME_PRESETS.map((preset) => (
+                      {recommendedThemePresets.map((preset) => (
                         <button
                           key={preset.id}
                           type="button"
@@ -2448,6 +2548,35 @@ export default function CafeApp() {
                           </div>
                           <div className="theme-preset-name">{preset.name}</div>
                           <div className="theme-preset-description">{preset.description}</div>
+                          <div className={`theme-preset-mode ${preset.mode === 'dark' ? 'dark' : 'light'}`}>
+                            {preset.mode === 'dark' ? 'داكن مريح' : 'فاتح احترافي'}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="theme-preset-group-title theme-preset-group-title-alt">
+                      {darkMode ? 'قوالب بديلة (فاتحة)' : 'قوالب بديلة (داكنة)'}
+                    </div>
+                    <div className="theme-preset-grid">
+                      {alternativeThemePresets.map((preset) => (
+                        <button
+                          key={`alt-${preset.id}`}
+                          type="button"
+                          className="theme-preset-card"
+                          onClick={() => applyThemePack(preset.colors)}
+                        >
+                          <div className="theme-preset-swatches">
+                            <span style={{ backgroundColor: preset.colors.primaryColor }} />
+                            <span style={{ backgroundColor: preset.colors.accentColor }} />
+                            <span style={{ backgroundColor: preset.colors.backgroundColor }} />
+                            <span style={{ backgroundColor: preset.colors.textPrimaryColor }} />
+                          </div>
+                          <div className="theme-preset-name">{preset.name}</div>
+                          <div className="theme-preset-description">{preset.description}</div>
+                          <div className={`theme-preset-mode ${preset.mode === 'dark' ? 'dark' : 'light'}`}>
+                            {preset.mode === 'dark' ? 'داكن مريح' : 'فاتح احترافي'}
+                          </div>
                         </button>
                       ))}
                     </div>
