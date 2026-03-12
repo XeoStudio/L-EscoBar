@@ -340,6 +340,11 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     adminAccountSave: 'تحديث حساب الإدارة',
     adminAccountUpdatedMsg: 'تم تحديث حساب الإدارة',
     adminAccountUpdateFailedMsg: 'فشل في تحديث حساب الإدارة',
+    uploadImageBtn: 'رفع من الجهاز',
+    driveLinkBtn: 'رابط Google Drive',
+    driveLinkPrompt: 'الصق رابط مشاركة Google Drive هنا',
+    invalidDriveLinkMsg: 'رابط Google Drive غير صالح',
+    imageUploadFailedMsg: 'فشل في تحميل الصورة',
   },
   en: {
     loading: 'Loading...',
@@ -609,6 +614,11 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     adminAccountSave: 'Update admin account',
     adminAccountUpdatedMsg: 'Admin account updated',
     adminAccountUpdateFailedMsg: 'Failed to update admin account',
+    uploadImageBtn: 'Upload from device',
+    driveLinkBtn: 'Google Drive link',
+    driveLinkPrompt: 'Paste a Google Drive share link',
+    invalidDriveLinkMsg: 'Invalid Google Drive link',
+    imageUploadFailedMsg: 'Failed to load image',
   },
   fr: {
     loading: 'Chargement...',
@@ -878,6 +888,11 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     adminAccountSave: 'Mettre a jour le compte admin',
     adminAccountUpdatedMsg: 'Compte admin mis a jour',
     adminAccountUpdateFailedMsg: 'Echec de mise a jour du compte admin',
+    uploadImageBtn: 'Importer depuis l\'appareil',
+    driveLinkBtn: 'Lien Google Drive',
+    driveLinkPrompt: 'Collez un lien Google Drive partage',
+    invalidDriveLinkMsg: 'Lien Google Drive invalide',
+    imageUploadFailedMsg: 'Echec du chargement de l\'image',
   },
 };
 
@@ -1516,6 +1531,9 @@ export default function CafeApp() {
   const [orderFilter, setOrderFilter] = useState<OrderStatus | 'all'>('all');
   const [adminAccountForm, setAdminAccountForm] = useState({ email: '', password: '' });
   const [isAdminAccountLoading, setIsAdminAccountLoading] = useState(false);
+  const logoFileRef = useRef<HTMLInputElement | null>(null);
+  const productImageRef = useRef<HTMLInputElement | null>(null);
+  const categoryImageRef = useRef<HTMLInputElement | null>(null);
   
   // Database management states
   const [dbStats, setDbStats] = useState<{orders: number, products: number, categories: number, tables: number, admins: number, oldestOrder: string | null} | null>(null);
@@ -1946,6 +1964,63 @@ export default function CafeApp() {
     } catch (error) {
       console.error('fetchReports error:', error);
     }
+  };
+
+  const getDriveFileId = (value: string) => {
+    try {
+      const url = new URL(value);
+      const searchId = url.searchParams.get('id');
+      if (searchId) return searchId;
+
+      const fileMatch = url.pathname.match(/\/file\/d\/([^/]+)/);
+      if (fileMatch?.[1]) return fileMatch[1];
+
+      const ucMatch = url.pathname.match(/\/uc/);
+      if (ucMatch && url.searchParams.get('export') && url.searchParams.get('id')) {
+        return url.searchParams.get('id');
+      }
+    } catch {
+      return null;
+    }
+
+    return null;
+  };
+
+  const normalizeDriveImageUrl = (value: string) => {
+    const fileId = getDriveFileId(value);
+    if (!fileId) return null;
+    return `https://drive.google.com/uc?export=view&id=${fileId}`;
+  };
+
+  const handleImageFile = async (file: File, onChange: (url: string) => void) => {
+    if (!file.type.startsWith('image/')) {
+      toast({ title: t('warningTitle'), description: t('imageUploadFailedMsg'), variant: 'destructive' });
+      return;
+    }
+
+    try {
+      const dataUrl = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result));
+        reader.onerror = () => reject(new Error('read_failed'));
+        reader.readAsDataURL(file);
+      });
+      onChange(dataUrl);
+    } catch {
+      toast({ title: t('genericErrorTitle'), description: t('imageUploadFailedMsg'), variant: 'destructive' });
+    }
+  };
+
+  const handleDriveLink = (onChange: (url: string) => void) => {
+    if (typeof window === 'undefined') return;
+    const link = window.prompt(t('driveLinkPrompt'))?.trim();
+    if (!link) return;
+    const normalized = normalizeDriveImageUrl(link);
+    if (!normalized) {
+      toast({ title: t('warningTitle'), description: t('invalidDriveLinkMsg'), variant: 'destructive' });
+      return;
+    }
+    onChange(normalized);
   };
 
   const fetchAdminAccount = async () => {
@@ -3557,6 +3632,35 @@ export default function CafeApp() {
                         onChange={(e) => setSettingsForm({ ...settingsForm, logo: e.target.value })}
                         placeholder="https://example.com/logo.png"
                       />
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        <button
+                          type="button"
+                          className="btn btn-secondary btn-sm"
+                          onClick={() => logoFileRef.current?.click()}
+                        >
+                          {t('uploadImageBtn')}
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-secondary btn-sm"
+                          onClick={() => handleDriveLink((url) => setSettingsForm({ ...settingsForm, logo: url }))}
+                        >
+                          {t('driveLinkBtn')}
+                        </button>
+                        <input
+                          ref={logoFileRef}
+                          type="file"
+                          accept="image/*"
+                          className="sr-only"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              handleImageFile(file, (url) => setSettingsForm({ ...settingsForm, logo: url }));
+                            }
+                            e.currentTarget.value = '';
+                          }}
+                        />
+                      </div>
                     </div>
                     <div className="settings-field">
                       <label className="settings-label">{t('phoneLabel')}</label>
@@ -4134,6 +4238,35 @@ export default function CafeApp() {
                     onChange={(e) => setProductForm({ ...productForm, image: e.target.value })}
                     placeholder="https://..."
                   />
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    <button
+                      type="button"
+                      className="btn btn-secondary btn-sm"
+                      onClick={() => productImageRef.current?.click()}
+                    >
+                      {t('uploadImageBtn')}
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-secondary btn-sm"
+                      onClick={() => handleDriveLink((url) => setProductForm({ ...productForm, image: url }))}
+                    >
+                      {t('driveLinkBtn')}
+                    </button>
+                    <input
+                      ref={productImageRef}
+                      type="file"
+                      accept="image/*"
+                      className="sr-only"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          handleImageFile(file, (url) => setProductForm({ ...productForm, image: url }));
+                        }
+                        e.currentTarget.value = '';
+                      }}
+                    />
+                  </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <input
@@ -4194,6 +4327,35 @@ export default function CafeApp() {
                     onChange={(e) => setCategoryForm({ ...categoryForm, image: e.target.value })}
                     placeholder="https://..."
                   />
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    <button
+                      type="button"
+                      className="btn btn-secondary btn-sm"
+                      onClick={() => categoryImageRef.current?.click()}
+                    >
+                      {t('uploadImageBtn')}
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-secondary btn-sm"
+                      onClick={() => handleDriveLink((url) => setCategoryForm({ ...categoryForm, image: url }))}
+                    >
+                      {t('driveLinkBtn')}
+                    </button>
+                    <input
+                      ref={categoryImageRef}
+                      type="file"
+                      accept="image/*"
+                      className="sr-only"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          handleImageFile(file, (url) => setCategoryForm({ ...categoryForm, image: url }));
+                        }
+                        e.currentTarget.value = '';
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
               <div className="dialog-footer">
