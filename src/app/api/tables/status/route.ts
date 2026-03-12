@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { db, hasDatabaseConfig } from '@/lib/db';
 import { Prisma } from '@prisma/client';
 
-// GET - جلب الطاولات مع حالتها (مشغولة/متاحة) - محسّن للسرعة
+// GET - Fetch tables with occupancy status (optimized)
 export async function GET() {
   if (!hasDatabaseConfig()) {
     return NextResponse.json([], {
@@ -13,7 +13,7 @@ export async function GET() {
   }
 
   try {
-    // استعلام واحد مُحسّن باستخدام raw query للسرعة القصوى
+    // Single optimized raw query for maximum speed
     const result = await db.$queryRaw<Array<{
       id: string;
       number: number;
@@ -39,7 +39,7 @@ export async function GET() {
       ORDER BY t.number ASC
     `;
 
-    // تحويل النتائج
+    // Transform result rows
     const tablesWithStatus = result.map(row => ({
       id: row.id,
       number: row.number,
@@ -61,6 +61,6 @@ export async function GET() {
     });
   } catch (error) {
     console.error('Error fetching table status:', error);
-    return NextResponse.json({ error: 'خطأ في جلب حالة الطاولات' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch table status' }, { status: 500 });
   }
 }

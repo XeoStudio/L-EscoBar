@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 
-// GET - جلب منتج واحد
+// GET - Fetch a single product
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -16,17 +16,17 @@ export async function GET(
     });
 
     if (!product) {
-      return NextResponse.json({ error: 'المنتج غير موجود' }, { status: 404 });
+      return NextResponse.json({ error: 'Product not found' }, { status: 404 });
     }
 
     return NextResponse.json(product);
   } catch (error) {
     console.error('Error fetching product:', error);
-    return NextResponse.json({ error: 'خطأ في جلب المنتج' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch product' }, { status: 500 });
   }
 }
 
-// PUT - تعديل منتج
+// PUT - Update a product
 export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -56,11 +56,11 @@ export async function PUT(
     return NextResponse.json(product);
   } catch (error) {
     console.error('Error updating product:', error);
-    return NextResponse.json({ error: 'خطأ في تحديث المنتج' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to update product' }, { status: 500 });
   }
 }
 
-// DELETE - حذف منتج
+// DELETE - Delete a product
 export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -72,9 +72,9 @@ export async function DELETE(
       where: { id }
     });
 
-    return NextResponse.json({ message: 'تم حذف المنتج بنجاح' });
+    return NextResponse.json({ message: 'Product deleted successfully' });
   } catch (error) {
     console.error('Error deleting product:', error);
-    return NextResponse.json({ error: 'خطأ في حذف المنتج' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to delete product' }, { status: 500 });
   }
 }

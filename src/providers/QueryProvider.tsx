@@ -9,19 +9,19 @@ export function QueryProvider({ children }: { children: ReactNode }) {
       new QueryClient({
         defaultOptions: {
           queries: {
-            // لا re-fetch عند التركيز - نستخدم polling يدوياً
+            // Disable refetch-on-focus; polling handles updates.
             refetchOnWindowFocus: false,
-            // البيانات صالحة لمدة 5 ثواني
+            // Data remains fresh for 5 seconds.
             staleTime: 5000,
-            // إعادة المحاولة مرة واحدة فقط
+            // Retry only once.
             retry: 1,
-            // عدم re-fetch عند إعادة التركيب
+            // Disable refetch on remount.
             refetchOnMount: false,
-            // Cache لمدة دقيقة
+            // Keep cache for one minute.
             gcTime: 60000,
           },
           mutations: {
-            // إعادة المحاولة مرة واحدة
+            // Retry mutations once.
             retry: 1,
           },
         },

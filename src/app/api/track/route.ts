@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 
-// GET - تتبع الطلب بالكود
+// GET - Track order by code
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const code = searchParams.get('code');
 
     if (!code) {
-      return NextResponse.json({ error: 'يرجى إدخال كود التتبع' }, { status: 400 });
+      return NextResponse.json({ error: 'Please enter a tracking code' }, { status: 400 });
     }
 
     // Normalize code to uppercase
@@ -27,12 +27,12 @@ export async function GET(request: Request) {
     });
 
     if (!order) {
-      return NextResponse.json({ error: 'لم يتم العثور على طلب بهذا الكود' }, { status: 404 });
+      return NextResponse.json({ error: 'No order found for this tracking code' }, { status: 404 });
     }
 
     return NextResponse.json(order);
   } catch (error) {
     console.error('Error tracking order:', error);
-    return NextResponse.json({ error: 'خطأ في تتبع الطلب' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to track order' }, { status: 500 });
   }
 }

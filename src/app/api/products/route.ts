@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db, hasDatabaseConfig } from '@/lib/db';
 
-// GET - جلب جميع المنتجات
+// GET - Fetch all products
 export async function GET(request: Request) {
   if (!hasDatabaseConfig()) {
     return NextResponse.json([]);
@@ -33,15 +33,15 @@ export async function GET(request: Request) {
     return NextResponse.json(products);
   } catch (error) {
     console.error('Error fetching products:', error);
-    return NextResponse.json({ error: 'خطأ في جلب المنتجات' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 });
   }
 }
 
-// POST - إضافة منتج جديد
+// POST - Create a new product
 export async function POST(request: Request) {
   if (!hasDatabaseConfig()) {
     return NextResponse.json(
-      { error: 'قاعدة البيانات غير مهيأة محلياً.' },
+      { error: 'Database is not configured locally.' },
       { status: 503 }
     );
   }
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
     const { name, nameAr, description, descriptionAr, price, image, categoryId, available } = body;
 
     if (!name || !nameAr || !price || !categoryId) {
-      return NextResponse.json({ error: 'البيانات الأساسية مطلوبة' }, { status: 400 });
+      return NextResponse.json({ error: 'Required fields are missing' }, { status: 400 });
     }
 
     const product = await db.product.create({
@@ -73,6 +73,6 @@ export async function POST(request: Request) {
     return NextResponse.json(product, { status: 201 });
   } catch (error) {
     console.error('Error creating product:', error);
-    return NextResponse.json({ error: 'خطأ في إنشاء المنتج' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to create product' }, { status: 500 });
   }
 }

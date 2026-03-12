@@ -45,11 +45,11 @@ export async function POST() {
 
     return NextResponse.json({ 
       success: true, 
-      message: `تم تحديث ${updated} طلب بكود التتبع`,
+      message: `Updated ${updated} orders with tracking codes`,
       updated 
     });
   } catch (error) {
     console.error('Migration error:', error);
-    return NextResponse.json({ error: 'فشل في الترحيل' }, { status: 500 });
+    return NextResponse.json({ error: 'Migration failed' }, { status: 500 });
   }
 }

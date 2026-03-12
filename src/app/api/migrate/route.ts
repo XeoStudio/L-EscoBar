@@ -17,11 +17,11 @@ export async function POST() {
     
     return NextResponse.json({
       success: true,
-      message: 'تم تنفيذ الترحيل بنجاح'
+      message: 'Migration completed successfully'
     });
   } catch (error: unknown) {
     console.error('Error running migrations:', error);
-    const errorMessage = error instanceof Error ? error.message : 'خطأ في تنفيذ الترحيلات';
+    const errorMessage = error instanceof Error ? error.message : 'Failed to run migrations';
     return NextResponse.json({
       success: false,
       error: errorMessage

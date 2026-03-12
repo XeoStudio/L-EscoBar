@@ -11,33 +11,33 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-// إعدادات التطبيق
+// Application settings
 model Settings {
   id                  String   @id @default(cuid())
   cafeName            String   @default("L'EscoBar")
   language            String   @default("ar")
-  currency            String   @default("د.ت")
-  logo                String?  // شعار المقهى
-  primaryColor        String   @default("#6F4E37") // اللون الرئيسي (بني القهوة)
-  accentColor         String   @default("#D4A574") // لون إبراز ثانوي
-  backgroundColor     String   @default("#FDF8F3") // لون خلفية التطبيق
-  surfaceColor        String   @default("#FFFFFF") // لون البطاقات والعناصر
-  textPrimaryColor    String   @default("#3D2314") // لون النص الأساسي
-  openingHours        String?  @default("08:00") // وقت الفتح
-  closingHours        String?  @default("23:00") // وقت الإغلاق
-  phone               String?  // رقم الهاتف
-  address             String?  // العنوان
-  welcomeMessage      String?  @default("مرحباً بك في مقهانا") // رسالة الترحيب
-  acceptOrders        Boolean  @default(true) // تفعيل/تعطيل الطلبات
-  enableTableService  Boolean  @default(true) // تفعيل خدمة الطاولات
-  enableDelivery      Boolean  @default(false) // تفعيل خدمة التوصيل
+  currency            String   @default("TND")
+  logo                String?  // Cafe logo
+  primaryColor        String   @default("#6F4E37") // Primary color
+  accentColor         String   @default("#D4A574") // Accent color
+  backgroundColor     String   @default("#FDF8F3") // App background color
+  surfaceColor        String   @default("#FFFFFF") // Card and surface color
+  textPrimaryColor    String   @default("#3D2314") // Primary text color
+  openingHours        String?  @default("08:00") // Opening time
+  closingHours        String?  @default("23:00") // Closing time
+  phone               String?  // Phone number
+  address             String?  // Address
+  welcomeMessage      String?  @default("Welcome to our cafe") // Welcome message
+  acceptOrders        Boolean  @default(true) // Enable/disable orders
+  enableTableService  Boolean  @default(true) // Enable table service
+  enableDelivery      Boolean  @default(false) // Enable delivery service
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 
   @@map("settings")
 }
 
-// فئات المنتجات
+// Product categories
 model Category {
   id        String     @id @default(cuid())
   name      String
@@ -50,7 +50,7 @@ model Category {
   @@map("categories")
 }
 
-// المنتجات
+// Products
 model Product {
   id            String      @id @default(cuid())
   name          String
@@ -70,7 +70,7 @@ model Product {
   @@map("products")
 }
 
-// الطاولات
+// Tables
 model Table {
   id          String   @id @default(cuid())
   number      Int      @unique
@@ -84,10 +84,10 @@ model Table {
   @@map("tables")
 }
 
-// الطلبات
+// Orders
 model Order {
   id          String      @id @default(cuid())
-  orderCode   String?     @unique // كود التتبع للعميل (اختياري للطلبات القديمة)
+  orderCode   String?     @unique // Customer tracking code (optional for legacy orders)
   tableId     String
   tableNumber Int
   status      OrderStatus @default(NEW)
@@ -104,7 +104,7 @@ model Order {
   @@map("orders")
 }
 
-// عناصر الطلب
+// Order items
 model OrderItem {
   id          String   @id @default(cuid())
   orderId     String
@@ -123,18 +123,18 @@ model OrderItem {
   @@map("order_items")
 }
 
-// حالة الطلب - سير عمل كامل
+// Order status workflow
 enum OrderStatus {
-  NEW       // طلب جديد (لم يُرَ من قبل)
-  ACCEPTED  // تم قبول الطلب
-  PREPARING // قيد التحضير
-  READY     // جاهز للاستلام
-  SERVED    // تم تقديمه
-  PAID      // تم الدفع
-  CANCELLED // ملغي
+  NEW       // New order
+  ACCEPTED  // Accepted
+  PREPARING // Preparing
+  READY     // Ready for pickup
+  SERVED    // Served
+  PAID      // Paid
+  CANCELLED // Cancelled
 }
 
-// صاحب المقهى (المسؤول)
+// Cafe owner (admin)
 model Admin {
   id        String   @id @default(cuid())
   email     String   @unique

@@ -2,7 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
-// جلب الطلبات
+// Fetch orders
 async function fetchOrders(status?: string, tableId?: string) {
   const params = new URLSearchParams();
   if (status) params.set('status', status);
@@ -15,7 +15,7 @@ async function fetchOrders(status?: string, tableId?: string) {
   return res.json();
 }
 
-// جلب الطلبات مع polling
+// Fetch orders with polling
 export function useOrders(options?: {
   status?: string;
   tableId?: string;
@@ -38,7 +38,7 @@ export function useOrders(options?: {
   });
 }
 
-// إنشاء طلب جديد مع optimistic update
+// Create a new order with optimistic update
 export function useCreateOrder() {
   const queryClient = useQueryClient();
 
@@ -57,20 +57,20 @@ export function useCreateOrder() {
       
       if (!res.ok) {
         const error = await res.json();
-        throw new Error(error.details || error.error || 'فشل في إنشاء الطلب');
+        throw new Error(error.details || error.error || 'Failed to create order');
       }
       
       return res.json();
     },
     onSuccess: () => {
-      // تحديث فوري للطلبات والطاولات
+      // Immediately refresh orders and tables
       queryClient.invalidateQueries({ queryKey: ['orders'] });
       queryClient.invalidateQueries({ queryKey: ['tables-status'] });
     },
   });
 }
 
-// تحديث حالة الطلب
+// Update order status
 export function useUpdateOrderStatus() {
   const queryClient = useQueryClient();
 
@@ -88,11 +88,11 @@ export function useUpdateOrderStatus() {
         body: JSON.stringify({ status }),
       });
       
-      if (!res.ok) throw new Error('فشل في تحديث الطلب');
+      if (!res.ok) throw new Error('Failed to update order');
       return res.json();
     },
     onMutate: async ({ orderId, status }) => {
-      // Optimistic update - تحديث فوري في الواجهة
+      // Optimistic update - instant UI update
       await queryClient.cancelQueries({ queryKey: ['orders'] });
       
       const previousOrders = queryClient.getQueryData(['orders']);
@@ -106,7 +106,7 @@ export function useUpdateOrderStatus() {
       return { previousOrders };
     },
     onError: (err, variables, context) => {
-      // إعادة الحالة السابقة عند الخطأ
+      // Revert previous state on failure
       if (context?.previousOrders) {
         queryClient.setQueryData(['orders'], context.previousOrders);
       }

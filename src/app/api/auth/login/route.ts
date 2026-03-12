@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { cookies } from 'next/headers';
 
-// دالة تشفير (SHA256)
+// SHA-256 hash helper
 async function sha256(message: string): Promise<string> {
   const msgBuffer = new TextEncoder().encode(message);
   const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
@@ -10,33 +10,33 @@ async function sha256(message: string): Promise<string> {
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-// POST - تسجيل الدخول
+// POST - Login
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { email, password } = body;
 
     if (!email || !password) {
-      return NextResponse.json({ error: 'البريد الإلكتروني وكلمة المرور مطلوبان' }, { status: 400 });
+      return NextResponse.json({ error: 'Email and password are required' }, { status: 400 });
     }
 
     const hashedPassword = await sha256(password);
 
-    // البحث عن المسؤول فقط - لا ننشئ حساب جديد!
+    // Admin-only login. Do not create accounts here.
     const admin = await db.admin.findUnique({
       where: { email }
     });
 
-    // إذا لم يوجد الحساب أو كلمة المرور خاطئة
+    // Validate account and password
     if (!admin) {
-      return NextResponse.json({ error: 'الحساب غير موجود' }, { status: 401 });
+      return NextResponse.json({ error: 'Account not found' }, { status: 401 });
     }
 
     if (admin.password !== hashedPassword) {
-      return NextResponse.json({ error: 'كلمة المرور غير صحيحة' }, { status: 401 });
+      return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
     }
 
-    // إنشاء جلسة
+    // Create session cookie
     const sessionToken = crypto.randomUUID();
     const cookieStore = await cookies();
     cookieStore.set('admin_session', sessionToken, {
@@ -47,11 +47,11 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({
-      message: 'تم تسجيل الدخول بنجاح',
+      message: 'Login successful',
       admin: { id: admin.id, email: admin.email, name: admin.name }
     });
   } catch (error) {
     console.error('Login error:', error);
-    return NextResponse.json({ error: 'خطأ في تسجيل الدخول' }, { status: 500 });
+    return NextResponse.json({ error: 'Login failed' }, { status: 500 });
   }
 }

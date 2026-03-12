@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 
-// GET - جلب التقارير الشاملة
+// GET - Fetch full reporting data
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -30,7 +30,7 @@ export async function GET(request: Request) {
       }
     } : {};
 
-    // جلب جميع الطلبات غير الملغاة
+    // Fetch all non-cancelled orders
     const orders = await db.order.findMany({
       where: {
         ...dateFilter,
@@ -42,19 +42,19 @@ export async function GET(request: Request) {
       orderBy: { createdAt: 'asc' }
     });
 
-    // الطلبات المدفوعة فقط للأرباح
+    // Paid orders only for revenue
     const paidOrders = orders.filter(o => o.status === 'PAID');
     
-    // إجمالي الأرباح
+    // Total revenue
     const totalRevenue = paidOrders.reduce((sum, o) => sum + o.total, 0);
     
-    // عدد الطلبات
+    // Total orders count
     const totalOrders = orders.length;
     
-    // عدد الزبائن الفريدين (عدد الطاولات المختلفة)
+    // Unique customers (distinct table count)
     const uniqueTables = new Set(orders.map(o => o.tableNumber)).size;
 
-    // المنتجات الأكثر مبيعاً
+    // Top-selling products
     const productSales: Record<string, { name: string; quantity: number; revenue: number }> = {};
     
     orders.forEach(order => {
@@ -76,7 +76,7 @@ export async function GET(request: Request) {
       .sort((a, b) => b.quantity - a.quantity)
       .slice(0, 5);
 
-    // إحصائيات حسب الحالة (الحالات الجديدة)
+    // Status distribution
     const allOrdersForStatus = await db.order.findMany({
       where: dateFilter,
       select: { status: true }
@@ -92,13 +92,13 @@ export async function GET(request: Request) {
       cancelled: allOrdersForStatus.filter(o => o.status === 'CANCELLED').length,
     };
 
-    // متوسط قيمة الطلب
+    // Average order value
     const averageOrderValue = paidOrders.length > 0 ? totalRevenue / paidOrders.length : 0;
 
-    // مبيعات كل ساعة (لليوم الحالي فقط)
+    // Hourly sales (for current day)
     const hourlySales: Array<{ hour: number; orders: number; revenue: number }> = [];
     
-    // حساب المبيعات بالساعة من الطلبات
+    // Compute hourly metrics from orders
     const hourMap = new Map<number, { orders: Set<string>; revenue: number }>();
     
     orders.forEach(order => {
@@ -113,7 +113,7 @@ export async function GET(request: Request) {
       }
     });
 
-    // ملء كل الساعات
+    // Fill all 24 hours
     for (let h = 0; h < 24; h++) {
       const data = hourMap.get(h);
       hourlySales.push({
@@ -123,7 +123,7 @@ export async function GET(request: Request) {
       });
     }
 
-    // إحصائيات اليوم
+    // Today stats
     const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const todayOrders = await db.order.count({
       where: {
@@ -142,7 +142,7 @@ export async function GET(request: Request) {
       }
     });
 
-    // عدد الطلبات الجديدة (غير المعالجة)
+    // Pending orders count
     const pendingOrdersCount = await db.order.count({
       where: {
         status: { in: ['NEW', 'ACCEPTED', 'PREPARING', 'READY'] }
@@ -166,6 +166,6 @@ export async function GET(request: Request) {
     });
   } catch (error) {
     console.error('Error generating reports:', error);
-    return NextResponse.json({ error: 'خطأ في إنشاء التقارير' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to generate reports' }, { status: 500 });
   }
 }

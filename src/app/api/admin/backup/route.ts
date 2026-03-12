@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
     const session = cookieStore.get('admin_session');
     
     if (!session) {
-      return NextResponse.json({ error: 'غير مصرح' }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Get all data
@@ -70,6 +70,6 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Backup error:', error);
-    return NextResponse.json({ error: 'فشل في إنشاء النسخة الاحتياطية' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to create backup' }, { status: 500 });
   }
 }

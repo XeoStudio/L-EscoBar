@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 
-// GET - جلب فئة واحدة
+// GET - Fetch a single category
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -16,17 +16,17 @@ export async function GET(
     });
 
     if (!category) {
-      return NextResponse.json({ error: 'الفئة غير موجودة' }, { status: 404 });
+      return NextResponse.json({ error: 'Category not found' }, { status: 404 });
     }
 
     return NextResponse.json(category);
   } catch (error) {
     console.error('Error fetching category:', error);
-    return NextResponse.json({ error: 'خطأ في جلب الفئة' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch category' }, { status: 500 });
   }
 }
 
-// PUT - تعديل فئة
+// PUT - Update a category
 export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -48,11 +48,11 @@ export async function PUT(
     return NextResponse.json(category);
   } catch (error) {
     console.error('Error updating category:', error);
-    return NextResponse.json({ error: 'خطأ في تحديث الفئة' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to update category' }, { status: 500 });
   }
 }
 
-// DELETE - حذف فئة
+// DELETE - Delete a category
 export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -64,9 +64,9 @@ export async function DELETE(
       where: { id }
     });
 
-    return NextResponse.json({ message: 'تم حذف الفئة بنجاح' });
+    return NextResponse.json({ message: 'Category deleted successfully' });
   } catch (error) {
     console.error('Error deleting category:', error);
-    return NextResponse.json({ error: 'خطأ في حذف الفئة' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to delete category' }, { status: 500 });
   }
 }

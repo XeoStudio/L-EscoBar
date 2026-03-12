@@ -15,9 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "مقهى السعادة - نظام إدارة الطلبات",
-  description: "تطبيق إدارة مقهى متكامل - قائمة المنتجات، نظام الطلبات، وإدارة الطاولات",
-  keywords: ["مقهى", "كافيه", "طلبات", "إدارة", "السعودية"],
+  title: "L'EscoBar - Cafe Management",
+  description: "Complete cafe management app for menu, orders, and table operations",
+  keywords: ["cafe", "restaurant", "orders", "menu", "table management"],
   authors: [{ name: "Cafe Team" }],
 };
 

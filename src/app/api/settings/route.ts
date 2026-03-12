@@ -4,7 +4,7 @@ import { db, hasDatabaseConfig } from '@/lib/db';
 const DEFAULT_SETTINGS = {
   cafeName: "L'EscoBar",
   language: 'ar',
-  currency: 'د.ت',
+  currency: 'TND',
   primaryColor: '#6F4E37',
   accentColor: '#D4A574',
   backgroundColor: '#FDF8F3',
@@ -12,13 +12,13 @@ const DEFAULT_SETTINGS = {
   textPrimaryColor: '#3D2314',
   openingHours: '08:00',
   closingHours: '23:00',
-  welcomeMessage: 'مرحباً بك في مقهانا',
+  welcomeMessage: 'Welcome to our cafe',
   acceptOrders: true,
   enableTableService: true,
   enableDelivery: false,
 };
 
-// GET - جلب الإعدادات
+// GET - Fetch settings
 export async function GET() {
   if (!hasDatabaseConfig()) {
     return NextResponse.json(DEFAULT_SETTINGS);
@@ -36,15 +36,15 @@ export async function GET() {
     return NextResponse.json(settings);
   } catch (error) {
     console.error('Error fetching settings:', error);
-    return NextResponse.json({ error: 'خطأ في جلب الإعدادات' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch settings' }, { status: 500 });
   }
 }
 
-// PUT - تحديث الإعدادات
+// PUT - Update settings
 export async function PUT(request: Request) {
   if (!hasDatabaseConfig()) {
     return NextResponse.json(
-      { error: 'قاعدة البيانات غير مهيأة محلياً. أضف DATABASE_URL لحفظ الإعدادات.' },
+      { error: 'Database is not configured locally. Add DATABASE_URL to save settings.' },
       { status: 503 }
     );
   }
@@ -124,6 +124,6 @@ export async function PUT(request: Request) {
     return NextResponse.json(settings);
   } catch (error) {
     console.error('Error updating settings:', error);
-    return NextResponse.json({ error: 'خطأ في تحديث الإعدادات' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to update settings' }, { status: 500 });
   }
 }

@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/db';
 import { cookies } from 'next/headers';
 
-// GET - التحقق من حالة تسجيل الدخول
+// GET - Check authentication status
 export async function GET() {
   try {
     const cookieStore = await cookies();
@@ -12,9 +11,9 @@ export async function GET() {
       return NextResponse.json({ authenticated: false });
     }
 
-    // التحقق من وجود جلسة صالحة
-    // في نظام بسيط، نعتبر أي جلسة صالحة
-    // في نظام إنتاجي، يجب التحقق من قاعدة البيانات
+    // Validate that a session exists.
+    // In this simplified flow, any session cookie is treated as valid.
+    // In production, this should be verified against the database.
     
     return NextResponse.json({ authenticated: true });
   } catch (error) {

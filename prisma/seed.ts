@@ -10,7 +10,7 @@ async function sha256(message: string): Promise<string> {
 }
 
 async function main() {
-  // حذف جميع البيانات القديمة (بالترتيب الصحيح للعلاقات)
+  // Remove existing data in dependency-safe order.
   await prisma.orderItem.deleteMany({});
   await prisma.order.deleteMany({});
   await prisma.product.deleteMany({});
@@ -19,28 +19,28 @@ async function main() {
   await prisma.admin.deleteMany({});
   await prisma.settings.deleteMany({});
 
-  // إنشاء الإعدادات
+  // Create settings
   await prisma.settings.create({
     data: {
       id: 'settings-1',
       cafeName: "L'EscoBar",
-      currency: 'د.ت'
+      currency: 'TND'
     }
   });
   console.log('✅ Settings created');
 
-  // إنشاء حساب المسؤول
+  // Create admin account
   const hashedPassword = await sha256('admin123');
   await prisma.admin.create({
     data: {
       email: 'admin@cafe.com',
       password: hashedPassword,
-      name: 'صاحب المقهى'
+      name: 'Cafe Owner'
     }
   });
   console.log('✅ Admin created (admin@cafe.com / admin123)');
 
-  // إنشاء الطاولات
+  // Create tables
   for (let i = 1; i <= 10; i++) {
     await prisma.table.create({
       data: { number: i, seats: i % 3 === 0 ? 2 : (i % 2 === 0 ? 6 : 4) }
@@ -48,13 +48,13 @@ async function main() {
   }
   console.log('✅ 10 Tables created');
 
-  // إنشاء الفئات مع الصور
+  // Create categories with images
   const cats = [
-    { id: 'cat-coffee', name: 'Coffee', nameAr: 'أنواع القهوة', image: '/download/category-coffee.png' },
-    { id: 'cat-tea', name: 'Tea', nameAr: 'الشاي', image: '/download/category-tea.png' },
-    { id: 'cat-drinks', name: 'Cold Drinks', nameAr: 'المشروبات الباردة', image: '/download/category-drinks.png' },
-    { id: 'cat-desserts', name: 'Desserts', nameAr: 'الحلويات', image: '/download/category-desserts.png' },
-    { id: 'cat-snacks', name: 'Snacks', nameAr: 'السناكس', image: '/download/category-snacks.png' }
+    { id: 'cat-coffee', name: 'Coffee', nameAr: 'Coffee', image: '/download/category-coffee.png' },
+    { id: 'cat-tea', name: 'Tea', nameAr: 'Tea', image: '/download/category-tea.png' },
+    { id: 'cat-drinks', name: 'Cold Drinks', nameAr: 'Cold Drinks', image: '/download/category-drinks.png' },
+    { id: 'cat-desserts', name: 'Desserts', nameAr: 'Desserts', image: '/download/category-desserts.png' },
+    { id: 'cat-snacks', name: 'Snacks', nameAr: 'Snacks', image: '/download/category-snacks.png' }
   ];
   
   for (const cat of cats) {
@@ -62,9 +62,9 @@ async function main() {
   }
   console.log('✅ 5 Categories created');
 
-  // إنشاء المنتجات مع صور الفئات
+  // Create products with category images
   const prods = [
-    // أنواع القهوة
+    // Coffee
     { name: 'Café Lavazza', nameAr: 'Café Lavazza', price: 6.5, categoryId: 'cat-coffee', image: '/download/category-coffee.png' },
     { name: 'Café Nespresso', nameAr: 'Café Nespresso', price: 6.5, categoryId: 'cat-coffee', image: '/download/category-coffee.png' },
     { name: 'Café Saquella', nameAr: 'Café Saquella', price: 6.5, categoryId: 'cat-coffee', image: '/download/category-coffee.png' },
@@ -81,27 +81,27 @@ async function main() {
     { name: 'Expresse importé', nameAr: 'Expresse importé', price: 2.5, categoryId: 'cat-coffee', image: '/download/category-coffee.png' },
     { name: 'Cappucin importé', nameAr: 'Cappucin importé', price: 2.8, categoryId: 'cat-coffee', image: '/download/category-coffee.png' },
     { name: 'Café crème importé', nameAr: 'Café crème importé', price: 3.0, categoryId: 'cat-coffee', image: '/download/category-coffee.png' },
-    { name: 'Pévalu 2', nameAr: 'Pévalu (نسخة ثانية)', price: 0.5, categoryId: 'cat-coffee', image: '/download/category-coffee.png' },
+    { name: 'Pévalu 2', nameAr: 'Pévalu 2', price: 0.5, categoryId: 'cat-coffee', image: '/download/category-coffee.png' },
     { name: 'American importé', nameAr: 'American importé', price: 3.0, categoryId: 'cat-coffee', image: '/download/category-coffee.png' },
-    // الشاي
-    { name: 'Black Tea', nameAr: 'شاي أسود', price: 2.0, categoryId: 'cat-tea', image: '/download/category-tea.png' },
-    { name: 'Green Tea', nameAr: 'شاي أخضر', price: 2.5, categoryId: 'cat-tea', image: '/download/category-tea.png' },
-    { name: 'Mint Tea', nameAr: 'شاي بالنعناع', price: 3.0, categoryId: 'cat-tea', image: '/download/category-tea.png' },
-    { name: 'Chai Latte', nameAr: 'شاي لاتيه', price: 5.0, categoryId: 'cat-tea', image: '/download/category-tea.png' },
-    // المشروبات الباردة
-    { name: 'Iced Latte', nameAr: 'لاتيه مثلج', price: 5.0, categoryId: 'cat-drinks', image: '/download/category-drinks.png' },
-    { name: 'Iced Americano', nameAr: 'أمريكانو مثلج', price: 4.0, categoryId: 'cat-drinks', image: '/download/category-drinks.png' },
-    { name: 'Fresh Orange Juice', nameAr: 'عصير برتقال طازج', price: 4.5, categoryId: 'cat-drinks', image: '/download/category-drinks.png' },
-    { name: 'Mango Smoothie', nameAr: 'سموذي مانجو', price: 6.0, categoryId: 'cat-drinks', image: '/download/category-drinks.png' },
-    // الحلويات
-    { name: 'Cheesecake', nameAr: 'تشيز كيك', price: 7.0, categoryId: 'cat-desserts', image: '/download/category-desserts.png' },
-    { name: 'Chocolate Cake', nameAr: 'كيك شوكولاتة', price: 7.5, categoryId: 'cat-desserts', image: '/download/category-desserts.png' },
-    { name: 'Tiramisu', nameAr: 'تيراميسو', price: 8.0, categoryId: 'cat-desserts', image: '/download/category-desserts.png' },
-    { name: 'Brownie', nameAr: 'براوني', price: 5.0, categoryId: 'cat-desserts', image: '/download/category-desserts.png' },
-    // السناكس
-    { name: 'Croissant', nameAr: 'كرواسون', price: 3.5, categoryId: 'cat-snacks', image: '/download/category-snacks.png' },
-    { name: 'Club Sandwich', nameAr: 'ساندويتش كلوب', price: 8.5, categoryId: 'cat-snacks', image: '/download/category-snacks.png' },
-    { name: 'French Fries', nameAr: 'بطاطس مقلية', price: 4.5, categoryId: 'cat-snacks', image: '/download/category-snacks.png' },
+    // Tea
+    { name: 'Black Tea', nameAr: 'Black Tea', price: 2.0, categoryId: 'cat-tea', image: '/download/category-tea.png' },
+    { name: 'Green Tea', nameAr: 'Green Tea', price: 2.5, categoryId: 'cat-tea', image: '/download/category-tea.png' },
+    { name: 'Mint Tea', nameAr: 'Mint Tea', price: 3.0, categoryId: 'cat-tea', image: '/download/category-tea.png' },
+    { name: 'Chai Latte', nameAr: 'Chai Latte', price: 5.0, categoryId: 'cat-tea', image: '/download/category-tea.png' },
+    // Cold drinks
+    { name: 'Iced Latte', nameAr: 'Iced Latte', price: 5.0, categoryId: 'cat-drinks', image: '/download/category-drinks.png' },
+    { name: 'Iced Americano', nameAr: 'Iced Americano', price: 4.0, categoryId: 'cat-drinks', image: '/download/category-drinks.png' },
+    { name: 'Fresh Orange Juice', nameAr: 'Fresh Orange Juice', price: 4.5, categoryId: 'cat-drinks', image: '/download/category-drinks.png' },
+    { name: 'Mango Smoothie', nameAr: 'Mango Smoothie', price: 6.0, categoryId: 'cat-drinks', image: '/download/category-drinks.png' },
+    // Desserts
+    { name: 'Cheesecake', nameAr: 'Cheesecake', price: 7.0, categoryId: 'cat-desserts', image: '/download/category-desserts.png' },
+    { name: 'Chocolate Cake', nameAr: 'Chocolate Cake', price: 7.5, categoryId: 'cat-desserts', image: '/download/category-desserts.png' },
+    { name: 'Tiramisu', nameAr: 'Tiramisu', price: 8.0, categoryId: 'cat-desserts', image: '/download/category-desserts.png' },
+    { name: 'Brownie', nameAr: 'Brownie', price: 5.0, categoryId: 'cat-desserts', image: '/download/category-desserts.png' },
+    // Snacks
+    { name: 'Croissant', nameAr: 'Croissant', price: 3.5, categoryId: 'cat-snacks', image: '/download/category-snacks.png' },
+    { name: 'Club Sandwich', nameAr: 'Club Sandwich', price: 8.5, categoryId: 'cat-snacks', image: '/download/category-snacks.png' },
+    { name: 'French Fries', nameAr: 'French Fries', price: 4.5, categoryId: 'cat-snacks', image: '/download/category-snacks.png' },
   ];
   
   for (const prod of prods) {

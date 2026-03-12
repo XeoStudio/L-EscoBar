@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 
-// GET - جلب طاولة واحدة
+// GET - Fetch a single table
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -14,17 +14,17 @@ export async function GET(
     });
     
     if (!table) {
-      return NextResponse.json({ error: 'الطاولة غير موجودة' }, { status: 404 });
+      return NextResponse.json({ error: 'Table not found' }, { status: 404 });
     }
     
     return NextResponse.json(table);
   } catch (error) {
     console.error('Error fetching table:', error);
-    return NextResponse.json({ error: 'خطأ في جلب الطاولة' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch table' }, { status: 500 });
   }
 }
 
-// PUT - تعديل طاولة
+// PUT - Update a table
 export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -47,11 +47,11 @@ export async function PUT(
     return NextResponse.json(table);
   } catch (error) {
     console.error('Error updating table:', error);
-    return NextResponse.json({ error: 'خطأ في تحديث الطاولة' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to update table' }, { status: 500 });
   }
 }
 
-// DELETE - حذف طاولة
+// DELETE - Delete a table
 export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -63,9 +63,9 @@ export async function DELETE(
       where: { id }
     });
 
-    return NextResponse.json({ message: 'تم حذف الطاولة بنجاح' });
+    return NextResponse.json({ message: 'Table deleted successfully' });
   } catch (error) {
     console.error('Error deleting table:', error);
-    return NextResponse.json({ error: 'خطأ في حذف الطاولة' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to delete table' }, { status: 500 });
   }
 }

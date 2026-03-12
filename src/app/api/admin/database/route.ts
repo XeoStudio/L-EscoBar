@@ -19,7 +19,7 @@ async function checkAuth() {
 export async function GET(request: NextRequest) {
   try {
     if (!(await checkAuth())) {
-      return NextResponse.json({ error: 'غير مصرح' }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const [
@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Get stats error:', error);
-    return NextResponse.json({ error: 'فشل في جلب الإحصائيات' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch statistics' }, { status: 500 });
   }
 }
 
@@ -61,7 +61,7 @@ export async function GET(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   try {
     if (!(await checkAuth())) {
-      return NextResponse.json({ error: 'غير مصرح' }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const body = await request.json();
@@ -84,11 +84,11 @@ export async function DELETE(request: NextRequest) {
         return await fullReset();
       
       default:
-        return NextResponse.json({ error: 'إجراء غير معروف' }, { status: 400 });
+        return NextResponse.json({ error: 'Unknown action' }, { status: 400 });
     }
   } catch (error) {
     console.error('Database action error:', error);
-    return NextResponse.json({ error: 'فشل في تنفيذ الإجراء' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to execute action' }, { status: 500 });
   }
 }
 
@@ -120,7 +120,7 @@ async function deleteOrders(options?: { keepDays?: number; status?: string }) {
     if (orderIds.length === 0) {
       return NextResponse.json({ 
         success: true, 
-        message: 'لا توجد طلبات للحذف',
+        message: 'No orders to delete',
         deletedCount: 0 
       });
     }
@@ -137,12 +137,12 @@ async function deleteOrders(options?: { keepDays?: number; status?: string }) {
 
     return NextResponse.json({ 
       success: true, 
-      message: `تم حذف ${result.count} طلب بنجاح`,
+      message: `Successfully deleted ${result.count} orders`,
       deletedCount: result.count 
     });
   } catch (error) {
     console.error('Delete orders error:', error);
-    return NextResponse.json({ error: 'فشل في حذف الطلبات' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to delete orders' }, { status: 500 });
   }
 }
 
@@ -156,12 +156,12 @@ async function deleteProducts() {
     
     return NextResponse.json({ 
       success: true, 
-      message: `تم حذف ${result.count} منتج بنجاح`,
+      message: `Successfully deleted ${result.count} products`,
       deletedCount: result.count 
     });
   } catch (error) {
     console.error('Delete products error:', error);
-    return NextResponse.json({ error: 'فشل في حذف المنتجات' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to delete products' }, { status: 500 });
   }
 }
 
@@ -176,12 +176,12 @@ async function deleteCategories() {
     
     return NextResponse.json({ 
       success: true, 
-      message: `تم حذف ${result.count} فئة بنجاح`,
+      message: `Successfully deleted ${result.count} categories`,
       deletedCount: result.count 
     });
   } catch (error) {
     console.error('Delete categories error:', error);
-    return NextResponse.json({ error: 'فشل في حذف الفئات' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to delete categories' }, { status: 500 });
   }
 }
 
@@ -196,12 +196,12 @@ async function deleteTables() {
     
     return NextResponse.json({ 
       success: true, 
-      message: `تم حذف ${result.count} طاولة بنجاح`,
+      message: `Successfully deleted ${result.count} tables`,
       deletedCount: result.count 
     });
   } catch (error) {
     console.error('Delete tables error:', error);
-    return NextResponse.json({ error: 'فشل في حذف الطاولات' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to delete tables' }, { status: 500 });
   }
 }
 
@@ -220,16 +220,16 @@ async function fullReset() {
     await prisma.settings.create({
       data: {
         cafeName: "L'EscoBar",
-        currency: 'د.ت'
+        currency: 'TND'
       }
     });
 
     return NextResponse.json({ 
       success: true, 
-      message: 'تم إعادة ضبط قاعدة البيانات بنجاح. تم حذف جميع البيانات باستثناء حساب المسؤول.' 
+      message: 'Database reset completed successfully. All data was removed except the admin account.' 
     });
   } catch (error) {
     console.error('Full reset error:', error);
-    return NextResponse.json({ error: 'فشل في إعادة ضبط قاعدة البيانات' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to reset database' }, { status: 500 });
   }
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { Settings, Category, Product, Table, Order, OrderStatus, Reports, ORDER_STATUS_AR } from '@/types';
+import { Settings, Category, Product, Table, Order, OrderItem, OrderStatus, Reports, ORDER_STATUS_AR } from '@/types';
 import { toast } from '@/hooks/use-toast';
 import { 
   Home, 
@@ -2421,8 +2421,8 @@ export default function CafeApp() {
   const readyOrdersCount = orders.filter(o => o.status === 'READY').length;
 
   const language: AppLanguage = appLanguage;
-  const t = (key: string) => UI_TEXT[language][key] || UI_TEXT.ar[key] || key;
-  const getStatusLabel = (status: OrderStatus) => ORDER_STATUS_LABELS[language]?.[status] || ORDER_STATUS_AR[status];
+  const t = (key: string) => UI_TEXT[language][key] || UI_TEXT.en[key] || key;
+  const getStatusLabel = (status: OrderStatus) => ORDER_STATUS_LABELS[language]?.[status] || ORDER_STATUS_LABELS.en[status];
   const getStatusActionLabel = (status: OrderStatus) => {
     if (status === 'PAID' || status === 'CANCELLED') return '';
     return STATUS_ACTION_LABELS[language][status as 'NEW' | 'ACCEPTED' | 'PREPARING' | 'READY' | 'SERVED'];
@@ -2448,6 +2448,12 @@ export default function CafeApp() {
   const getProductDescription = (product: Product) => {
     if (language === 'ar') return product.descriptionAr || product.description || '';
     return product.description || product.descriptionAr || '';
+  };
+  const getOrderItemDisplayName = (item: OrderItem) => {
+    if (item.product) {
+      return language === 'ar' ? item.product.nameAr : item.product.name;
+    }
+    return item.productName;
   };
 
   useEffect(() => {
@@ -2904,7 +2910,7 @@ export default function CafeApp() {
                       <div className="order-group-items">
                         {order.orderItems.map(item => (
                           <div key={item.id} className="order-group-item">
-                            <span className="order-group-item-name">{item.productName}</span>
+                            <span className="order-group-item-name">{getOrderItemDisplayName(item)}</span>
                             <span className="order-group-item-qty">×{item.quantity}</span>
                           </div>
                         ))}
@@ -4551,7 +4557,7 @@ export default function CafeApp() {
                     {trackedOrder.orderItems.map((item) => (
                       <div key={item.id} className="track-item">
                         <div className="track-item-info">
-                          <span className="track-item-name">{item.productName}</span>
+                          <span className="track-item-name">{getOrderItemDisplayName(item)}</span>
                           <span className="track-item-price">{item.price} {currency}</span>
                         </div>
                         <span className="track-item-qty">×{item.quantity}</span>

@@ -3,7 +3,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef } from 'react';
 
-// أنواع البيانات
+// Data types
 interface TableStatus {
   id: string;
   number: number;
@@ -19,7 +19,7 @@ interface TableStatus {
   } | null;
 }
 
-// جلب حالة الطاولات
+// Fetch table status
 async function fetchTablesStatus(): Promise<TableStatus[]> {
   const res = await fetch('/api/tables/status', {
     cache: 'no-store',
@@ -28,7 +28,7 @@ async function fetchTablesStatus(): Promise<TableStatus[]> {
   return res.json();
 }
 
-// Hook لحالة الطاولات مع polling محسن
+// Table status hook with optimized polling
 export function useTableStatus(options?: { 
   enabled?: boolean;
   refetchInterval?: number;
@@ -41,15 +41,15 @@ export function useTableStatus(options?: {
     queryFn: fetchTablesStatus,
     enabled,
     refetchInterval,
-    staleTime: 0, // دائماً جلب بيانات جديدة
+    staleTime: 0, // Always fetch fresh data
   });
 
-  // إنشاء Set للطاولات المشغولة
+  // Build a set of occupied table IDs
   const occupiedTables = new Set(
     query.data?.filter(t => t.isOccupied).map(t => t.id) || []
   );
 
-  // قائمة الطاولات
+  // Flatten tables list
   const tables = query.data?.map(t => ({
     id: t.id,
     number: t.number,
@@ -58,7 +58,7 @@ export function useTableStatus(options?: {
     active: t.active,
   })) || [];
 
-  // إعادة جلب فورية
+  // Immediate refetch helper
   const refetch = useCallback(() => {
     return queryClient.invalidateQueries({ queryKey: ['tables-status'] });
   }, [queryClient]);
@@ -74,18 +74,18 @@ export function useTableStatus(options?: {
   };
 }
 
-// Hook للطاولات المشغولة فقط (أسرع)
+// Hook for occupied tables only (faster)
 export function useOccupiedTables() {
   const { occupiedTables, isFetching } = useTableStatus();
   return { occupiedTables, isFetching };
 }
 
-// تحديث فوري بعد إنشاء طلب
+// Immediate refresh after creating an order
 export function useRefreshTablesOnOrder() {
   const queryClient = useQueryClient();
   
   return useCallback(() => {
-    // تحديث فوري بدون انتظار
+    // Refresh immediately without waiting
     queryClient.invalidateQueries({ queryKey: ['tables-status'] });
     queryClient.invalidateQueries({ queryKey: ['orders'] });
   }, [queryClient]);

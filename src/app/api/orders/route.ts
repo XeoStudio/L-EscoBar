@@ -12,7 +12,7 @@ function generateOrderCode(): string {
   return code;
 }
 
-// GET - جلب جميع الطلبات
+// GET - Fetch all orders
 export async function GET(request: Request) {
   if (!hasDatabaseConfig()) {
     return NextResponse.json([]);
@@ -49,15 +49,15 @@ export async function GET(request: Request) {
     return NextResponse.json(orders);
   } catch (error) {
     console.error('Error fetching orders:', error);
-    return NextResponse.json({ error: 'خطأ في جلب الطلبات' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch orders' }, { status: 500 });
   }
 }
 
-// POST - إنشاء طلب جديد مع حماية قوية من التزامن
+// POST - Create a new order with race-condition protection
 export async function POST(request: Request) {
   if (!hasDatabaseConfig()) {
     return NextResponse.json(
-      { error: 'قاعدة البيانات غير مهيأة محلياً.' },
+      { error: 'Database is not configured locally.' },
       { status: 503 }
     );
   }
@@ -69,10 +69,10 @@ export async function POST(request: Request) {
     console.log('Creating order:', { tableId, tableNumber, itemsCount: items?.length });
 
     if (!tableId || !tableNumber || !items || items.length === 0) {
-      return NextResponse.json({ error: 'البيانات غير مكتملة' }, { status: 400 });
+      return NextResponse.json({ error: 'Missing required order data' }, { status: 400 });
     }
 
-    // حساب المجموع أولاً
+    // Calculate total first
     let total = 0;
     const orderItemsData: Array<{
       productId: string;
@@ -88,7 +88,7 @@ export async function POST(request: Request) {
       });
 
       if (!product) {
-        return NextResponse.json({ error: `المنتج غير موجود` }, { status: 400 });
+        return NextResponse.json({ error: 'Product not found' }, { status: 400 });
       }
 
       const itemTotal = product.price * item.quantity;
@@ -96,7 +96,7 @@ export async function POST(request: Request) {
 
       orderItemsData.push({
         productId: item.productId,
-        productName: product.nameAr,
+        productName: product.name,
         price: product.price,
         quantity: item.quantity,
         notes: item.notes || null
@@ -119,10 +119,9 @@ export async function POST(request: Request) {
       attempts++;
     }
 
-    // استخدام Transaction مع إعادة المحاولة للحماية من Race Condition
+    // Use transaction to guard against race conditions
     const order = await db.$transaction(async (tx) => {
-      // 1. قفل الطاولة والتحقق من عدم وجود طلب جاري
-      // نستخدم findFirst مع Sort للحصول على أحدث طلب
+      // 1. Verify there is no active order on this table
       const existingOrder = await tx.order.findFirst({
         where: {
           tableId,
@@ -135,7 +134,7 @@ export async function POST(request: Request) {
 
       if (existingOrder) {
         throw new Prisma.PrismaClientKnownRequestError(
-          'الطاولة مشغولة',
+          'Table is occupied',
           { 
             code: 'P2002', 
             clientVersion: '5.0.0',
@@ -147,7 +146,7 @@ export async function POST(request: Request) {
         );
       }
 
-      // 2. إنشاء الطلب داخل الـ transaction
+      // 2. Create order inside the transaction
       const newOrder = await tx.order.create({
         data: {
           orderCode,
@@ -167,8 +166,8 @@ export async function POST(request: Request) {
 
       return newOrder;
     }, {
-      maxWait: 5000,  // أقصى انتظار 5 ثواني
-      timeout: 10000, // أقصى مدة للـ transaction 10 ثواني
+      maxWait: 5000,
+      timeout: 10000,
     });
 
     console.log('Order created successfully:', order.id, 'Code:', orderCode);
@@ -177,17 +176,17 @@ export async function POST(request: Request) {
   } catch (error: any) {
     console.error('Error creating order:', error);
     
-    // التحقق من خطأ الطاولة المشغولة
-    if (error?.code === 'P2002' || error?.message === 'الطاولة مشغولة') {
+    // Occupied table conflict
+    if (error?.code === 'P2002' || error?.message === 'Table is occupied') {
       return NextResponse.json({ 
-        error: 'الطاولة مشغولة',
-        details: 'هذه الطاولة لديها طلب جاري بالفعل. يرجى اختيار طاولة أخرى أو الانتظار.',
+        error: 'Table is occupied',
+        details: 'This table already has an active order. Please choose another table or wait.',
         existingOrderCode: error?.meta?.existingOrderCode
       }, { status: 409 });
     }
     
     return NextResponse.json({ 
-      error: 'خطأ في إنشاء الطلب',
+      error: 'Failed to create order',
       details: error?.message || 'Unknown error'
     }, { status: 500 });
   }

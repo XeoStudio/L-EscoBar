@@ -12,7 +12,7 @@ const VALID_TRANSITIONS: Record<string, string[]> = {
   'CANCELLED': []
 };
 
-// GET - جلب طلب واحد
+// GET - Fetch a single order
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -32,17 +32,17 @@ export async function GET(
     });
 
     if (!order) {
-      return NextResponse.json({ error: 'الطلب غير موجود' }, { status: 404 });
+      return NextResponse.json({ error: 'Order not found' }, { status: 404 });
     }
 
     return NextResponse.json(order);
   } catch (error) {
     console.error('Error fetching order:', error);
-    return NextResponse.json({ error: 'خطأ في جلب الطلب' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch order' }, { status: 500 });
   }
 }
 
-// PUT - تحديث حالة الطلب مع التحقق من التسلسل
+// PUT - Update order status with transition validation
 export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -52,23 +52,23 @@ export async function PUT(
     const body = await request.json();
     const { status, notes } = body;
 
-    // جلب الطلب الحالي
+    // Fetch current order status
     const currentOrder = await db.order.findUnique({
       where: { id },
       select: { status: true }
     });
 
     if (!currentOrder) {
-      return NextResponse.json({ error: 'الطلب غير موجود' }, { status: 404 });
+      return NextResponse.json({ error: 'Order not found' }, { status: 404 });
     }
 
-    // التحقق من صحة الانتقال
+    // Validate transition
     const currentStatus = currentOrder.status;
     const validNextStatuses = VALID_TRANSITIONS[currentStatus] || [];
 
     if (!validNextStatuses.includes(status)) {
       return NextResponse.json({ 
-        error: `لا يمكن تغيير الحالة من "${currentStatus}" إلى "${status}". الانتقالات المسموحة: ${validNextStatuses.join(', ') || 'لا يوجد'}`,
+        error: `Cannot change status from "${currentStatus}" to "${status}". Allowed transitions: ${validNextStatuses.join(', ') || 'none'}`,
         allowedTransitions: validNextStatuses
       }, { status: 400 });
     }
@@ -92,11 +92,11 @@ export async function PUT(
     return NextResponse.json(order);
   } catch (error) {
     console.error('Error updating order:', error);
-    return NextResponse.json({ error: 'خطأ في تحديث الطلب' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to update order' }, { status: 500 });
   }
 }
 
-// DELETE - حذف طلب
+// DELETE - Delete an order
 export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -104,19 +104,19 @@ export async function DELETE(
   try {
     const { id } = await params;
     
-    // حذف عناصر الطلب أولاً
+    // Delete order items first
     await db.orderItem.deleteMany({
       where: { orderId: id }
     });
     
-    // ثم حذف الطلب
+    // Then delete the order
     await db.order.delete({
       where: { id }
     });
 
-    return NextResponse.json({ message: 'تم حذف الطلب بنجاح' });
+    return NextResponse.json({ message: 'Order deleted successfully' });
   } catch (error) {
     console.error('Error deleting order:', error);
-    return NextResponse.json({ error: 'خطأ في حذف الطلب' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to delete order' }, { status: 500 });
   }
 }

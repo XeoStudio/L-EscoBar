@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db, hasDatabaseConfig } from '@/lib/db';
 
-// GET - جلب جميع الفئات
+// GET - Fetch all categories
 export async function GET() {
   if (!hasDatabaseConfig()) {
     return NextResponse.json([]);
@@ -19,15 +19,15 @@ export async function GET() {
     return NextResponse.json(categories);
   } catch (error) {
     console.error('Error fetching categories:', error);
-    return NextResponse.json({ error: 'خطأ في جلب الفئات' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch categories' }, { status: 500 });
   }
 }
 
-// POST - إضافة فئة جديدة
+// POST - Create a new category
 export async function POST(request: Request) {
   if (!hasDatabaseConfig()) {
     return NextResponse.json(
-      { error: 'قاعدة البيانات غير مهيأة محلياً.' },
+      { error: 'Database is not configured locally.' },
       { status: 503 }
     );
   }
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     const { name, nameAr, image } = body;
 
     if (!name || !nameAr) {
-      return NextResponse.json({ error: 'اسم الفئة مطلوب' }, { status: 400 });
+      return NextResponse.json({ error: 'Category name is required' }, { status: 400 });
     }
 
     const category = await db.category.create({
@@ -51,6 +51,6 @@ export async function POST(request: Request) {
     return NextResponse.json(category, { status: 201 });
   } catch (error) {
     console.error('Error creating category:', error);
-    return NextResponse.json({ error: 'خطأ في إنشاء الفئة' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to create category' }, { status: 500 });
   }
 }
