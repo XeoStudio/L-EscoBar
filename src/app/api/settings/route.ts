@@ -3,6 +3,7 @@ import { db } from '@/lib/db';
 
 const DEFAULT_SETTINGS = {
   cafeName: "L'EscoBar",
+  language: 'ar',
   currency: 'د.ت',
   primaryColor: '#6F4E37',
   accentColor: '#D4A574',
@@ -57,6 +58,7 @@ export async function PUT(request: Request) {
     const body = await request.json();
     const { 
       cafeName, 
+      language,
       currency, 
       logo,
       primaryColor,
@@ -82,6 +84,7 @@ export async function PUT(request: Request) {
         data: {
           ...DEFAULT_SETTINGS,
           cafeName: cafeName || DEFAULT_SETTINGS.cafeName,
+          language: language || DEFAULT_SETTINGS.language,
           currency: currency || DEFAULT_SETTINGS.currency,
           logo: logo || null,
           primaryColor: primaryColor || DEFAULT_SETTINGS.primaryColor,
@@ -105,6 +108,7 @@ export async function PUT(request: Request) {
         where: { id: settings.id },
         data: {
           ...(cafeName !== undefined && { cafeName }),
+          ...(language !== undefined && { language }),
           ...(currency !== undefined && { currency }),
           ...(logo !== undefined && { logo }),
           ...(primaryColor !== undefined && { primaryColor }),

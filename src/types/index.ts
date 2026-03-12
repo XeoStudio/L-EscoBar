@@ -1,6 +1,7 @@
 export interface Settings {
   id: string;
   cafeName: string;
+  language?: 'ar' | 'en' | 'fr';
   currency: string;
   logo?: string | null;
   primaryColor: string;

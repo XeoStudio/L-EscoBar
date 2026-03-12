@@ -56,6 +56,548 @@ import {
   MapPin
 } from 'lucide-react';
 
+type AppLanguage = 'ar' | 'en' | 'fr';
+
+const SUPPORTED_LANGUAGES: AppLanguage[] = ['ar', 'en', 'fr'];
+
+const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
+  ar: {
+    loading: 'جاري التحميل...',
+    dashboard: 'لوحة التحكم',
+    orders: 'الطلبات',
+    menu: 'القائمة',
+    database: 'البيانات',
+    settings: 'الإعدادات',
+    home: 'الرئيسية',
+    cart: 'السلة',
+    track: 'تتبع',
+    more: 'المزيد',
+    saveAllSettings: 'حفظ جميع الإعدادات',
+    language: 'اللغة',
+    languageDesc: 'اختر لغة الواجهة لكل الزوار ولوحة الإدارة',
+    arabic: 'العربية',
+    english: 'English',
+    french: 'Français',
+    appearance: 'المظهر',
+    templatesSmart: 'قوالب ذكية حسب الوضع الحالي',
+    darkRecommended: 'موصى به للوضع الداكن',
+    lightRecommended: 'موصى به للوضع الفاتح',
+    darkActiveHint: 'الوضع الداكن مفعل: نعرض قوالب بإضاءة منخفضة وألوان مريحة للعين.',
+    lightActiveHint: 'الوضع الفاتح مفعل: نعرض قوالب واضحة ومضيئة للاستخدام النهاري.',
+    altLight: 'قوالب بديلة (فاتحة)',
+    altDark: 'قوالب بديلة (داكنة)',
+    darkComfort: 'داكن مريح',
+    lightProfessional: 'فاتح احترافي',
+    chooseFromList: 'اختر من القائمة',
+    livePreview: 'معاينة مباشرة للألوان',
+    livePreviewDesc: 'هذا مثال سريع لكيف سيظهر التصميم للزوار.',
+    primaryColorLabel: 'اللون الرئيسي',
+    accentColorLabel: 'لون الإبراز',
+    resetTheme: 'إعادة ألوان الثيم الافتراضية',
+    darkMode: 'الوضع الداكن',
+    darkModeDesc: 'تغيير مظهر التطبيق',
+    notificationsSound: 'صوت الإشعارات',
+    notificationsSoundDesc: 'تشغيل صوت عند وصول طلب جديد',
+    trackOrder: 'تتبع طلبك',
+    enterTrackingCode: 'أدخل كود التتبع لمعرفة حالة طلبك',
+    noTrackedOrder: 'لا يوجد طلب للتتبع',
+    adminLogin: 'تسجيل دخول الإدارة',
+    adminLoginDesc: 'إدارة الطلبات والقائمة',
+    systemLabel: 'نظام إدارة المقهى',
+    welcomeDefault: 'مرحباً بك في مقهانا',
+    all: 'الكل',
+    overview: 'نظرة عامة',
+    activeOrders: 'طلبات نشطة',
+    todayRevenue: 'إيرادات اليوم',
+    newOrders: 'طلبات جديدة',
+    preparing: 'قيد التحضير',
+    quickActions: 'إجراءات سريعة',
+    manageOrders: 'إدارة الطلبات',
+    manageMenu: 'إدارة القائمة',
+    recentOrders: 'الطلبات الأخيرة',
+    noOrders: 'لا توجد طلبات',
+    noOrdersInFilter: 'لم يتم العثور على طلبات بهذا التصنيف',
+    filterAll: 'الكل',
+    filterNew: 'جديد',
+    filterReady: 'جاهز',
+    total: 'المجموع',
+    table: 'طاولة',
+    productCount: 'منتج',
+    menuManagement: 'إدارة القائمة',
+    categories: 'الفئات',
+    products: 'المنتجات',
+    tables: 'الطاولات',
+    add: 'إضافة',
+    noCategories: 'لا توجد فئات',
+    noProducts: 'لا توجد منتجات',
+    noTables: 'لا توجد طاولات',
+    addTablesHint: 'أضف طاولات للمقهى',
+    databaseManagement: 'إدارة البيانات',
+    databaseStats: 'إحصائيات قاعدة البيانات',
+    backup: 'النسخ الاحتياطي',
+    exportData: 'تصدير البيانات',
+    download: 'تحميل',
+    deleteSpecificData: 'حذف بيانات محددة',
+    dangerZone: 'منطقة الخطر',
+    account: 'الحساب',
+    logout: 'تسجيل الخروج',
+    cafeInfo: 'معلومات المقهى',
+    callUs: 'اتصل بنا',
+    address: 'العنوان',
+    workingHours: 'أوقات العمل',
+    display: 'المظهر',
+    version: 'الإصدار',
+    cartEmpty: 'السلة فارغة',
+    addFromMenu: 'أضف منتجات من القائمة',
+    browseMenu: 'تصفح القائمة',
+    selectedProducts: 'المنتجات المختارة',
+    subtotal: 'المجموع الفرعي',
+    tax: 'الضريبة',
+    totalWithTax: 'الإجمالي',
+    confirmOrder: 'تأكيد الطلب',
+    trackingCodeHint: 'الكود مكون من 6 أحرف وأرقام',
+    startTracking: 'بدء التتبع',
+    tracking: 'جاري التتبع...',
+    lastOrder: 'آخر طلب',
+    live: 'مباشر',
+    orderStages: 'مراحل الطلب',
+    cancelledOrder: 'تم إلغاء هذا الطلب',
+    orderReady: 'طلبك جاهز!',
+    pickupNow: 'يمكنك المرور لاستلامه',
+    items: 'المنتجات',
+    time: 'الوقت',
+    date: 'التاريخ',
+    trackEmptyHint: 'أدخل الكود أعلاه لمتابعة طلبك',
+    orderSent: 'تم إرسال طلبك!',
+    keepTrackingCode: 'احتفظ بكود التتبع لمتابعة طلبك',
+    trackingCode: 'كود التتبع',
+    copyCode: 'نسخ الكود',
+    close: 'إغلاق',
+    continueTracking: 'متابعة الطلب',
+    adminEmail: 'البريد الإلكتروني',
+    password: 'كلمة المرور',
+    signIn: 'تسجيل الدخول',
+    verifyInProgress: 'جاري التحقق...',
+    orderConfirmation: 'تأكيد الطلب',
+    tableNumber: 'رقم الطاولة',
+    noTablesAvailable: 'لا توجد طاولات متاحة',
+    blockedTablesHint: 'الطاولات المحجوبة لديها طلبات جارية',
+    orderLabel: 'الطلب',
+    sending: 'جاري الإرسال...',
+    cancel: 'إلغاء',
+    loadingShort: 'جاري...',
+    acceptOrder: 'قبول الطلب',
+    startPreparing: 'بدء التحضير',
+    prepared: 'تم التحضير',
+    served: 'تم التقديم',
+    paid: 'تم الدفع',
+    settingsTitle: 'الإعدادات',
+    cafeInfoSection: 'معلومات المقهى',
+    cafeNameLabel: 'اسم المقهى',
+    cafeNamePlaceholder: 'اسم المقهى',
+    cafeLogoLabel: 'شعار المقهى (رابط صورة)',
+    phoneLabel: 'رقم الهاتف',
+    welcomeMessageLabel: 'رسالة الترحيب',
+    openingHoursSection: 'أوقات العمل',
+    openingTime: 'وقت الفتح',
+    closingTime: 'وقت الإغلاق',
+    financialSettings: 'الإعدادات المالية',
+    currencyLabel: 'العملة',
+    services: 'الخدمات',
+    acceptOrders: 'قبول الطلبات',
+    acceptOrdersDesc: 'السماح للعملاء بتقديم طلبات جديدة',
+    smartSuggestionsByPrimary: 'اقتراحات ذكية حسب اللون الرئيسي',
+    primaryColor: 'اللون الرئيسي',
+    accentColor: 'لون الإبراز',
+    backgroundColor: 'لون الخلفية',
+    surfaceColor: 'لون الأسطح',
+    textPrimaryColor: 'لون النص الأساسي',
+    workingHoursLabel: 'ساعات العمل',
+    notAcceptingOrdersNow: 'غير مستقبلين طلبات حالياً',
+    inCart: 'في السلة',
+    noProductsInCategory: 'لا توجد منتجات في هذه الفئة حالياً',
+    orderItems: 'المنتجات المختارة',
+    adminLoginTitle: 'تسجيل دخول الإدارة',
+    orderItemWord: 'منتج',
+    onlyAvailableTables: 'لا توجد طاولات متاحة',
+    actionDelete: 'حذف',
+  },
+  en: {
+    loading: 'Loading...',
+    dashboard: 'Dashboard',
+    orders: 'Orders',
+    menu: 'Menu',
+    database: 'Database',
+    settings: 'Settings',
+    home: 'Home',
+    cart: 'Cart',
+    track: 'Track',
+    more: 'More',
+    saveAllSettings: 'Save All Settings',
+    language: 'Language',
+    languageDesc: 'Choose interface language for customers and admin panel',
+    arabic: 'Arabic',
+    english: 'English',
+    french: 'French',
+    appearance: 'Appearance',
+    templatesSmart: 'Smart templates for current mode',
+    darkRecommended: 'Recommended for dark mode',
+    lightRecommended: 'Recommended for light mode',
+    darkActiveHint: 'Dark mode is active: showing low-light templates for better eye comfort.',
+    lightActiveHint: 'Light mode is active: showing bright and clear daytime templates.',
+    altLight: 'Alternative templates (light)',
+    altDark: 'Alternative templates (dark)',
+    darkComfort: 'Comfort Dark',
+    lightProfessional: 'Professional Light',
+    chooseFromList: 'Choose from list',
+    livePreview: 'Live color preview',
+    livePreviewDesc: 'Quick preview of how visitors will see your design.',
+    primaryColorLabel: 'Primary color',
+    accentColorLabel: 'Accent color',
+    resetTheme: 'Reset theme colors to default',
+    darkMode: 'Dark mode',
+    darkModeDesc: 'Switch app appearance',
+    notificationsSound: 'Notification sound',
+    notificationsSoundDesc: 'Play a sound when a new order arrives',
+    trackOrder: 'Track your order',
+    enterTrackingCode: 'Enter tracking code to see order status',
+    noTrackedOrder: 'No tracked order yet',
+    adminLogin: 'Admin Login',
+    adminLoginDesc: 'Manage orders and menu',
+    systemLabel: 'Cafe Management System',
+    welcomeDefault: 'Welcome to our cafe',
+    all: 'All',
+    overview: 'Overview',
+    activeOrders: 'Active orders',
+    todayRevenue: 'Today revenue',
+    newOrders: 'New orders',
+    preparing: 'Preparing',
+    quickActions: 'Quick actions',
+    manageOrders: 'Manage orders',
+    manageMenu: 'Manage menu',
+    recentOrders: 'Recent orders',
+    noOrders: 'No orders yet',
+    noOrdersInFilter: 'No orders found for this filter',
+    filterAll: 'All',
+    filterNew: 'New',
+    filterReady: 'Ready',
+    total: 'Total',
+    table: 'Table',
+    productCount: 'items',
+    menuManagement: 'Menu management',
+    categories: 'Categories',
+    products: 'Products',
+    tables: 'Tables',
+    add: 'Add',
+    noCategories: 'No categories',
+    noProducts: 'No products',
+    noTables: 'No tables',
+    addTablesHint: 'Add cafe tables',
+    databaseManagement: 'Data management',
+    databaseStats: 'Database stats',
+    backup: 'Backup',
+    exportData: 'Export data',
+    download: 'Download',
+    deleteSpecificData: 'Delete specific data',
+    dangerZone: 'Danger zone',
+    account: 'Account',
+    logout: 'Log out',
+    cafeInfo: 'Cafe info',
+    callUs: 'Call us',
+    address: 'Address',
+    workingHours: 'Working hours',
+    display: 'Display',
+    version: 'Version',
+    cartEmpty: 'Cart is empty',
+    addFromMenu: 'Add products from menu',
+    browseMenu: 'Browse menu',
+    selectedProducts: 'Selected products',
+    subtotal: 'Subtotal',
+    tax: 'Tax',
+    totalWithTax: 'Total',
+    confirmOrder: 'Confirm order',
+    trackingCodeHint: 'Code contains 6 letters and numbers',
+    startTracking: 'Start tracking',
+    tracking: 'Tracking...',
+    lastOrder: 'Last order',
+    live: 'Live',
+    orderStages: 'Order stages',
+    cancelledOrder: 'This order was cancelled',
+    orderReady: 'Your order is ready!',
+    pickupNow: 'You can pick it up now',
+    items: 'Items',
+    time: 'Time',
+    date: 'Date',
+    trackEmptyHint: 'Enter the code above to follow your order',
+    orderSent: 'Your order has been sent!',
+    keepTrackingCode: 'Keep your tracking code to follow your order',
+    trackingCode: 'Tracking code',
+    copyCode: 'Copy code',
+    close: 'Close',
+    continueTracking: 'Track order',
+    adminEmail: 'Email',
+    password: 'Password',
+    signIn: 'Sign in',
+    verifyInProgress: 'Verifying...',
+    orderConfirmation: 'Order confirmation',
+    tableNumber: 'Table number',
+    noTablesAvailable: 'No tables available',
+    blockedTablesHint: 'Blocked tables have active orders',
+    orderLabel: 'Order',
+    sending: 'Sending...',
+    cancel: 'Cancel',
+    loadingShort: 'Loading...',
+    acceptOrder: 'Accept order',
+    startPreparing: 'Start preparation',
+    prepared: 'Prepared',
+    served: 'Served',
+    paid: 'Paid',
+    settingsTitle: 'Settings',
+    cafeInfoSection: 'Cafe information',
+    cafeNameLabel: 'Cafe name',
+    cafeNamePlaceholder: 'Cafe name',
+    cafeLogoLabel: 'Cafe logo (image URL)',
+    phoneLabel: 'Phone number',
+    welcomeMessageLabel: 'Welcome message',
+    openingHoursSection: 'Opening hours',
+    openingTime: 'Opening time',
+    closingTime: 'Closing time',
+    financialSettings: 'Financial settings',
+    currencyLabel: 'Currency',
+    services: 'Services',
+    acceptOrders: 'Accept orders',
+    acceptOrdersDesc: 'Allow customers to place new orders',
+    smartSuggestionsByPrimary: 'Smart suggestions by primary color',
+    primaryColor: 'Primary color',
+    accentColor: 'Accent color',
+    backgroundColor: 'Background color',
+    surfaceColor: 'Surface color',
+    textPrimaryColor: 'Primary text color',
+    workingHoursLabel: 'Working hours',
+    notAcceptingOrdersNow: 'We are not accepting orders right now',
+    inCart: 'in cart',
+    noProductsInCategory: 'No products in this category right now',
+    orderItems: 'Selected products',
+    adminLoginTitle: 'Admin login',
+    orderItemWord: 'items',
+    onlyAvailableTables: 'No tables available',
+    actionDelete: 'Delete',
+  },
+  fr: {
+    loading: 'Chargement...',
+    dashboard: 'Tableau de bord',
+    orders: 'Commandes',
+    menu: 'Menu',
+    database: 'Base de donnees',
+    settings: 'Parametres',
+    home: 'Accueil',
+    cart: 'Panier',
+    track: 'Suivi',
+    more: 'Plus',
+    saveAllSettings: 'Enregistrer tous les parametres',
+    language: 'Langue',
+    languageDesc: 'Choisissez la langue pour les clients et l\'administration',
+    arabic: 'Arabe',
+    english: 'Anglais',
+    french: 'Francais',
+    appearance: 'Apparence',
+    templatesSmart: 'Modeles intelligents selon le mode',
+    darkRecommended: 'Recommande pour mode sombre',
+    lightRecommended: 'Recommande pour mode clair',
+    darkActiveHint: 'Le mode sombre est actif: modeles a faible luminosite pour plus de confort.',
+    lightActiveHint: 'Le mode clair est actif: modeles lumineux et lisibles pour la journee.',
+    altLight: 'Modeles alternatifs (clair)',
+    altDark: 'Modeles alternatifs (sombre)',
+    darkComfort: 'Sombre Confort',
+    lightProfessional: 'Clair Pro',
+    chooseFromList: 'Choisir depuis la liste',
+    livePreview: 'Apercu en direct des couleurs',
+    livePreviewDesc: 'Apercu rapide de l\'affichage pour les visiteurs.',
+    primaryColorLabel: 'Couleur principale',
+    accentColorLabel: 'Couleur accent',
+    resetTheme: 'Reinitialiser les couleurs du theme',
+    darkMode: 'Mode sombre',
+    darkModeDesc: 'Changer l\'apparence de l\'application',
+    notificationsSound: 'Son des notifications',
+    notificationsSoundDesc: 'Jouer un son a l\'arrivee d\'une nouvelle commande',
+    trackOrder: 'Suivre votre commande',
+    enterTrackingCode: 'Entrez le code pour voir le statut',
+    noTrackedOrder: 'Aucune commande suivie',
+    adminLogin: 'Connexion Admin',
+    adminLoginDesc: 'Gerer les commandes et le menu',
+    systemLabel: 'Systeme de gestion du cafe',
+    welcomeDefault: 'Bienvenue dans notre cafe',
+    all: 'Tout',
+    overview: 'Apercu',
+    activeOrders: 'Commandes actives',
+    todayRevenue: 'Revenu du jour',
+    newOrders: 'Nouvelles commandes',
+    preparing: 'Preparation',
+    quickActions: 'Actions rapides',
+    manageOrders: 'Gerer commandes',
+    manageMenu: 'Gerer menu',
+    recentOrders: 'Commandes recentes',
+    noOrders: 'Aucune commande',
+    noOrdersInFilter: 'Aucune commande pour ce filtre',
+    filterAll: 'Tout',
+    filterNew: 'Nouvelle',
+    filterReady: 'Prete',
+    total: 'Total',
+    table: 'Table',
+    productCount: 'articles',
+    menuManagement: 'Gestion du menu',
+    categories: 'Categories',
+    products: 'Produits',
+    tables: 'Tables',
+    add: 'Ajouter',
+    noCategories: 'Aucune categorie',
+    noProducts: 'Aucun produit',
+    noTables: 'Aucune table',
+    addTablesHint: 'Ajoutez des tables au cafe',
+    databaseManagement: 'Gestion des donnees',
+    databaseStats: 'Statistiques base',
+    backup: 'Sauvegarde',
+    exportData: 'Exporter les donnees',
+    download: 'Telecharger',
+    deleteSpecificData: 'Supprimer des donnees',
+    dangerZone: 'Zone de danger',
+    account: 'Compte',
+    logout: 'Deconnexion',
+    cafeInfo: 'Infos du cafe',
+    callUs: 'Appelez-nous',
+    address: 'Adresse',
+    workingHours: 'Horaires',
+    display: 'Affichage',
+    version: 'Version',
+    cartEmpty: 'Panier vide',
+    addFromMenu: 'Ajoutez des produits du menu',
+    browseMenu: 'Parcourir menu',
+    selectedProducts: 'Produits selectionnes',
+    subtotal: 'Sous-total',
+    tax: 'Taxe',
+    totalWithTax: 'Total',
+    confirmOrder: 'Confirmer commande',
+    trackingCodeHint: 'Le code contient 6 lettres et chiffres',
+    startTracking: 'Demarrer suivi',
+    tracking: 'Suivi en cours...',
+    lastOrder: 'Derniere commande',
+    live: 'En direct',
+    orderStages: 'Etapes de commande',
+    cancelledOrder: 'Cette commande est annulee',
+    orderReady: 'Votre commande est prete!',
+    pickupNow: 'Vous pouvez la recuperer maintenant',
+    items: 'Produits',
+    time: 'Heure',
+    date: 'Date',
+    trackEmptyHint: 'Entrez le code ci-dessus pour suivre la commande',
+    orderSent: 'Votre commande est envoyee!',
+    keepTrackingCode: 'Gardez le code de suivi pour suivre votre commande',
+    trackingCode: 'Code de suivi',
+    copyCode: 'Copier le code',
+    close: 'Fermer',
+    continueTracking: 'Suivre commande',
+    adminEmail: 'Email',
+    password: 'Mot de passe',
+    signIn: 'Se connecter',
+    verifyInProgress: 'Verification...',
+    orderConfirmation: 'Confirmation commande',
+    tableNumber: 'Numero de table',
+    noTablesAvailable: 'Aucune table disponible',
+    blockedTablesHint: 'Les tables bloquees ont des commandes actives',
+    orderLabel: 'Commande',
+    sending: 'Envoi en cours...',
+    cancel: 'Annuler',
+    loadingShort: 'Chargement...',
+    acceptOrder: 'Accepter commande',
+    startPreparing: 'Demarrer preparation',
+    prepared: 'Preparation terminee',
+    served: 'Servie',
+    paid: 'Payee',
+    settingsTitle: 'Parametres',
+    cafeInfoSection: 'Informations du cafe',
+    cafeNameLabel: 'Nom du cafe',
+    cafeNamePlaceholder: 'Nom du cafe',
+    cafeLogoLabel: 'Logo du cafe (URL image)',
+    phoneLabel: 'Numero de telephone',
+    welcomeMessageLabel: 'Message de bienvenue',
+    openingHoursSection: 'Horaires',
+    openingTime: 'Heure d\'ouverture',
+    closingTime: 'Heure de fermeture',
+    financialSettings: 'Parametres financiers',
+    currencyLabel: 'Devise',
+    services: 'Services',
+    acceptOrders: 'Accepter les commandes',
+    acceptOrdersDesc: 'Autoriser les clients a passer de nouvelles commandes',
+    smartSuggestionsByPrimary: 'Suggestions intelligentes selon la couleur principale',
+    primaryColor: 'Couleur principale',
+    accentColor: 'Couleur accent',
+    backgroundColor: 'Couleur de fond',
+    surfaceColor: 'Couleur des surfaces',
+    textPrimaryColor: 'Couleur du texte principal',
+    workingHoursLabel: 'Heures de travail',
+    notAcceptingOrdersNow: 'Nous n\'acceptons pas de commandes actuellement',
+    inCart: 'au panier',
+    noProductsInCategory: 'Aucun produit dans cette categorie pour le moment',
+    orderItems: 'Produits selectionnes',
+    adminLoginTitle: 'Connexion admin',
+    orderItemWord: 'articles',
+    onlyAvailableTables: 'Aucune table disponible',
+    actionDelete: 'Supprimer',
+  },
+};
+
+const ORDER_STATUS_LABELS: Record<AppLanguage, Record<OrderStatus, string>> = {
+  ar: ORDER_STATUS_AR,
+  en: {
+    NEW: 'New',
+    ACCEPTED: 'Accepted',
+    PREPARING: 'Preparing',
+    READY: 'Ready',
+    SERVED: 'Served',
+    PAID: 'Paid',
+    CANCELLED: 'Cancelled',
+  },
+  fr: {
+    NEW: 'Nouvelle',
+    ACCEPTED: 'Acceptee',
+    PREPARING: 'Preparation',
+    READY: 'Prete',
+    SERVED: 'Servie',
+    PAID: 'Payee',
+    CANCELLED: 'Annulee',
+  },
+};
+
+const STATUS_ACTION_LABELS: Record<AppLanguage, Record<'NEW' | 'ACCEPTED' | 'PREPARING' | 'READY' | 'SERVED', string>> = {
+  ar: {
+    NEW: 'قبول الطلب',
+    ACCEPTED: 'بدء التحضير',
+    PREPARING: 'تم التحضير',
+    READY: 'تم التقديم',
+    SERVED: 'تم الدفع',
+  },
+  en: {
+    NEW: 'Accept order',
+    ACCEPTED: 'Start preparation',
+    PREPARING: 'Prepared',
+    READY: 'Served',
+    SERVED: 'Paid',
+  },
+  fr: {
+    NEW: 'Accepter commande',
+    ACCEPTED: 'Demarrer preparation',
+    PREPARING: 'Preparation terminee',
+    READY: 'Servie',
+    SERVED: 'Payee',
+  },
+};
+
+const LOCALE_BY_LANGUAGE: Record<AppLanguage, string> = {
+  ar: 'ar-SA',
+  en: 'en-US',
+  fr: 'fr-FR',
+};
+
 // Sound notification
 const playNotificationSound = () => {
   if (typeof window !== 'undefined') {
@@ -111,12 +653,12 @@ const playReadySound = () => {
 };
 
 // Status actions configuration
-const STATUS_ACTIONS: Record<OrderStatus, { next: OrderStatus; label: string; icon: typeof Check } | null> = {
-  NEW: { next: 'ACCEPTED', label: 'قبول الطلب', icon: Check },
-  ACCEPTED: { next: 'PREPARING', label: 'بدء التحضير', icon: ChefHat },
-  PREPARING: { next: 'READY', label: 'تم التحضير', icon: PackageCheck },
-  READY: { next: 'SERVED', label: 'تم التقديم', icon: HandPlatter },
-  SERVED: { next: 'PAID', label: 'تم الدفع', icon: CreditCard },
+const STATUS_ACTIONS: Record<OrderStatus, { next: OrderStatus; icon: typeof Check } | null> = {
+  NEW: { next: 'ACCEPTED', icon: Check },
+  ACCEPTED: { next: 'PREPARING', icon: ChefHat },
+  PREPARING: { next: 'READY', icon: PackageCheck },
+  READY: { next: 'SERVED', icon: HandPlatter },
+  SERVED: { next: 'PAID', icon: CreditCard },
   PAID: null,
   CANCELLED: null
 };
@@ -576,6 +1118,7 @@ export default function CafeApp() {
   const [tableForm, setTableForm] = useState({ number: '', seats: '4', description: '' });
   const [settingsForm, setSettingsForm] = useState({ 
     cafeName: '', 
+    language: 'ar' as AppLanguage,
     currency: 'د.ت',
     logo: '',
     primaryColor: DEFAULT_THEME_COLORS.primaryColor,
@@ -610,12 +1153,32 @@ export default function CafeApp() {
     const background = colors?.backgroundColor || DEFAULT_THEME_COLORS.backgroundColor;
     const surface = colors?.surfaceColor || DEFAULT_THEME_COLORS.surfaceColor;
     const textPrimary = colors?.textPrimaryColor || DEFAULT_THEME_COLORS.textPrimaryColor;
+    const primaryHover = mixHex(primary, '#000000', 0.16);
+    const primaryLight = mixHex(primary, '#FFFFFF', 0.84);
+    const primaryDark = mixHex(primary, '#000000', 0.34);
+    const accentHover = mixHex(accent, '#000000', 0.14);
+    const accentLight = mixHex(accent, '#FFFFFF', 0.88);
+    const surfaceRaised = mixHex(surface, background, 0.25);
+    const border = mixHex(surface, textPrimary, 0.16);
+    const textSecondary = mixHex(textPrimary, background, 0.38);
+    const textMuted = mixHex(textPrimary, background, 0.55);
 
     rootStyle.setProperty('--primary', primary);
+    rootStyle.setProperty('--primary-hover', primaryHover);
+    rootStyle.setProperty('--primary-light', primaryLight);
+    rootStyle.setProperty('--primary-dark', primaryDark);
     rootStyle.setProperty('--accent', accent);
+    rootStyle.setProperty('--accent-hover', accentHover);
+    rootStyle.setProperty('--accent-light', accentLight);
     rootStyle.setProperty('--background', background);
     rootStyle.setProperty('--surface', surface);
+    rootStyle.setProperty('--surface-raised', surfaceRaised);
+    rootStyle.setProperty('--border', border);
     rootStyle.setProperty('--text-primary', textPrimary);
+    rootStyle.setProperty('--text-secondary', textSecondary);
+    rootStyle.setProperty('--text-muted', textMuted);
+    rootStyle.setProperty('--gradient-primary', `linear-gradient(135deg, ${primary} 0%, ${accent} 100%)`);
+    rootStyle.setProperty('--gradient-cream', `linear-gradient(180deg, ${background} 0%, ${surfaceRaised} 100%)`);
   }, []);
 
   const themeSuggestions = useMemo(
@@ -834,6 +1397,7 @@ export default function CafeApp() {
       setSettings(data);
       setSettingsForm({ 
         cafeName: data.cafeName, 
+        language: SUPPORTED_LANGUAGES.includes(data.language as AppLanguage) ? data.language : 'ar',
         currency: data.currency,
         logo: data.logo || '',
         primaryColor: data.primaryColor || DEFAULT_THEME_COLORS.primaryColor,
@@ -1030,11 +1594,11 @@ export default function CafeApp() {
     if (isSubmitting) return;
     
     if (!selectedTableId) {
-      toast({ title: '⚠️ تنبيه', description: 'الرجاء اختيار رقم الطاولة', variant: 'destructive' });
+      toast({ title: '⚠️', description: t('tableNumber'), variant: 'destructive' });
       return;
     }
     if (selectedProducts.size === 0) {
-      toast({ title: '⚠️ تنبيه', description: 'لم تختر أي منتج', variant: 'destructive' });
+      toast({ title: '⚠️', description: t('noProducts'), variant: 'destructive' });
       return;
     }
 
@@ -1083,22 +1647,22 @@ export default function CafeApp() {
         setSelectedTableId('');
         
         toast({ 
-          title: '🚫 الطاولة مشغولة!', 
-          description: data.details || 'هذه الطاولة لديها طلب جاري. يرجى اختيار طاولة أخرى.',
+          title: '🚫', 
+          description: data.details || t('blockedTablesHint'),
           variant: 'destructive'
         });
       } else {
         const data = await res.json();
         console.error('Order creation failed:', data);
         toast({ 
-          title: '❌ خطأ', 
-          description: data.details || data.error || 'فشل في إرسال الطلب', 
+          title: '❌', 
+          description: data.details || data.error || t('sending'), 
           variant: 'destructive' 
         });
       }
     } catch (error) {
       console.error('Submit order error:', error);
-      toast({ title: '❌ خطأ', description: 'فشل في الاتصال بالخادم', variant: 'destructive' });
+      toast({ title: '❌', description: t('sending'), variant: 'destructive' });
     } finally {
       setTimeout(() => setIsSubmitting(false), 1000);
     }
@@ -1107,7 +1671,7 @@ export default function CafeApp() {
   // Track order by code
   const trackOrder = async () => {
     if (!trackingCode.trim()) {
-      toast({ title: '⚠️ تنبيه', description: 'يرجى إدخال كود التتبع', variant: 'destructive' });
+      toast({ title: '⚠️', description: t('enterTrackingFirst'), variant: 'destructive' });
       return;
     }
     
@@ -1120,14 +1684,14 @@ export default function CafeApp() {
       if (res.ok) {
         const order = await res.json();
         setTrackedOrder(order);
-        toast({ title: '✅ تم العثور على الطلب', description: `طلب رقم ${order.tableNumber}` });
+        toast({ title: '✅', description: `${t('orderFound')} - ${t('table')} ${order.tableNumber}` });
       } else {
         const data = await res.json();
-        toast({ title: '❌ خطأ', description: data.error || 'لم يتم العثور على الطلب', variant: 'destructive' });
+        toast({ title: '❌', description: data.error || t('orderNotFound'), variant: 'destructive' });
         setTrackedOrder(null);
       }
     } catch {
-      toast({ title: '❌ خطأ', description: 'فشل في البحث عن الطلب', variant: 'destructive' });
+      toast({ title: '❌', description: t('searchOrderFailed'), variant: 'destructive' });
       setTrackedOrder(null);
     } finally {
       setIsTrackingLoading(false);
@@ -1156,7 +1720,7 @@ export default function CafeApp() {
   const copyTrackingCode = () => {
     if (lastOrderCode) {
       navigator.clipboard.writeText(lastOrderCode);
-      toast({ title: '✅ تم النسخ', description: `تم نسخ الكود: ${lastOrderCode}` });
+      toast({ title: '✅', description: `${t('copyCode')}: ${lastOrderCode}` });
     }
   };
 
@@ -1179,14 +1743,14 @@ export default function CafeApp() {
       });
       
       if (res.ok) {
-        toast({ title: '✅ تم التحديث', description: 'تم تحديث حالة الطلب' });
+        toast({ title: '✅', description: t('orders') });
         fetchOrders();
       } else {
         const data = await res.json();
-        toast({ title: '❌ خطأ', description: data.error || 'فشل في تحديث الطلب', variant: 'destructive' });
+        toast({ title: '❌', description: data.error || t('orders'), variant: 'destructive' });
       }
     } catch {
-      toast({ title: '❌ خطأ', description: 'فشل في تحديث الطلب', variant: 'destructive' });
+      toast({ title: '❌', description: t('orders'), variant: 'destructive' });
     }
   };
 
@@ -1200,7 +1764,7 @@ export default function CafeApp() {
 
   // Cancel order
   const cancelOrder = async (orderId: string) => {
-    if (confirm('هل أنت متأكد من إلغاء هذا الطلب؟')) {
+    if (confirm(t('orderCancelledConfirm'))) {
       await updateOrderStatus(orderId, 'CANCELLED');
     }
   };
@@ -1223,14 +1787,14 @@ export default function CafeApp() {
           surfaceColor: data.surfaceColor,
           textPrimaryColor: data.textPrimaryColor,
         });
-        toast({ title: '✅ تم الحفظ', description: 'تم تحديث الإعدادات' });
+        toast({ title: '✅', description: t('settings') });
       } else {
         const errorData = await res.json();
-        toast({ title: '❌ خطأ', description: errorData.error || 'فشل في حفظ الإعدادات', variant: 'destructive' });
+        toast({ title: '❌', description: errorData.error || t('settings'), variant: 'destructive' });
       }
     } catch (error) {
       console.error('Save settings error:', error);
-      toast({ title: '❌ خطأ', description: 'فشل في حفظ الإعدادات', variant: 'destructive' });
+      toast({ title: '❌', description: t('settings'), variant: 'destructive' });
     }
   };
 
@@ -1438,8 +2002,39 @@ export default function CafeApp() {
   const preparingOrdersCount = orders.filter(o => o.status === 'PREPARING' || o.status === 'ACCEPTED').length;
   const readyOrdersCount = orders.filter(o => o.status === 'READY').length;
 
+  const language: AppLanguage = SUPPORTED_LANGUAGES.includes((settings?.language || 'ar') as AppLanguage)
+    ? ((settings?.language || 'ar') as AppLanguage)
+    : 'ar';
+  const t = (key: string) => UI_TEXT[language][key] || UI_TEXT.ar[key] || key;
+  const getStatusLabel = (status: OrderStatus) => ORDER_STATUS_LABELS[language]?.[status] || ORDER_STATUS_AR[status];
+  const getStatusActionLabel = (status: OrderStatus) => {
+    if (status === 'PAID' || status === 'CANCELLED') return '';
+    return STATUS_ACTION_LABELS[language][status as 'NEW' | 'ACCEPTED' | 'PREPARING' | 'READY' | 'SERVED'];
+  };
+  const locale = LOCALE_BY_LANGUAGE[language];
+  const appDir: 'rtl' | 'ltr' = language === 'ar' ? 'rtl' : 'ltr';
+  const localizedCafeName = settings?.cafeName || "L'EscoBar";
+  const getCategoryDisplayName = (category: Category) => {
+    if (language === 'ar') return category.nameAr;
+    return category.name;
+  };
+  const getProductDisplayName = (product: Product) => {
+    if (language === 'ar') return product.nameAr;
+    return product.name;
+  };
+  const getProductDescription = (product: Product) => {
+    if (language === 'ar') return product.descriptionAr || product.description || '';
+    return product.description || product.descriptionAr || '';
+  };
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    document.documentElement.lang = language;
+    document.documentElement.dir = appDir;
+  }, [language, appDir]);
+
   const currency = settings?.currency || 'د.ت';
-  const cafeName = settings?.cafeName || "L'EscoBar";
+  const cafeName = localizedCafeName;
 
   // Database Management Functions
   const fetchDbStats = async () => {
@@ -1662,7 +2257,7 @@ export default function CafeApp() {
           <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-[var(--primary)] flex items-center justify-center">
             <Coffee className="w-8 h-8 text-white" />
           </div>
-          <p className="text-[var(--text-secondary)]">جاري التحميل...</p>
+          <p className="text-[var(--text-secondary)]">{t('loading')}</p>
         </div>
       </div>
     );
@@ -1671,7 +2266,7 @@ export default function CafeApp() {
   // Admin View
   if (isAdminAuthenticated) {
     return (
-      <div className="min-h-screen bg-[var(--background)]" dir="rtl">
+      <div className="min-h-screen bg-[var(--background)]" dir={appDir}>
         {/* App Header */}
         <header className="app-header">
           <div className="app-header-inner">
@@ -1709,18 +2304,18 @@ export default function CafeApp() {
           {/* Dashboard Tab */}
           {adminTab === 'dashboard' && (
             <div className="p-4">
-              <h2 className="text-h2 mb-4">لوحة التحكم</h2>
+              <h2 className="text-h2 mb-4">{t('dashboard')}</h2>
               
               {/* Stats Group */}
               <div className="stats-group">
-                <div className="stats-group-title">نظرة عامة</div>
+                <div className="stats-group-title">{t('overview')}</div>
                 <div className="stats-grid">
                   <div className="stat-item">
                     <div className="stat-item-icon" style={{ background: 'var(--warning-light)', color: 'var(--warning)' }}>
                       <ShoppingCart className="w-5 h-5" />
                     </div>
                     <div className="stat-item-value">{orders.filter(o => o.status !== 'PAID' && o.status !== 'CANCELLED').length}</div>
-                    <div className="stat-item-label">طلبات نشطة</div>
+                    <div className="stat-item-label">{t('activeOrders')}</div>
                   </div>
                   
                   <div className="stat-item">
@@ -1728,7 +2323,7 @@ export default function CafeApp() {
                       <DollarSign className="w-5 h-5" />
                     </div>
                     <div className="stat-item-value">{reports?.today.revenue.toFixed(2) || '0'}</div>
-                    <div className="stat-item-label">إيرادات اليوم</div>
+                    <div className="stat-item-label">{t('todayRevenue')}</div>
                   </div>
                   
                   <div className="stat-item">
@@ -1736,7 +2331,7 @@ export default function CafeApp() {
                       <Bell className="w-5 h-5" />
                     </div>
                     <div className="stat-item-value">{newOrdersCount}</div>
-                    <div className="stat-item-label">طلبات جديدة</div>
+                    <div className="stat-item-label">{t('newOrders')}</div>
                   </div>
                   
                   <div className="stat-item">
@@ -1744,14 +2339,14 @@ export default function CafeApp() {
                       <Clock className="w-5 h-5" />
                     </div>
                     <div className="stat-item-value">{preparingOrdersCount}</div>
-                    <div className="stat-item-label">قيد التحضير</div>
+                    <div className="stat-item-label">{t('preparing')}</div>
                   </div>
                 </div>
               </div>
 
               {/* Quick Actions */}
               <div className="quick-actions">
-                <div className="quick-actions-title">إجراءات سريعة</div>
+                <div className="quick-actions-title">{t('quickActions')}</div>
                 <div className="quick-actions-grid">
                   <button 
                     className="quick-action-btn"
@@ -1761,7 +2356,7 @@ export default function CafeApp() {
                       <ClipboardList className="w-5 h-5" />
                     </div>
                     <span className="quick-action-label">
-                      إدارة الطلبات
+                      {t('manageOrders')}
                       {newOrdersCount > 0 && (
                         <span className="badge badge-error" style={{ marginLeft: '8px' }}>{newOrdersCount}</span>
                       )}
@@ -1774,7 +2369,7 @@ export default function CafeApp() {
                     <div className="quick-action-icon">
                       <Package className="w-5 h-5" />
                     </div>
-                    <span className="quick-action-label">إدارة القائمة</span>
+                    <span className="quick-action-label">{t('manageMenu')}</span>
                   </button>
                 </div>
               </div>
@@ -1786,18 +2381,18 @@ export default function CafeApp() {
                     <div className="section-card-title-icon">
                       <Clock className="w-4 h-4" />
                     </div>
-                    الطلبات الأخيرة
+                    {t('recentOrders')}
                   </div>
                 </div>
                 <div className="grouped-list">
                   {orders.slice(0, 5).map(order => (
                     <div key={order.id} className="grouped-list-item">
                       <div className="grouped-list-item-content">
-                        <div className="grouped-list-item-title">طاولة {order.tableNumber}</div>
-                        <div className="grouped-list-item-subtitle">{order.orderItems.length} منتج</div>
+                        <div className="grouped-list-item-title">{t('table')} {order.tableNumber}</div>
+                        <div className="grouped-list-item-subtitle">{order.orderItems.length} {t('productCount')}</div>
                       </div>
                       <span className={`order-status-badge ${STATUS_CLASSES[order.status]}`}>
-                        {ORDER_STATUS_AR[order.status]}
+                        {getStatusLabel(order.status)}
                       </span>
                     </div>
                   ))}
@@ -1806,7 +2401,7 @@ export default function CafeApp() {
                       <div className="empty-state-icon">
                         <ClipboardList className="w-6 h-6" />
                       </div>
-                      <div className="empty-state-title">لا توجد طلبات</div>
+                      <div className="empty-state-title">{t('noOrders')}</div>
                     </div>
                   )}
                 </div>
@@ -1818,7 +2413,7 @@ export default function CafeApp() {
           {adminTab === 'orders' && (
             <div className="p-4">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-h2">الطلبات</h2>
+                <h2 className="text-h2">{t('orders')}</h2>
                 <div className="flex items-center gap-2">
                   <button
                     className="btn btn-ghost btn-sm"
@@ -1841,25 +2436,25 @@ export default function CafeApp() {
                   className={`filter-chip ${orderFilter === 'all' ? 'active' : ''}`}
                   onClick={() => setOrderFilter('all')}
                 >
-                  الكل
+                  {t('filterAll')}
                 </button>
                 <button
                   className={`filter-chip ${orderFilter === 'NEW' ? 'active' : ''}`}
                   onClick={() => setOrderFilter('NEW')}
                 >
-                  جديد {newOrdersCount > 0 && `(${newOrdersCount})`}
+                  {t('filterNew')} {newOrdersCount > 0 && `(${newOrdersCount})`}
                 </button>
                 <button
                   className={`filter-chip ${orderFilter === 'PREPARING' ? 'active' : ''}`}
                   onClick={() => setOrderFilter('PREPARING')}
                 >
-                  قيد التحضير
+                  {t('preparing')}
                 </button>
                 <button
                   className={`filter-chip ${orderFilter === 'READY' ? 'active' : ''}`}
                   onClick={() => setOrderFilter('READY')}
                 >
-                  جاهز
+                  {t('filterReady')}
                 </button>
               </div>
 
@@ -1871,13 +2466,13 @@ export default function CafeApp() {
                     <div key={order.id} className="order-group">
                       <div className="order-group-header">
                         <div className="order-group-info">
-                          <span className="order-group-table">طاولة {order.tableNumber}</span>
+                          <span className="order-group-table">{t('table')} {order.tableNumber}</span>
                           <span className={`order-status-badge ${STATUS_CLASSES[order.status]}`}>
-                            {ORDER_STATUS_AR[order.status]}
+                            {getStatusLabel(order.status)}
                           </span>
                         </div>
                         <span className="order-group-time">
-                          {new Date(order.createdAt).toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' })}
+                          {new Date(order.createdAt).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })}
                         </span>
                       </div>
                       <div className="order-group-items">
@@ -1889,7 +2484,7 @@ export default function CafeApp() {
                         ))}
                       </div>
                       <div className="order-group-total">
-                        <span className="order-group-total-label">المجموع</span>
+                        <span className="order-group-total-label">{t('total')}</span>
                         <span className="order-group-total-value">{order.total.toFixed(2)} {currency}</span>
                       </div>
                       {action && (
@@ -1899,7 +2494,7 @@ export default function CafeApp() {
                             onClick={() => advanceOrderStatus(order.id, order.status)}
                           >
                             <action.icon className="w-4 h-4" />
-                            {action.label}
+                            {getStatusActionLabel(order.status)}
                           </button>
                           {order.status !== 'CANCELLED' && (
                             <button
@@ -1919,8 +2514,8 @@ export default function CafeApp() {
                     <div className="empty-state-icon">
                       <ClipboardList className="w-6 h-6" />
                     </div>
-                    <div className="empty-state-title">لا توجد طلبات</div>
-                    <div className="empty-state-description">لم يتم العثور على طلبات بهذا التصنيف</div>
+                    <div className="empty-state-title">{t('noOrders')}</div>
+                    <div className="empty-state-description">{t('noOrdersInFilter')}</div>
                   </div>
                 )}
               </div>
@@ -1931,7 +2526,7 @@ export default function CafeApp() {
           {adminTab === 'menu' && (
             <div className="p-4">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-h2">إدارة القائمة</h2>
+                <h2 className="text-h2">{t('menuManagement')}</h2>
               </div>
 
               {/* Categories Section */}
@@ -1941,7 +2536,7 @@ export default function CafeApp() {
                     <div className="section-card-title-icon">
                       <Layers className="w-4 h-4" />
                     </div>
-                    الفئات
+                    {t('categories')}
                   </div>
                   <button
                     className="btn btn-primary btn-sm"
@@ -1951,7 +2546,7 @@ export default function CafeApp() {
                     }}
                   >
                     <Plus className="w-4 h-4" />
-                    إضافة
+                    {t('add')}
                   </button>
                 </div>
                 <div className="grouped-list">
@@ -1983,7 +2578,7 @@ export default function CafeApp() {
                   ))}
                   {categories.length === 0 && (
                     <div className="empty-state" style={{ padding: '24px' }}>
-                      <div className="empty-state-title">لا توجد فئات</div>
+                      <div className="empty-state-title">{t('noCategories')}</div>
                     </div>
                   )}
                 </div>
@@ -1996,7 +2591,7 @@ export default function CafeApp() {
                     <div className="section-card-title-icon">
                       <Package className="w-4 h-4" />
                     </div>
-                    المنتجات
+                    {t('products')}
                   </div>
                   <button
                     className="btn btn-primary btn-sm"
@@ -2006,7 +2601,7 @@ export default function CafeApp() {
                     }}
                   >
                     <Plus className="w-4 h-4" />
-                    إضافة
+                    {t('add')}
                   </button>
                 </div>
                 <div className="grouped-list custom-scrollbar" style={{ maxHeight: '300px', overflowY: 'auto' }}>
@@ -2056,7 +2651,7 @@ export default function CafeApp() {
                   ))}
                   {products.length === 0 && (
                     <div className="empty-state" style={{ padding: '24px' }}>
-                      <div className="empty-state-title">لا توجد منتجات</div>
+                      <div className="empty-state-title">{t('noProducts')}</div>
                     </div>
                   )}
                 </div>
@@ -2069,7 +2664,7 @@ export default function CafeApp() {
                     <div className="section-card-title-icon">
                       <TableIcon className="w-4 h-4" />
                     </div>
-                    الطاولات
+                    {t('tables')}
                   </div>
                   <button
                     className="btn btn-primary btn-sm"
@@ -2079,7 +2674,7 @@ export default function CafeApp() {
                     }}
                   >
                     <Plus className="w-4 h-4" />
-                    إضافة
+                    {t('add')}
                   </button>
                 </div>
                 <div className="section-card-body">
@@ -2088,8 +2683,8 @@ export default function CafeApp() {
                       <div className="empty-state-icon">
                         <TableIcon className="w-6 h-6" />
                       </div>
-                      <div className="empty-state-title">لا توجد طاولات</div>
-                      <div className="empty-state-description">أضف طاولات للمقهى</div>
+                      <div className="empty-state-title">{t('noTables')}</div>
+                      <div className="empty-state-description">{t('addTablesHint')}</div>
                     </div>
                   ) : (
                     <div className="table-select-grid">
@@ -2120,7 +2715,7 @@ export default function CafeApp() {
           {/* Database Tab */}
           {adminTab === 'database' && (
             <div className="p-4 space-y-4">
-              <h2 className="text-h2">إدارة البيانات</h2>
+              <h2 className="text-h2">{t('databaseManagement')}</h2>
               
               {/* Database Stats */}
               <div className="section-card">
@@ -2129,7 +2724,7 @@ export default function CafeApp() {
                     <div className="section-card-title-icon" style={{ background: 'var(--primary-light)' }}>
                       <Database className="w-4 h-4" style={{ color: 'var(--primary)' }} />
                     </div>
-                    إحصائيات قاعدة البيانات
+                    {t('databaseStats')}
                   </div>
                 </div>
                 <div className="section-card-body">
@@ -2181,13 +2776,13 @@ export default function CafeApp() {
                     <div className="section-card-title-icon" style={{ background: 'var(--success-light)' }}>
                       <Download className="w-4 h-4" style={{ color: 'var(--success)' }} />
                     </div>
-                    النسخ الاحتياطي
+                    {t('backup')}
                   </div>
                 </div>
                 <div className="section-card-body">
                   <div className="db-action-row">
                     <div className="db-action-info">
-                      <div className="db-action-title">تصدير البيانات</div>
+                      <div className="db-action-title">{t('exportData')}</div>
                       <div className="db-action-desc">تحميل نسخة احتياطية كاملة بصيغة JSON</div>
                     </div>
                     <button
@@ -2196,7 +2791,7 @@ export default function CafeApp() {
                       disabled={isDbLoading}
                     >
                       <FileJson className="w-4 h-4" />
-                      {isDbLoading ? 'جاري...' : 'تحميل'}
+                      {isDbLoading ? t('loadingShort') : t('download')}
                     </button>
                   </div>
                 </div>
@@ -2209,7 +2804,7 @@ export default function CafeApp() {
                     <div className="section-card-title-icon" style={{ background: 'var(--warning-light)' }}>
                       <Trash2 className="w-4 h-4" style={{ color: 'var(--warning)' }} />
                     </div>
-                    حذف بيانات محددة
+                    {t('deleteSpecificData')}
                   </div>
                 </div>
                 <div className="section-card-body">
@@ -2236,7 +2831,7 @@ export default function CafeApp() {
                         disabled={isDbLoading}
                       >
                         <Calendar className="w-4 h-4" />
-                        حذف
+                        {t('actionDelete')}
                       </button>
                     </div>
 
@@ -2251,7 +2846,7 @@ export default function CafeApp() {
                         disabled={isDbLoading}
                       >
                         <Trash2 className="w-4 h-4" />
-                        حذف
+                        {t('actionDelete')}
                       </button>
                     </div>
 
@@ -2266,7 +2861,7 @@ export default function CafeApp() {
                         disabled={isDbLoading}
                       >
                         <Trash2 className="w-4 h-4" />
-                        حذف
+                        {t('actionDelete')}
                       </button>
                     </div>
 
@@ -2281,7 +2876,7 @@ export default function CafeApp() {
                         disabled={isDbLoading}
                       >
                         <Trash2 className="w-4 h-4" />
-                        حذف
+                        {t('actionDelete')}
                       </button>
                     </div>
 
@@ -2296,7 +2891,7 @@ export default function CafeApp() {
                         disabled={isDbLoading}
                       >
                         <Trash2 className="w-4 h-4" />
-                        حذف
+                        {t('actionDelete')}
                       </button>
                     </div>
                   </div>
@@ -2310,7 +2905,7 @@ export default function CafeApp() {
                     <div className="section-card-title-icon" style={{ background: 'var(--error)' }}>
                       <AlertTriangle className="w-4 h-4 text-white" />
                     </div>
-                    منطقة الخطر
+                    {t('dangerZone')}
                   </div>
                 </div>
                 <div className="section-card-body">
@@ -2367,7 +2962,7 @@ export default function CafeApp() {
           {/* Settings Tab */}
           {adminTab === 'settings' && (
             <div className="p-4">
-              <h2 className="text-h2 mb-4">الإعدادات</h2>
+              <h2 className="text-h2 mb-4">{t('settingsTitle')}</h2>
               
               {/* Cafe Info Settings */}
               <div className="settings-section">
@@ -2375,22 +2970,42 @@ export default function CafeApp() {
                   <div className="settings-section-icon">
                     <Store className="w-5 h-5" />
                   </div>
-                  <div className="settings-section-title">معلومات المقهى</div>
+                  <div className="settings-section-title">{t('cafeInfoSection')}</div>
                 </div>
                 <div className="settings-section-body">
                   <div className="space-y-4">
                     <div className="settings-field">
-                      <label className="settings-label">اسم المقهى</label>
+                      <label className="settings-label">{t('language')}</label>
+                      <p className="settings-help-text">{t('languageDesc')}</p>
+                      <select
+                        className="settings-input"
+                        value={settingsForm.language}
+                        onChange={(e) => {
+                          const nextLanguage = e.target.value as AppLanguage;
+                          if (!SUPPORTED_LANGUAGES.includes(nextLanguage)) return;
+                          const nextForm = { ...settingsForm, language: nextLanguage };
+                          setSettingsForm(nextForm);
+                          setSettings((prev) => (prev ? { ...prev, language: nextLanguage } : prev));
+                        }}
+                      >
+                        <option value="ar">{t('arabic')}</option>
+                        <option value="en">{t('english')}</option>
+                        <option value="fr">{t('french')}</option>
+                      </select>
+                    </div>
+
+                    <div className="settings-field">
+                      <label className="settings-label">{t('cafeNameLabel')}</label>
                       <input
                         type="text"
                         className="settings-input"
                         value={settingsForm.cafeName}
                         onChange={(e) => setSettingsForm({ ...settingsForm, cafeName: e.target.value })}
-                        placeholder="اسم المقهى"
+                        placeholder={t('cafeNamePlaceholder')}
                       />
                     </div>
                     <div className="settings-field">
-                      <label className="settings-label">شعار المقهى (رابط صورة)</label>
+                      <label className="settings-label">{t('cafeLogoLabel')}</label>
                       <input
                         type="text"
                         className="settings-input"
@@ -2400,7 +3015,7 @@ export default function CafeApp() {
                       />
                     </div>
                     <div className="settings-field">
-                      <label className="settings-label">رقم الهاتف</label>
+                      <label className="settings-label">{t('phoneLabel')}</label>
                       <input
                         type="text"
                         className="settings-input"
@@ -2410,7 +3025,7 @@ export default function CafeApp() {
                       />
                     </div>
                     <div className="settings-field">
-                      <label className="settings-label">العنوان</label>
+                      <label className="settings-label">{t('address')}</label>
                       <input
                         type="text"
                         className="settings-input"
@@ -2420,7 +3035,7 @@ export default function CafeApp() {
                       />
                     </div>
                     <div className="settings-field">
-                      <label className="settings-label">رسالة الترحيب</label>
+                      <label className="settings-label">{t('welcomeMessageLabel')}</label>
                       <input
                         type="text"
                         className="settings-input"
@@ -2439,13 +3054,13 @@ export default function CafeApp() {
                   <div className="settings-section-icon">
                     <Clock className="w-5 h-5" />
                   </div>
-                  <div className="settings-section-title">أوقات العمل</div>
+                  <div className="settings-section-title">{t('openingHoursSection')}</div>
                 </div>
                 <div className="settings-section-body">
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="settings-field">
-                        <label className="settings-label">وقت الفتح</label>
+                        <label className="settings-label">{t('openingTime')}</label>
                         <input
                           type="time"
                           className="settings-input"
@@ -2454,7 +3069,7 @@ export default function CafeApp() {
                         />
                       </div>
                       <div className="settings-field">
-                        <label className="settings-label">وقت الإغلاق</label>
+                        <label className="settings-label">{t('closingTime')}</label>
                         <input
                           type="time"
                           className="settings-input"
@@ -2473,12 +3088,12 @@ export default function CafeApp() {
                   <div className="settings-section-icon">
                     <DollarSign className="w-5 h-5" />
                   </div>
-                  <div className="settings-section-title">الإعدادات المالية</div>
+                  <div className="settings-section-title">{t('financialSettings')}</div>
                 </div>
                 <div className="settings-section-body">
                   <div className="space-y-4">
                     <div className="settings-field">
-                      <label className="settings-label">العملة</label>
+                      <label className="settings-label">{t('currencyLabel')}</label>
                       <input
                         type="text"
                         className="settings-input"
@@ -2497,13 +3112,13 @@ export default function CafeApp() {
                   <div className="settings-section-icon">
                     <UtensilsCrossed className="w-5 h-5" />
                   </div>
-                  <div className="settings-section-title">الخدمات</div>
+                  <div className="settings-section-title">{t('services')}</div>
                 </div>
                 <div className="settings-section-body">
                   <div className="settings-toggle">
                     <div>
-                      <div className="settings-toggle-label">قبول الطلبات</div>
-                      <div className="settings-toggle-description">السماح للعملاء بتقديم طلبات جديدة</div>
+                      <div className="settings-toggle-label">{t('acceptOrders')}</div>
+                      <div className="settings-toggle-description">{t('acceptOrdersDesc')}</div>
                     </div>
                     <div 
                       className={`settings-toggle-switch ${settingsForm.acceptOrders ? 'active' : ''}`}
@@ -2519,18 +3134,18 @@ export default function CafeApp() {
                   <div className="settings-section-icon">
                     <SettingsIcon className="w-5 h-5" />
                   </div>
-                <div className="settings-section-title">المظهر</div>
+                  <div className="settings-section-title">{t('appearance')}</div>
                 </div>
                 <div className="settings-section-body">
                   <div className="settings-field">
-                    <label className="settings-label">قوالب ذكية حسب الوضع الحالي</label>
+                    <label className="settings-label">{t('templatesSmart')}</label>
                     <div className="theme-preset-hint">
                       {darkMode
-                        ? 'الوضع الداكن مفعل: نعرض قوالب بإضاءة منخفضة وألوان مريحة للعين.'
-                        : 'الوضع الفاتح مفعل: نعرض قوالب واضحة ومضيئة للاستخدام النهاري.'}
+                        ? t('darkActiveHint')
+                        : t('lightActiveHint')}
                     </div>
                     <div className="theme-preset-group-title">
-                      {darkMode ? 'موصى به للوضع الداكن' : 'موصى به للوضع الفاتح'}
+                      {darkMode ? t('darkRecommended') : t('lightRecommended')}
                     </div>
                     <div className="theme-preset-grid">
                       {recommendedThemePresets.map((preset) => (
@@ -2549,14 +3164,14 @@ export default function CafeApp() {
                           <div className="theme-preset-name">{preset.name}</div>
                           <div className="theme-preset-description">{preset.description}</div>
                           <div className={`theme-preset-mode ${preset.mode === 'dark' ? 'dark' : 'light'}`}>
-                            {preset.mode === 'dark' ? 'داكن مريح' : 'فاتح احترافي'}
+                            {preset.mode === 'dark' ? t('darkComfort') : t('lightProfessional')}
                           </div>
                         </button>
                       ))}
                     </div>
 
                     <div className="theme-preset-group-title theme-preset-group-title-alt">
-                      {darkMode ? 'قوالب بديلة (فاتحة)' : 'قوالب بديلة (داكنة)'}
+                      {darkMode ? t('altLight') : t('altDark')}
                     </div>
                     <div className="theme-preset-grid">
                       {alternativeThemePresets.map((preset) => (
@@ -2575,7 +3190,7 @@ export default function CafeApp() {
                           <div className="theme-preset-name">{preset.name}</div>
                           <div className="theme-preset-description">{preset.description}</div>
                           <div className={`theme-preset-mode ${preset.mode === 'dark' ? 'dark' : 'light'}`}>
-                            {preset.mode === 'dark' ? 'داكن مريح' : 'فاتح احترافي'}
+                            {preset.mode === 'dark' ? t('darkComfort') : t('lightProfessional')}
                           </div>
                         </button>
                       ))}
@@ -2583,7 +3198,7 @@ export default function CafeApp() {
                   </div>
 
                   <div className="settings-field">
-                    <label className="settings-label">اقتراحات ذكية حسب اللون الرئيسي</label>
+                    <label className="settings-label">{t('smartSuggestionsByPrimary')}</label>
                     <div className="theme-suggestion-row">
                       {themeSuggestions.map((suggestion) => (
                         <button
@@ -2602,7 +3217,7 @@ export default function CafeApp() {
 
                   <div className="settings-row">
                     <div className="settings-field">
-                      <label className="settings-label">اللون الرئيسي</label>
+                      <label className="settings-label">{t('primaryColor')}</label>
                       <div className="color-picker-wrapper">
                         <input
                           type="color"
@@ -2619,7 +3234,7 @@ export default function CafeApp() {
                             e.currentTarget.value = '';
                           }}
                         >
-                          <option value="">اختر من القائمة</option>
+                          <option value="">{t('chooseFromList')}</option>
                           {COLOR_MENU_OPTIONS.map((option) => (
                             <option key={`primary-${option.value}`} value={option.value}>
                               {option.name} - {option.value}
@@ -2638,7 +3253,7 @@ export default function CafeApp() {
                     </div>
 
                     <div className="settings-field">
-                      <label className="settings-label">لون الإبراز</label>
+                      <label className="settings-label">{t('accentColor')}</label>
                       <div className="color-picker-wrapper">
                         <input
                           type="color"
@@ -2655,7 +3270,7 @@ export default function CafeApp() {
                             e.currentTarget.value = '';
                           }}
                         >
-                          <option value="">اختر من القائمة</option>
+                          <option value="">{t('chooseFromList')}</option>
                           {COLOR_MENU_OPTIONS.map((option) => (
                             <option key={`accent-${option.value}`} value={option.value}>
                               {option.name} - {option.value}
@@ -2674,7 +3289,7 @@ export default function CafeApp() {
                     </div>
 
                     <div className="settings-field">
-                      <label className="settings-label">لون الخلفية</label>
+                      <label className="settings-label">{t('backgroundColor')}</label>
                       <div className="color-picker-wrapper">
                         <input
                           type="color"
@@ -2691,7 +3306,7 @@ export default function CafeApp() {
                             e.currentTarget.value = '';
                           }}
                         >
-                          <option value="">اختر من القائمة</option>
+                          <option value="">{t('chooseFromList')}</option>
                           {COLOR_MENU_OPTIONS.map((option) => (
                             <option key={`background-${option.value}`} value={option.value}>
                               {option.name} - {option.value}
@@ -2710,7 +3325,7 @@ export default function CafeApp() {
                     </div>
 
                     <div className="settings-field">
-                      <label className="settings-label">لون الأسطح</label>
+                      <label className="settings-label">{t('surfaceColor')}</label>
                       <div className="color-picker-wrapper">
                         <input
                           type="color"
@@ -2727,7 +3342,7 @@ export default function CafeApp() {
                             e.currentTarget.value = '';
                           }}
                         >
-                          <option value="">اختر من القائمة</option>
+                          <option value="">{t('chooseFromList')}</option>
                           {COLOR_MENU_OPTIONS.map((option) => (
                             <option key={`surface-${option.value}`} value={option.value}>
                               {option.name} - {option.value}
@@ -2746,7 +3361,7 @@ export default function CafeApp() {
                     </div>
 
                     <div className="settings-field">
-                      <label className="settings-label">لون النص الأساسي</label>
+                      <label className="settings-label">{t('textPrimaryColor')}</label>
                       <div className="color-picker-wrapper">
                         <input
                           type="color"
@@ -2763,7 +3378,7 @@ export default function CafeApp() {
                             e.currentTarget.value = '';
                           }}
                         >
-                          <option value="">اختر من القائمة</option>
+                          <option value="">{t('chooseFromList')}</option>
                           {COLOR_MENU_OPTIONS.map((option) => (
                             <option key={`text-${option.value}`} value={option.value}>
                               {option.name} - {option.value}
@@ -2784,20 +3399,20 @@ export default function CafeApp() {
 
                   <div className="theme-live-preview" style={{ backgroundColor: settingsForm.backgroundColor }}>
                     <div className="theme-live-surface" style={{ backgroundColor: settingsForm.surfaceColor, color: settingsForm.textPrimaryColor }}>
-                      <div className="theme-live-title">معاينة مباشرة للألوان</div>
-                      <div className="theme-live-text">هذا مثال سريع لكيف سيظهر التصميم للزوار.</div>
+                      <div className="theme-live-title">{t('livePreview')}</div>
+                      <div className="theme-live-text">{t('livePreviewDesc')}</div>
                       <div className="theme-live-actions">
                         <span
                           className="theme-live-badge"
                           style={{ backgroundColor: settingsForm.primaryColor, color: getContrastText(settingsForm.primaryColor) }}
                         >
-                          اللون الرئيسي
+                          {t('primaryColorLabel')}
                         </span>
                         <span
                           className="theme-live-badge"
                           style={{ backgroundColor: settingsForm.accentColor, color: getContrastText(settingsForm.accentColor) }}
                         >
-                          لون الإبراز
+                          {t('accentColorLabel')}
                         </span>
                       </div>
                     </div>
@@ -2808,13 +3423,13 @@ export default function CafeApp() {
                     type="button"
                     onClick={() => applyThemePack(DEFAULT_THEME_COLORS)}
                   >
-                    إعادة ألوان الثيم الافتراضية
+                    {t('resetTheme')}
                   </button>
 
                   <div className="settings-toggle">
                     <div>
-                      <div className="settings-toggle-label">الوضع الداكن</div>
-                      <div className="settings-toggle-description">تغيير مظهر التطبيق</div>
+                      <div className="settings-toggle-label">{t('darkMode')}</div>
+                      <div className="settings-toggle-description">{t('darkModeDesc')}</div>
                     </div>
                     <div 
                       className={`settings-toggle-switch ${darkMode ? 'active' : ''}`}
@@ -2823,8 +3438,8 @@ export default function CafeApp() {
                   </div>
                   <div className="settings-toggle">
                     <div>
-                      <div className="settings-toggle-label">صوت الإشعارات</div>
-                      <div className="settings-toggle-description">تشغيل صوت عند وصول طلب جديد</div>
+                      <div className="settings-toggle-label">{t('notificationsSound')}</div>
+                      <div className="settings-toggle-description">{t('notificationsSoundDesc')}</div>
                     </div>
                     <div 
                       className={`settings-toggle-switch ${soundEnabled ? 'active' : ''}`}
@@ -2837,7 +3452,7 @@ export default function CafeApp() {
               {/* Save Button */}
               <button className="btn btn-primary btn-lg w-full mb-4" onClick={saveSettings}>
                 <Check className="w-5 h-5" />
-                حفظ جميع الإعدادات
+                {t('saveAllSettings')}
               </button>
 
               {/* Account */}
@@ -2846,12 +3461,12 @@ export default function CafeApp() {
                   <div className="settings-section-icon">
                     <Users className="w-5 h-5" />
                   </div>
-                  <div className="settings-section-title">الحساب</div>
+                  <div className="settings-section-title">{t('account')}</div>
                 </div>
                 <div className="settings-section-body">
                   <button className="btn btn-danger w-full" onClick={handleLogout}>
                     <LogOut className="w-5 h-5" />
-                    تسجيل الخروج
+                    {t('logout')}
                   </button>
                 </div>
               </div>
@@ -2869,7 +3484,7 @@ export default function CafeApp() {
               <div className="bottom-nav-icon">
                 <LayoutDashboard className="w-5 h-5" />
               </div>
-              <span className="bottom-nav-label">لوحة التحكم</span>
+              <span className="bottom-nav-label">{t('dashboard')}</span>
               {newOrdersCount > 0 && adminTab !== 'dashboard' && (
                 <span className="bottom-nav-badge">{newOrdersCount}</span>
               )}
@@ -2881,7 +3496,7 @@ export default function CafeApp() {
               <div className="bottom-nav-icon">
                 <ClipboardList className="w-5 h-5" />
               </div>
-              <span className="bottom-nav-label">الطلبات</span>
+              <span className="bottom-nav-label">{t('orders')}</span>
               {newOrdersCount > 0 && adminTab !== 'orders' && (
                 <span className="bottom-nav-badge">{newOrdersCount}</span>
               )}
@@ -2893,7 +3508,7 @@ export default function CafeApp() {
               <div className="bottom-nav-icon">
                 <UtensilsCrossed className="w-5 h-5" />
               </div>
-              <span className="bottom-nav-label">القائمة</span>
+              <span className="bottom-nav-label">{t('menu')}</span>
             </button>
             <button
               className={`bottom-nav-item ${adminTab === 'database' ? 'active' : ''}`}
@@ -2902,7 +3517,7 @@ export default function CafeApp() {
               <div className="bottom-nav-icon">
                 <Database className="w-5 h-5" />
               </div>
-              <span className="bottom-nav-label">البيانات</span>
+              <span className="bottom-nav-label">{t('database')}</span>
             </button>
             <button
               className={`bottom-nav-item ${adminTab === 'settings' ? 'active' : ''}`}
@@ -2911,7 +3526,7 @@ export default function CafeApp() {
               <div className="bottom-nav-icon">
                 <SettingsIcon className="w-5 h-5" />
               </div>
-              <span className="bottom-nav-label">الإعدادات</span>
+              <span className="bottom-nav-label">{t('settings')}</span>
             </button>
           </div>
         </nav>
@@ -3106,7 +3721,7 @@ export default function CafeApp() {
 
   // Customer View
   return (
-    <div className="min-h-screen bg-[var(--background)]" dir="rtl">
+    <div className="min-h-screen bg-[var(--background)]" dir={appDir}>
       {/* App Header */}
       <header className="app-header">
         <div className="app-header-inner">
@@ -3151,18 +3766,18 @@ export default function CafeApp() {
               {settings?.welcomeMessage && (
                 <p className="hero-subtitle">{settings.welcomeMessage}</p>
               ) || (
-                <p className="hero-subtitle">مرحباً بك في مقهانا</p>
+                 <p className="hero-subtitle">{settings?.welcomeMessage || t('welcomeDefault')}</p>
               )}
               {settings?.openingHours && settings?.closingHours && (
                 <div className="hero-status">
                   <Clock className="w-4 h-4" />
-                  <span>ساعات العمل: {settings.openingHours} - {settings.closingHours}</span>
+                  <span>{t('workingHoursLabel')}: {settings.openingHours} - {settings.closingHours}</span>
                 </div>
               )}
               {settings && !settings.acceptOrders && (
                 <div className="hero-status closed" style={{ marginTop: '8px' }}>
                   <Ban className="w-4 h-4" />
-                  <span>غير مستقبلين طلبات حالياً</span>
+                  <span>{t('notAcceptingOrdersNow')}</span>
                 </div>
               )}
               {settings?.phone && (
@@ -3181,7 +3796,7 @@ export default function CafeApp() {
                 className={`category-chip ${selectedCategory === 'all' ? 'active' : ''}`}
                 onClick={() => setSelectedCategory('all')}
               >
-                الكل
+                {t('all')}
               </button>
               {categories.map(category => (
                 <button
@@ -3189,7 +3804,7 @@ export default function CafeApp() {
                   className={`category-chip ${selectedCategory === category.id ? 'active' : ''}`}
                   onClick={() => setSelectedCategory(category.id)}
                 >
-                  {category.nameAr}
+                  {getCategoryDisplayName(category)}
                 </button>
               ))}
             </div>
@@ -3206,7 +3821,7 @@ export default function CafeApp() {
                     {product.image ? (
                       <img
                         src={product.image}
-                        alt={product.nameAr}
+                        alt={getProductDisplayName(product)}
                         className="product-card-image"
                       />
                     ) : (
@@ -3216,14 +3831,14 @@ export default function CafeApp() {
                     )}
                     {selectedProducts.has(product.id) && (
                       <div className="product-card-badge">
-                        {selectedProducts.get(product.id)} في السلة
+                         {selectedProducts.get(product.id)} {t('inCart')}
                       </div>
                     )}
                   </div>
                   <div className="product-card-content">
-                    <div className="product-card-name">{product.nameAr}</div>
-                    {product.descriptionAr && (
-                      <div className="product-card-description">{product.descriptionAr}</div>
+                    <div className="product-card-name">{getProductDisplayName(product)}</div>
+                    {getProductDescription(product) && (
+                      <div className="product-card-description">{getProductDescription(product)}</div>
                     )}
                     <div className="product-card-footer">
                       <span className="product-card-price">{product.price} {currency}</span>
@@ -3247,8 +3862,8 @@ export default function CafeApp() {
                   <div className="empty-state-icon">
                     <Coffee className="w-6 h-6" />
                   </div>
-                  <div className="empty-state-title">لا توجد منتجات</div>
-                  <div className="empty-state-description">لا توجد منتجات في هذه الفئة حالياً</div>
+                  <div className="empty-state-title">{t('noProducts')}</div>
+                  <div className="empty-state-description">{t('noProductsInCategory')}</div>
                 </div>
               )}
             </div>
@@ -3260,7 +3875,7 @@ export default function CafeApp() {
                 onClick={() => setCustomerTab('cart')}
               >
                 <ShoppingCart className="w-5 h-5" />
-                {getCartCount()} منتج • {getOrderTotal().toFixed(2)} {currency}
+                {getCartCount()} • {getOrderTotal().toFixed(2)} {currency}
               </button>
             )}
           </>
@@ -3269,20 +3884,20 @@ export default function CafeApp() {
         {/* Cart Tab */}
         {customerTab === 'cart' && (
           <div className="p-4">
-            <h2 className="text-h2 mb-4">السلة</h2>
+                <h2 className="text-h2 mb-4">{t('cart')}</h2>
             
             {getSelectedProductsList().length === 0 ? (
               <div className="empty-state">
                 <div className="empty-state-icon">
                   <ShoppingCart className="w-6 h-6" />
                 </div>
-                <div className="empty-state-title">السلة فارغة</div>
-                <div className="empty-state-description">أضف منتجات من القائمة</div>
+                <div className="empty-state-title">{t('cartEmpty')}</div>
+                <div className="empty-state-description">{t('addFromMenu')}</div>
                 <button 
                   className="btn btn-primary mt-4"
                   onClick={() => setCustomerTab('home')}
                 >
-                  تصفح القائمة
+                  {t('browseMenu')}
                 </button>
               </div>
             ) : (
@@ -3291,7 +3906,7 @@ export default function CafeApp() {
                   <div className="cart-header">
                     <div className="cart-title">
                       <ShoppingCart className="w-5 h-5" />
-                      المنتجات المختارة
+                      {t('selectedProducts')}
                       <span className="cart-count-badge">{getCartCount()}</span>
                     </div>
                   </div>
@@ -3300,13 +3915,13 @@ export default function CafeApp() {
                       <div key={product.id} className="cart-item-row">
                         <div className="cart-item-image">
                           {product.image ? (
-                            <img src={product.image} alt={product.nameAr} />
+                            <img src={product.image} alt={getProductDisplayName(product)} />
                           ) : (
                             <Coffee className="w-6 h-6 text-[var(--text-muted)]" />
                           )}
                         </div>
                         <div className="cart-item-details">
-                          <div className="cart-item-name">{product.nameAr}</div>
+                          <div className="cart-item-name">{getProductDisplayName(product)}</div>
                           <div className="cart-item-price">{product.price} {currency}</div>
                         </div>
                         <div className="cart-item-controls">
@@ -3329,19 +3944,19 @@ export default function CafeApp() {
                   </div>
                   <div className="cart-footer">
                     <div className="cart-total-row">
-                      <span className="cart-total-label">المجموع الفرعي</span>
+                      <span className="cart-total-label">{t('subtotal')}</span>
                       <span className="cart-total-value" style={{ fontSize: '16px' }}>{getOrderTotal().toFixed(2)} {currency}</span>
                     </div>
                     {settings && settings.taxRate > 0 && (
                       <div className="cart-total-row" style={{ marginBottom: '8px' }}>
-                        <span className="cart-total-label">الضريبة ({settings.taxRate}%)</span>
+                          <span className="cart-total-label">{t('tax')} ({settings.taxRate}%)</span>
                         <span className="cart-total-value" style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>
                           {(getOrderTotal() * settings.taxRate / 100).toFixed(2)} {currency}
                         </span>
                       </div>
                     )}
                     <div className="cart-total-row" style={{ paddingTop: '12px', borderTop: '1px solid var(--border)' }}>
-                      <span className="cart-total-label" style={{ fontWeight: 600 }}>الإجمالي</span>
+                      <span className="cart-total-label" style={{ fontWeight: 600 }}>{t('totalWithTax')}</span>
                       <span className="cart-total-value">
                         {settings?.taxRate 
                           ? (getOrderTotal() * (1 + settings.taxRate / 100)).toFixed(2)
@@ -3357,7 +3972,7 @@ export default function CafeApp() {
                       }}
                     >
                       <Check className="w-5 h-5" />
-                      تأكيد الطلب
+                      {t('confirmOrder')}
                     </button>
                   </div>
                 </div>
@@ -3376,8 +3991,8 @@ export default function CafeApp() {
                 <div className="track-hero-icon">
                   <Search className="w-6 h-6" />
                 </div>
-                <h2 className="track-hero-title">تتبع طلبك</h2>
-                <p className="track-hero-subtitle">أدخل كود التتبع لمعرفة حالة طلبك</p>
+                <h2 className="track-hero-title">{t('trackOrder')}</h2>
+                <p className="track-hero-subtitle">{t('enterTrackingCode')}</p>
               </div>
               
               {/* Search Input - Connected to Hero */}
@@ -3399,17 +4014,17 @@ export default function CafeApp() {
                     {isTrackingLoading ? (
                       <>
                         <RefreshCw className="w-4 h-4 animate-spin" />
-                        <span>Tracking...</span>
+                        <span>{t('tracking')}</span>
                       </>
                     ) : (
                       <>
                         <Search className="w-4 h-4" />
-                        <span>Start Tracking</span>
+                        <span>{t('startTracking')}</span>
                       </>
                     )}
                   </button>
                 </div>
-                <div className="track-input-hint">الكود مكون من 6 أحرف وأرقام</div>
+                <div className="track-input-hint">{t('trackingCodeHint')}</div>
                 
                 {/* Quick Access to Last Order */}
                 {lastOrderCode && !trackedOrder && (
@@ -3421,7 +4036,7 @@ export default function CafeApp() {
                     }}
                   >
                     <ClipboardList className="w-4 h-4" />
-                    <span>آخر طلب: <strong>{lastOrderCode}</strong></span>
+                    <span>{t('lastOrder')}: <strong>{lastOrderCode}</strong></span>
                   </button>
                 )}
               </div>
@@ -3437,17 +4052,17 @@ export default function CafeApp() {
                     {trackedOrder.status !== 'PAID' && trackedOrder.status !== 'CANCELLED' && (
                       <div className="track-live-tag">
                         <span className="track-live-pulse"></span>
-                        مباشر
+                        {t('live')}
                       </div>
                     )}
                   </div>
                   <div className="track-status-bottom">
                     <div className="track-table-tag">
                       <TableIcon className="w-4 h-4" />
-                      طاولة {trackedOrder.tableNumber}
+                      {t('table')} {trackedOrder.tableNumber}
                     </div>
                     <div className={`track-status-tag track-status-${trackedOrder.status.toLowerCase()}`}>
-                      {ORDER_STATUS_AR[trackedOrder.status]}
+                      {getStatusLabel(trackedOrder.status)}
                     </div>
                   </div>
                 </div>
@@ -3456,7 +4071,7 @@ export default function CafeApp() {
                 <div className="track-section-card">
                   <div className="track-section-header">
                     <Clock className="w-4 h-4" />
-                    <span>مراحل الطلب</span>
+                    <span>{t('orderStages')}</span>
                   </div>
                   
                   <div className="track-timeline">
@@ -3483,7 +4098,7 @@ export default function CafeApp() {
                               <X className="w-3 h-3" />
                             ) : null}
                           </div>
-                          <span className="track-step-text">{ORDER_STATUS_AR[status as keyof typeof ORDER_STATUS_AR]}</span>
+                          <span className="track-step-text">{getStatusLabel(status as OrderStatus)}</span>
                         </div>
                       );
                     })}
@@ -3493,7 +4108,7 @@ export default function CafeApp() {
                   {trackedOrder.status === 'CANCELLED' && (
                     <div className="track-alert track-alert-error">
                       <AlertTriangle className="w-5 h-5" />
-                      <span>تم إلغاء هذا الطلب</span>
+                      <span>{t('cancelledOrder')}</span>
                     </div>
                   )}
                   
@@ -3501,8 +4116,8 @@ export default function CafeApp() {
                     <div className="track-alert track-alert-success">
                       <PackageCheck className="w-5 h-5" />
                       <div>
-                        <div className="track-alert-title">طلبك جاهز!</div>
-                        <div className="track-alert-sub">يمكنك المرور لاستلامه</div>
+                         <div className="track-alert-title">{t('orderReady')}</div>
+                         <div className="track-alert-sub">{t('pickupNow')}</div>
                       </div>
                     </div>
                   )}
@@ -3512,7 +4127,7 @@ export default function CafeApp() {
                 <div className="track-section-card">
                   <div className="track-section-header">
                     <Coffee className="w-4 h-4" />
-                    <span>المنتجات</span>
+                    <span>{t('items')}</span>
                     <span className="track-count-badge">{trackedOrder.orderItems.length}</span>
                   </div>
                   <div className="track-items">
@@ -3528,7 +4143,7 @@ export default function CafeApp() {
                     ))}
                   </div>
                   <div className="track-total">
-                    <span>المجموع</span>
+                    <span>{t('total')}</span>
                     <span>{trackedOrder.total.toFixed(2)} {currency}</span>
                   </div>
                 </div>
@@ -3538,18 +4153,18 @@ export default function CafeApp() {
                   <div className="track-meta-item">
                     <Clock className="w-4 h-4" />
                     <div>
-                      <span className="track-meta-label">الوقت</span>
+                      <span className="track-meta-label">{t('time')}</span>
                       <span className="track-meta-value">
-                        {new Date(trackedOrder.createdAt).toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' })}
+                        {new Date(trackedOrder.createdAt).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })}
                       </span>
                     </div>
                   </div>
                   <div className="track-meta-item">
                     <Calendar className="w-4 h-4" />
                     <div>
-                      <span className="track-meta-label">التاريخ</span>
+                      <span className="track-meta-label">{t('date')}</span>
                       <span className="track-meta-value">
-                        {new Date(trackedOrder.createdAt).toLocaleDateString('ar-SA', { day: 'numeric', month: 'short' })}
+                        {new Date(trackedOrder.createdAt).toLocaleDateString(locale, { day: 'numeric', month: 'short' })}
                       </span>
                     </div>
                   </div>
@@ -3560,8 +4175,8 @@ export default function CafeApp() {
                 <div className="track-empty-icon">
                   <ClipboardList className="w-8 h-8" />
                 </div>
-                <div className="track-empty-text">لا يوجد طلب للتتبع</div>
-                <div className="track-empty-hint">أدخل الكود أعلاه لمتابعة طلبك</div>
+                <div className="track-empty-text">{t('noTrackedOrder')}</div>
+                <div className="track-empty-hint">{t('trackEmptyHint')}</div>
               </div>
             )}
           </div>
@@ -3570,7 +4185,7 @@ export default function CafeApp() {
         {/* More Tab */}
         {customerTab === 'more' && (
           <div className="p-4">
-            <h2 className="text-h2 mb-4">المزيد</h2>
+            <h2 className="text-h2 mb-4">{t('more')}</h2>
             
             {/* Cafe Info */}
             {(settings?.phone || settings?.address || settings?.openingHours) && (
@@ -3580,7 +4195,7 @@ export default function CafeApp() {
                     <div className="section-card-title-icon">
                       <Store className="w-4 h-4" />
                     </div>
-                    معلومات المقهى
+                    {t('cafeInfo')}
                   </div>
                 </div>
                 <div className="section-card-body">
@@ -3595,7 +4210,7 @@ export default function CafeApp() {
                           <Volume2 className="w-5 h-5" style={{ color: 'var(--success)' }} />
                         </div>
                         <div className="grouped-list-item-content">
-                          <div className="grouped-list-item-title">اتصل بنا</div>
+                          <div className="grouped-list-item-title">{t('callUs')}</div>
                           <div className="grouped-list-item-subtitle">{settings.phone}</div>
                         </div>
                         <ChevronLeft className="w-5 h-5 text-[var(--text-muted)]" />
@@ -3607,7 +4222,7 @@ export default function CafeApp() {
                           <MapPin className="w-5 h-5" style={{ color: 'var(--info)' }} />
                         </div>
                         <div className="grouped-list-item-content">
-                          <div className="grouped-list-item-title">العنوان</div>
+                          <div className="grouped-list-item-title">{t('address')}</div>
                           <div className="grouped-list-item-subtitle">{settings.address}</div>
                         </div>
                       </div>
@@ -3618,7 +4233,7 @@ export default function CafeApp() {
                           <Clock className="w-5 h-5" style={{ color: 'var(--warning)' }} />
                         </div>
                         <div className="grouped-list-item-content">
-                          <div className="grouped-list-item-title">أوقات العمل</div>
+                          <div className="grouped-list-item-title">{t('workingHours')}</div>
                           <div className="grouped-list-item-subtitle">{settings.openingHours} - {settings.closingHours}</div>
                         </div>
                       </div>
@@ -3639,8 +4254,8 @@ export default function CafeApp() {
                   <LogIn className="w-5 h-5" style={{ color: 'var(--primary)' }} />
                 </div>
                 <div className="grouped-list-item-content">
-                  <div className="grouped-list-item-title">تسجيل دخول الإدارة</div>
-                  <div className="grouped-list-item-subtitle">إدارة الطلبات والقائمة</div>
+                  <div className="grouped-list-item-title">{t('adminLogin')}</div>
+                  <div className="grouped-list-item-subtitle">{t('adminLoginDesc')}</div>
                 </div>
                 <ChevronLeft className="w-5 h-5 text-[var(--text-muted)]" />
               </div>
@@ -3652,13 +4267,13 @@ export default function CafeApp() {
                 <div className="settings-section-icon">
                   <Moon className="w-5 h-5" />
                 </div>
-                <div className="settings-section-title">المظهر</div>
+                  <div className="settings-section-title">{t('display')}</div>
               </div>
               <div className="settings-section-body">
                 <div className="settings-toggle">
                   <div>
-                    <div className="settings-toggle-label">الوضع الداكن</div>
-                    <div className="settings-toggle-description">تغيير مظهر التطبيق</div>
+                      <div className="settings-toggle-label">{t('darkMode')}</div>
+                      <div className="settings-toggle-description">{t('darkModeDesc')}</div>
                   </div>
                   <div 
                     className={`settings-toggle-switch ${darkMode ? 'active' : ''}`}
@@ -3681,8 +4296,8 @@ export default function CafeApp() {
                   </div>
                 )}
                 <div className="font-semibold text-lg mb-1">{cafeName}</div>
-                <div className="text-small text-[var(--text-muted)]">نظام إدارة المقهى</div>
-                <div className="text-small text-[var(--text-muted)] mt-1">الإصدار 2.0.0</div>
+                <div className="text-small text-[var(--text-muted)]">{t('systemLabel')}</div>
+                <div className="text-small text-[var(--text-muted)] mt-1">{t('version')} 2.0.0</div>
               </div>
             </div>
           </div>
@@ -3699,7 +4314,7 @@ export default function CafeApp() {
             <div className="bottom-nav-icon">
               <Home className="w-5 h-5" />
             </div>
-            <span className="bottom-nav-label">الرئيسية</span>
+            <span className="bottom-nav-label">{t('home')}</span>
           </button>
           <button
             className={`bottom-nav-item ${customerTab === 'cart' ? 'active' : ''}`}
@@ -3711,7 +4326,7 @@ export default function CafeApp() {
                 <span className="bottom-nav-badge">{getCartCount()}</span>
               )}
             </div>
-            <span className="bottom-nav-label">السلة</span>
+            <span className="bottom-nav-label">{t('cart')}</span>
           </button>
           <button
             className={`bottom-nav-item ${customerTab === 'track' ? 'active' : ''}`}
@@ -3720,7 +4335,7 @@ export default function CafeApp() {
             <div className="bottom-nav-icon">
               <Search className="w-5 h-5" />
             </div>
-            <span className="bottom-nav-label">تتبع</span>
+            <span className="bottom-nav-label">{t('track')}</span>
           </button>
           <button
             className={`bottom-nav-item ${customerTab === 'more' ? 'active' : ''}`}
@@ -3729,7 +4344,7 @@ export default function CafeApp() {
             <div className="bottom-nav-icon">
               <MoreHorizontal className="w-5 h-5" />
             </div>
-            <span className="bottom-nav-label">المزيد</span>
+            <span className="bottom-nav-label">{t('more')}</span>
           </button>
         </div>
       </nav>
