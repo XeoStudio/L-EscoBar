@@ -2031,18 +2031,6 @@ export default function CafeApp() {
                         placeholder="د.ت"
                       />
                     </div>
-                    <div className="settings-field">
-                      <label className="settings-label">نسبة الضريبة (%)</label>
-                      <input
-                        type="number"
-                        className="settings-input"
-                        value={settingsForm.taxRate}
-                        onChange={(e) => setSettingsForm({ ...settingsForm, taxRate: parseFloat(e.target.value) || 0 })}
-                        min="0"
-                        max="100"
-                        step="0.1"
-                      />
-                    </div>
                   </div>
                 </div>
               </div>
@@ -2074,16 +2062,6 @@ export default function CafeApp() {
                     <div 
                       className={`settings-toggle-switch ${settingsForm.enableTableService ? 'active' : ''}`}
                       onClick={() => setSettingsForm({ ...settingsForm, enableTableService: !settingsForm.enableTableService })}
-                    />
-                  </div>
-                  <div className="settings-toggle">
-                    <div>
-                      <div className="settings-toggle-label">خدمة التوصيل</div>
-                      <div className="settings-toggle-description">تفعيل خدمة توصيل الطلبات</div>
-                    </div>
-                    <div 
-                      className={`settings-toggle-switch ${settingsForm.enableDelivery ? 'active' : ''}`}
-                      onClick={() => setSettingsForm({ ...settingsForm, enableDelivery: !settingsForm.enableDelivery })}
                     />
                   </div>
                 </div>
