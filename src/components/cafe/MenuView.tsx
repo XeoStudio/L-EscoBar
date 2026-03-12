@@ -221,6 +221,106 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     adminLoginTitle: 'تسجيل دخول الإدارة',
     orderItemWord: 'منتج',
     onlyAvailableTables: 'لا توجد طاولات متاحة',
+    themeBalanced: 'متوازن',
+    themeBalancedHint: 'متزن ومريح للعين',
+    themeBold: 'جريء',
+    themeBoldHint: 'تباين أوضح وحضور أقوى',
+    themeSoft: 'ناعم',
+    themeSoftHint: 'ألوان هادئة وتجربة لطيفة',
+    newOrderAlertTitle: '🔔 طلب جديد!',
+    newOrderAlertDesc: 'لديك',
+    newOrderCountSuffix: 'طلب جديد',
+    readyOrderAlertTitle: '🎉 طلبك جاهز!',
+    readyOrderAlertDesc: 'يمكنك استلام طلبك الآن',
+    loginSuccessTitle: '✅ تم تسجيل الدخول',
+    loginSuccessDesc: 'مرحباً بك في لوحة الإدارة',
+    loginErrorTitle: '❌ خطأ',
+    loginErrorDesc: 'فشل تسجيل الدخول',
+    logoutSuccessTitle: '👋 تم تسجيل الخروج',
+    logoutSuccessDesc: 'تم تسجيل خروجك بنجاح',
+    genericErrorTitle: '❌ خطأ',
+    warningTitle: '⚠️ تنبيه',
+    requiredFieldsMsg: 'يرجى ملء جميع الحقول المطلوبة',
+    productUpdatedMsg: 'تم تعديل المنتج',
+    productAddedMsg: 'تم إضافة المنتج',
+    productSaveFailedMsg: 'فشل في حفظ المنتج',
+    serverConnectionFailedMsg: 'فشل في الاتصال بالخادم',
+    confirmDeleteProduct: 'هل أنت متأكد من حذف هذا المنتج؟',
+    productDeletedMsg: 'تم حذف المنتج',
+    productDeleteFailedMsg: 'فشل في حذف المنتج',
+    categoryNameRequiredMsg: 'يرجى إدخال اسم الفئة باللغتين',
+    categoryUpdatedMsg: 'تم تعديل الفئة',
+    categoryAddedMsg: 'تم إضافة الفئة',
+    categorySaveFailedMsg: 'فشل في حفظ الفئة',
+    confirmDeleteCategory: 'هل أنت متأكد من حذف هذه الفئة؟ سيتم حذف جميع المنتجات التابعة لها.',
+    categoryDeletedMsg: 'تم حذف الفئة',
+    categoryDeleteFailedMsg: 'فشل في حذف الفئة',
+    invalidTableNumberMsg: 'يرجى إدخال رقم صحيح للطاولة',
+    tableUpdatedMsg: 'تم تعديل الطاولة',
+    tableUpdateFailedMsg: 'فشل في تعديل الطاولة',
+    tableAddedMsg: 'تم إضافة الطاولة بنجاح',
+    tableAddFailedMsg: 'فشل في إضافة الطاولة',
+    confirmDeleteTable: 'هل أنت متأكد من حذف هذه الطاولة؟',
+    tableDeletedMsg: 'تم حذف الطاولة',
+    tableDeleteFailedMsg: 'فشل في حذف الطاولة',
+    backupSuccessTitle: '✅ تم',
+    backupSuccessMsg: 'تم تحميل النسخة الاحتياطية بنجاح',
+    backupFailedMsg: 'فشل في إنشاء النسخة الاحتياطية',
+    confirmDeleteOldOrders: 'هل أنت متأكد من حذف الطلبات الأقدم من',
+    dayWord: 'يوم',
+    ordersDeletedTitle: '✅ تم الحذف',
+    deleteOrdersFailedMsg: 'فشل في حذف الطلبات',
+    confirmDeleteAllOrders: 'هل أنت متأكد من حذف جميع الطلبات؟ هذا الإجراء لا يمكن التراجع عنه!',
+    confirmDeleteAllProducts: 'هل أنت متأكد من حذف جميع المنتجات؟ سيتم حذف الطلبات أيضاً!',
+    deleteProductsFailedMsg: 'فشل في حذف المنتجات',
+    confirmDeleteAllCategories: 'هل أنت متأكد من حذف جميع الفئات؟ سيتم حذف المنتجات والطلبات أيضاً!',
+    deleteCategoriesFailedMsg: 'فشل في حذف الفئات',
+    confirmDeleteAllTables: 'هل أنت متأكد من حذف جميع الطاولات؟ سيتم حذف الطلبات أيضاً!',
+    deleteTablesFailedMsg: 'فشل في حذف الطاولات',
+    fullResetConfirmStep1: '⚠️ تحذير! سيتم حذف جميع البيانات نهائياً!\n\nسيتم حذف:\n- جميع الطلبات\n- جميع المنتجات\n- جميع الفئات\n- جميع الطاولات\n- الإعدادات\n\nلن يتم حذف حساب المسؤول.\n\nهل أنت متأكد؟',
+    fullResetConfirmStep2: '⚠️ هذا الإجراء لا يمكن التراجع عنه!\n\nهل أنت متأكد 100%؟',
+    resetDoneTitle: '✅ تم إعادة الضبط',
+    resetFailedMsg: 'فشل في إعادة ضبط قاعدة البيانات',
+    dbOrdersLabel: 'طلبات',
+    dbProductsLabel: 'منتجات',
+    dbCategoriesLabel: 'فئات',
+    dbTablesLabel: 'طاولات',
+    backupDesc: 'تحميل نسخة احتياطية كاملة بصيغة JSON',
+    oldOrdersTitle: 'طلبات قديمة',
+    dayAndOlder: 'يوم وأقدم',
+    allOrdersTitle: 'جميع الطلبات',
+    allProductsTitle: 'جميع المنتجات',
+    allCategoriesTitle: 'جميع الفئات',
+    allTablesTitle: 'جميع الطاولات',
+    factoryResetTitle: 'إعادة ضبط المصنع',
+    factoryResetDesc: 'سيتم حذف جميع البيانات نهائياً: الطلبات، المنتجات، الفئات، الطاولات، الإعدادات',
+    adminProtectedMsg: '✓ حساب المسؤول محمي ولن يتم حذفه',
+    resetDatabaseBtn: 'إعادة ضبط قاعدة البيانات',
+    resetWarningText: 'تحذير! هذا الإجراء لا يمكن التراجع عنه',
+    confirmDeleteBtn: 'تأكيد الحذف',
+    addressPlaceholder: 'شارع المثال، المدينة',
+    welcomePlaceholder: 'مرحباً بك في مقهانا',
+    currencyPlaceholder: 'د.ت',
+    editProductTitle: 'تعديل المنتج',
+    addProductTitle: 'إضافة منتج',
+    productNameArLabel: 'اسم المنتج (عربي)',
+    productNameEnLabel: 'اسم المنتج (إنجليزي)',
+    priceLabel: 'السعر',
+    categoryLabel: 'الفئة',
+    chooseCategory: 'اختر الفئة',
+    imageUrlLabel: 'رابط الصورة',
+    availableLabel: 'متوفر',
+    saveChanges: 'حفظ التغييرات',
+    addProductAction: 'إضافة المنتج',
+    editCategoryTitle: 'تعديل الفئة',
+    addCategoryTitle: 'إضافة فئة',
+    categoryNameArLabel: 'اسم الفئة (عربي)',
+    categoryNameEnLabel: 'اسم الفئة (إنجليزي)',
+    addCategoryAction: 'إضافة الفئة',
+    editTableTitle: 'تعديل الطاولة',
+    addTableTitle: 'إضافة طاولة',
+    seatsLabel: 'عدد المقاعد',
+    save: 'حفظ',
     actionDelete: 'حذف',
   },
   en: {
@@ -382,6 +482,106 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     adminLoginTitle: 'Admin login',
     orderItemWord: 'items',
     onlyAvailableTables: 'No tables available',
+    themeBalanced: 'Balanced',
+    themeBalancedHint: 'Well-balanced and easy on the eyes',
+    themeBold: 'Bold',
+    themeBoldHint: 'Stronger contrast and presence',
+    themeSoft: 'Soft',
+    themeSoftHint: 'Calm colors and gentle feel',
+    newOrderAlertTitle: '🔔 New order!',
+    newOrderAlertDesc: 'You have',
+    newOrderCountSuffix: 'new orders',
+    readyOrderAlertTitle: '🎉 Your order is ready!',
+    readyOrderAlertDesc: 'You can pick up your order now',
+    loginSuccessTitle: '✅ Logged in',
+    loginSuccessDesc: 'Welcome to the admin dashboard',
+    loginErrorTitle: '❌ Error',
+    loginErrorDesc: 'Login failed',
+    logoutSuccessTitle: '👋 Logged out',
+    logoutSuccessDesc: 'You have been logged out successfully',
+    genericErrorTitle: '❌ Error',
+    warningTitle: '⚠️ Warning',
+    requiredFieldsMsg: 'Please fill in all required fields',
+    productUpdatedMsg: 'Product updated',
+    productAddedMsg: 'Product added',
+    productSaveFailedMsg: 'Failed to save product',
+    serverConnectionFailedMsg: 'Failed to connect to server',
+    confirmDeleteProduct: 'Are you sure you want to delete this product?',
+    productDeletedMsg: 'Product deleted',
+    productDeleteFailedMsg: 'Failed to delete product',
+    categoryNameRequiredMsg: 'Please enter category name in both languages',
+    categoryUpdatedMsg: 'Category updated',
+    categoryAddedMsg: 'Category added',
+    categorySaveFailedMsg: 'Failed to save category',
+    confirmDeleteCategory: 'Are you sure you want to delete this category? All related products will be deleted.',
+    categoryDeletedMsg: 'Category deleted',
+    categoryDeleteFailedMsg: 'Failed to delete category',
+    invalidTableNumberMsg: 'Please enter a valid table number',
+    tableUpdatedMsg: 'Table updated',
+    tableUpdateFailedMsg: 'Failed to update table',
+    tableAddedMsg: 'Table added successfully',
+    tableAddFailedMsg: 'Failed to add table',
+    confirmDeleteTable: 'Are you sure you want to delete this table?',
+    tableDeletedMsg: 'Table deleted',
+    tableDeleteFailedMsg: 'Failed to delete table',
+    backupSuccessTitle: '✅ Done',
+    backupSuccessMsg: 'Backup downloaded successfully',
+    backupFailedMsg: 'Failed to create backup',
+    confirmDeleteOldOrders: 'Are you sure you want to delete orders older than',
+    dayWord: 'day(s)',
+    ordersDeletedTitle: '✅ Deleted',
+    deleteOrdersFailedMsg: 'Failed to delete orders',
+    confirmDeleteAllOrders: 'Are you sure you want to delete all orders? This action cannot be undone!',
+    confirmDeleteAllProducts: 'Are you sure you want to delete all products? Orders will also be deleted!',
+    deleteProductsFailedMsg: 'Failed to delete products',
+    confirmDeleteAllCategories: 'Are you sure you want to delete all categories? Products and orders will also be deleted!',
+    deleteCategoriesFailedMsg: 'Failed to delete categories',
+    confirmDeleteAllTables: 'Are you sure you want to delete all tables? Orders will also be deleted!',
+    deleteTablesFailedMsg: 'Failed to delete tables',
+    fullResetConfirmStep1: '⚠️ Warning! All data will be permanently deleted!\n\nThis will delete:\n- all orders\n- all products\n- all categories\n- all tables\n- settings\n\nAdmin account will not be deleted.\n\nAre you sure?',
+    fullResetConfirmStep2: '⚠️ This action cannot be undone!\n\nAre you 100% sure?',
+    resetDoneTitle: '✅ Reset completed',
+    resetFailedMsg: 'Failed to reset database',
+    dbOrdersLabel: 'Orders',
+    dbProductsLabel: 'Products',
+    dbCategoriesLabel: 'Categories',
+    dbTablesLabel: 'Tables',
+    backupDesc: 'Download a full JSON backup',
+    oldOrdersTitle: 'Old orders',
+    dayAndOlder: 'days and older',
+    allOrdersTitle: 'All orders',
+    allProductsTitle: 'All products',
+    allCategoriesTitle: 'All categories',
+    allTablesTitle: 'All tables',
+    factoryResetTitle: 'Factory reset',
+    factoryResetDesc: 'All data will be permanently deleted: orders, products, categories, tables, settings',
+    adminProtectedMsg: '✓ Admin account is protected and will not be deleted',
+    resetDatabaseBtn: 'Reset database',
+    resetWarningText: 'Warning! This action cannot be undone',
+    confirmDeleteBtn: 'Confirm deletion',
+    addressPlaceholder: 'Example street, city',
+    welcomePlaceholder: 'Welcome to our cafe',
+    currencyPlaceholder: 'TND',
+    editProductTitle: 'Edit product',
+    addProductTitle: 'Add product',
+    productNameArLabel: 'Product name (Arabic)',
+    productNameEnLabel: 'Product name (English)',
+    priceLabel: 'Price',
+    categoryLabel: 'Category',
+    chooseCategory: 'Choose category',
+    imageUrlLabel: 'Image URL',
+    availableLabel: 'Available',
+    saveChanges: 'Save changes',
+    addProductAction: 'Add product',
+    editCategoryTitle: 'Edit category',
+    addCategoryTitle: 'Add category',
+    categoryNameArLabel: 'Category name (Arabic)',
+    categoryNameEnLabel: 'Category name (English)',
+    addCategoryAction: 'Add category',
+    editTableTitle: 'Edit table',
+    addTableTitle: 'Add table',
+    seatsLabel: 'Seats',
+    save: 'Save',
     actionDelete: 'Delete',
   },
   fr: {
@@ -543,6 +743,106 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     adminLoginTitle: 'Connexion admin',
     orderItemWord: 'articles',
     onlyAvailableTables: 'Aucune table disponible',
+    themeBalanced: 'Equilibre',
+    themeBalancedHint: 'Harmonieux et confortable pour les yeux',
+    themeBold: 'Audacieux',
+    themeBoldHint: 'Contraste plus fort et presence marquee',
+    themeSoft: 'Doux',
+    themeSoftHint: 'Couleurs calmes et experience agreable',
+    newOrderAlertTitle: '🔔 Nouvelle commande!',
+    newOrderAlertDesc: 'Vous avez',
+    newOrderCountSuffix: 'nouvelles commandes',
+    readyOrderAlertTitle: '🎉 Votre commande est prete!',
+    readyOrderAlertDesc: 'Vous pouvez recuperer votre commande maintenant',
+    loginSuccessTitle: '✅ Connecte',
+    loginSuccessDesc: 'Bienvenue dans le tableau de bord admin',
+    loginErrorTitle: '❌ Erreur',
+    loginErrorDesc: 'Echec de connexion',
+    logoutSuccessTitle: '👋 Deconnecte',
+    logoutSuccessDesc: 'Vous etes deconnecte avec succes',
+    genericErrorTitle: '❌ Erreur',
+    warningTitle: '⚠️ Alerte',
+    requiredFieldsMsg: 'Veuillez remplir tous les champs obligatoires',
+    productUpdatedMsg: 'Produit modifie',
+    productAddedMsg: 'Produit ajoute',
+    productSaveFailedMsg: 'Echec de sauvegarde du produit',
+    serverConnectionFailedMsg: 'Echec de connexion au serveur',
+    confirmDeleteProduct: 'Voulez-vous vraiment supprimer ce produit?',
+    productDeletedMsg: 'Produit supprime',
+    productDeleteFailedMsg: 'Echec de suppression du produit',
+    categoryNameRequiredMsg: 'Veuillez saisir le nom de la categorie dans les deux langues',
+    categoryUpdatedMsg: 'Categorie modifiee',
+    categoryAddedMsg: 'Categorie ajoutee',
+    categorySaveFailedMsg: 'Echec de sauvegarde de la categorie',
+    confirmDeleteCategory: 'Voulez-vous vraiment supprimer cette categorie? Tous les produits associes seront supprimes.',
+    categoryDeletedMsg: 'Categorie supprimee',
+    categoryDeleteFailedMsg: 'Echec de suppression de la categorie',
+    invalidTableNumberMsg: 'Veuillez saisir un numero de table valide',
+    tableUpdatedMsg: 'Table modifiee',
+    tableUpdateFailedMsg: 'Echec de modification de la table',
+    tableAddedMsg: 'Table ajoutee avec succes',
+    tableAddFailedMsg: 'Echec d\'ajout de la table',
+    confirmDeleteTable: 'Voulez-vous vraiment supprimer cette table?',
+    tableDeletedMsg: 'Table supprimee',
+    tableDeleteFailedMsg: 'Echec de suppression de la table',
+    backupSuccessTitle: '✅ Termine',
+    backupSuccessMsg: 'Sauvegarde telechargee avec succes',
+    backupFailedMsg: 'Echec de creation de la sauvegarde',
+    confirmDeleteOldOrders: 'Voulez-vous vraiment supprimer les commandes de plus de',
+    dayWord: 'jour(s)',
+    ordersDeletedTitle: '✅ Supprime',
+    deleteOrdersFailedMsg: 'Echec de suppression des commandes',
+    confirmDeleteAllOrders: 'Voulez-vous vraiment supprimer toutes les commandes? Cette action est irreversible!',
+    confirmDeleteAllProducts: 'Voulez-vous vraiment supprimer tous les produits? Les commandes seront aussi supprimees!',
+    deleteProductsFailedMsg: 'Echec de suppression des produits',
+    confirmDeleteAllCategories: 'Voulez-vous vraiment supprimer toutes les categories? Les produits et commandes seront aussi supprimes!',
+    deleteCategoriesFailedMsg: 'Echec de suppression des categories',
+    confirmDeleteAllTables: 'Voulez-vous vraiment supprimer toutes les tables? Les commandes seront aussi supprimees!',
+    deleteTablesFailedMsg: 'Echec de suppression des tables',
+    fullResetConfirmStep1: '⚠️ Attention! Toutes les donnees seront supprimees definitivement!\n\nCela supprimera:\n- toutes les commandes\n- tous les produits\n- toutes les categories\n- toutes les tables\n- les parametres\n\nLe compte admin ne sera pas supprime.\n\nEtes-vous sur?',
+    fullResetConfirmStep2: '⚠️ Cette action est irreversible!\n\nEtes-vous sur a 100%?',
+    resetDoneTitle: '✅ Reinitialisation terminee',
+    resetFailedMsg: 'Echec de reinitialisation de la base',
+    dbOrdersLabel: 'Commandes',
+    dbProductsLabel: 'Produits',
+    dbCategoriesLabel: 'Categories',
+    dbTablesLabel: 'Tables',
+    backupDesc: 'Telecharger une sauvegarde JSON complete',
+    oldOrdersTitle: 'Anciennes commandes',
+    dayAndOlder: 'jours et plus',
+    allOrdersTitle: 'Toutes les commandes',
+    allProductsTitle: 'Tous les produits',
+    allCategoriesTitle: 'Toutes les categories',
+    allTablesTitle: 'Toutes les tables',
+    factoryResetTitle: 'Reinitialisation usine',
+    factoryResetDesc: 'Toutes les donnees seront supprimees definitivement: commandes, produits, categories, tables, parametres',
+    adminProtectedMsg: '✓ Le compte admin est protege et ne sera pas supprime',
+    resetDatabaseBtn: 'Reinitialiser la base de donnees',
+    resetWarningText: 'Attention! Cette action est irreversible',
+    confirmDeleteBtn: 'Confirmer suppression',
+    addressPlaceholder: 'Rue exemple, ville',
+    welcomePlaceholder: 'Bienvenue dans notre cafe',
+    currencyPlaceholder: 'TND',
+    editProductTitle: 'Modifier le produit',
+    addProductTitle: 'Ajouter un produit',
+    productNameArLabel: 'Nom du produit (Arabe)',
+    productNameEnLabel: 'Nom du produit (Anglais)',
+    priceLabel: 'Prix',
+    categoryLabel: 'Categorie',
+    chooseCategory: 'Choisir une categorie',
+    imageUrlLabel: 'URL de l\'image',
+    availableLabel: 'Disponible',
+    saveChanges: 'Enregistrer les modifications',
+    addProductAction: 'Ajouter le produit',
+    editCategoryTitle: 'Modifier la categorie',
+    addCategoryTitle: 'Ajouter une categorie',
+    categoryNameArLabel: 'Nom de categorie (Arabe)',
+    categoryNameEnLabel: 'Nom de categorie (Anglais)',
+    addCategoryAction: 'Ajouter la categorie',
+    editTableTitle: 'Modifier la table',
+    addTableTitle: 'Ajouter une table',
+    seatsLabel: 'Nombre de places',
+    save: 'Enregistrer',
     actionDelete: 'Supprimer',
   },
 };
@@ -702,6 +1002,19 @@ type ThemePreset = {
     surfaceColor: string;
     textPrimaryColor: string;
   };
+};
+
+type TableStatusItem = {
+  id: string;
+  isOccupied: boolean;
+};
+
+type TableWithOccupancy = Table & {
+  isOccupied?: boolean;
+};
+
+type AuthCheckResponse = {
+  authenticated: boolean;
 };
 
 const THEME_PRESETS: ThemePreset[] = [
@@ -942,19 +1255,108 @@ const THEME_PRESETS: ThemePreset[] = [
 ];
 
 const COLOR_MENU_OPTIONS = [
-  { name: 'قهوة', value: '#6F4E37' },
-  { name: 'ذهبي', value: '#C9A227' },
-  { name: 'كهرماني', value: '#D4A574' },
-  { name: 'أخضر', value: '#1F7A5A' },
-  { name: 'فيروزي', value: '#2D9C95' },
-  { name: 'كحلي', value: '#243447' },
-  { name: 'أزرق ملكي', value: '#365DA8' },
-  { name: 'بنفسجي غامق', value: '#52407A' },
-  { name: 'أحمر نبيذي', value: '#8B2E3D' },
-  { name: 'رمادي فحمي', value: '#2E2E32' },
-  { name: 'أبيض', value: '#FFFFFF' },
-  { name: 'كريمي', value: '#FDF8F3' },
+  { id: 'coffee', value: '#6F4E37' },
+  { id: 'gold', value: '#C9A227' },
+  { id: 'amber', value: '#D4A574' },
+  { id: 'green', value: '#1F7A5A' },
+  { id: 'turquoise', value: '#2D9C95' },
+  { id: 'navy', value: '#243447' },
+  { id: 'royalBlue', value: '#365DA8' },
+  { id: 'darkPurple', value: '#52407A' },
+  { id: 'burgundy', value: '#8B2E3D' },
+  { id: 'charcoalGray', value: '#2E2E32' },
+  { id: 'white', value: '#FFFFFF' },
+  { id: 'cream', value: '#FDF8F3' },
 ];
+
+const COLOR_MENU_LABELS: Record<AppLanguage, Record<string, string>> = {
+  ar: {
+    coffee: 'قهوة',
+    gold: 'ذهبي',
+    amber: 'كهرماني',
+    green: 'أخضر',
+    turquoise: 'فيروزي',
+    navy: 'كحلي',
+    royalBlue: 'أزرق ملكي',
+    darkPurple: 'بنفسجي غامق',
+    burgundy: 'أحمر نبيذي',
+    charcoalGray: 'رمادي فحمي',
+    white: 'أبيض',
+    cream: 'كريمي',
+  },
+  en: {
+    coffee: 'Coffee',
+    gold: 'Gold',
+    amber: 'Amber',
+    green: 'Green',
+    turquoise: 'Turquoise',
+    navy: 'Navy',
+    royalBlue: 'Royal Blue',
+    darkPurple: 'Dark Purple',
+    burgundy: 'Burgundy',
+    charcoalGray: 'Charcoal Gray',
+    white: 'White',
+    cream: 'Cream',
+  },
+  fr: {
+    coffee: 'Cafe',
+    gold: 'Or',
+    amber: 'Ambre',
+    green: 'Vert',
+    turquoise: 'Turquoise',
+    navy: 'Bleu marine',
+    royalBlue: 'Bleu royal',
+    darkPurple: 'Violet fonce',
+    burgundy: 'Bordeaux',
+    charcoalGray: 'Gris anthracite',
+    white: 'Blanc',
+    cream: 'Creme',
+  },
+};
+
+const THEME_PRESET_I18N: Record<AppLanguage, Record<string, { name: string; description: string }>> = {
+  ar: {},
+  en: {
+    'coffee-classic': { name: 'Coffee Classic', description: 'Warm and professional for cafes' },
+    'espresso-dark': { name: 'Dark Espresso', description: 'Strong identity with a premium touch' },
+    'latte-cream': { name: 'Latte Cream', description: 'Soft colors and comfortable reading' },
+    'mocha-bronze': { name: 'Mocha Bronze', description: 'Warm modern blend' },
+    'emerald-fresh': { name: 'Fresh Emerald', description: 'Modern and lively vibe' },
+    'mint-breeze': { name: 'Mint Breeze', description: 'Light natural option' },
+    'midnight-lounge': { name: 'Midnight Lounge', description: 'Premium style for upscale cafes' },
+    'royal-blue': { name: 'Royal Blue', description: 'Formal and confident look' },
+    'charcoal-modern': { name: 'Modern Charcoal', description: 'Clean professional experience' },
+    'sunset-vibe': { name: 'Warm Sunset', description: 'Soft and cheerful colors' },
+    'berry-bloom': { name: 'Berry Bloom', description: 'Playful and unique style' },
+    'amber-market': { name: 'Amber Market', description: 'Warm palette with strong contrast' },
+    'olive-garden': { name: 'Olive Garden', description: 'Calm natural identity' },
+    'desert-sand': { name: 'Desert Sand', description: 'Classic modern Arab palette' },
+    'night-roast': { name: 'Night Roast', description: 'Comfortable dark for night usage' },
+    'deep-ocean-dark': { name: 'Deep Ocean', description: 'Cool tones with comfortable contrast' },
+    'forest-night': { name: 'Forest Night', description: 'Natural dark with low brightness' },
+    'plum-night': { name: 'Night Plum', description: 'Luxurious identity with visual comfort' },
+  },
+  fr: {
+    'coffee-classic': { name: 'Cafe Classique', description: 'Chaud et professionnel pour les cafes' },
+    'espresso-dark': { name: 'Espresso Sombre', description: 'Style fort avec une touche premium' },
+    'latte-cream': { name: 'Latte Creme', description: 'Couleurs douces et lecture confortable' },
+    'mocha-bronze': { name: 'Mocha Bronze', description: 'Melange chaleureux et moderne' },
+    'emerald-fresh': { name: 'Emeraude Fraiche', description: 'Ambiance moderne et vivante' },
+    'mint-breeze': { name: 'Brise Menthe', description: 'Option legere et naturelle' },
+    'midnight-lounge': { name: 'Salon Minuit', description: 'Style premium pour cafes haut de gamme' },
+    'royal-blue': { name: 'Bleu Royal', description: 'Apparence formelle et confiante' },
+    'charcoal-modern': { name: 'Anthracite Moderne', description: 'Experience professionnelle epuree' },
+    'sunset-vibe': { name: 'Coucher Chaleureux', description: 'Couleurs douces et joyeuses' },
+    'berry-bloom': { name: 'Baies Fleuries', description: 'Style ludique et different' },
+    'amber-market': { name: 'Marche Ambre', description: 'Palette chaude avec fort contraste' },
+    'olive-garden': { name: 'Jardin Olive', description: 'Identite naturelle et apaisante' },
+    'desert-sand': { name: 'Sable du Desert', description: 'Palette arabe classique et moderne' },
+    'night-roast': { name: 'Torréfaction Nuit', description: 'Sombre confortable pour la nuit' },
+    'deep-ocean-dark': { name: 'Ocean Profond', description: 'Tons froids et contraste agreable' },
+    'forest-night': { name: 'Foret Nocturne', description: 'Sombre naturel a faible luminosite' },
+    'plum-night': { name: 'Prune Nocturne', description: 'Identite luxueuse et confort visuel' },
+  },
+};
 
 const normalizeHex = (value: string) => {
   const hex = value.trim();
@@ -1001,8 +1403,8 @@ const buildThemeSuggestions = (primaryColor: string) => {
   return [
     {
       id: 'balanced',
-      label: 'متوازن',
-      hint: 'متزن ومريح للعين',
+      labelKey: 'themeBalanced',
+      hintKey: 'themeBalancedHint',
       colors: {
         primaryColor: primary,
         accentColor: mixHex(primary, '#FFFFFF', 0.4),
@@ -1013,8 +1415,8 @@ const buildThemeSuggestions = (primaryColor: string) => {
     },
     {
       id: 'bold',
-      label: 'جريء',
-      hint: 'تباين أوضح وحضور أقوى',
+      labelKey: 'themeBold',
+      hintKey: 'themeBoldHint',
       colors: {
         primaryColor: primary,
         accentColor: mixHex(primary, '#FFD166', 0.55),
@@ -1025,8 +1427,8 @@ const buildThemeSuggestions = (primaryColor: string) => {
     },
     {
       id: 'soft',
-      label: 'ناعم',
-      hint: 'ألوان هادئة وتجربة لطيفة',
+      labelKey: 'themeSoft',
+      hintKey: 'themeSoftHint',
       colors: {
         primaryColor: primary,
         accentColor: mixHex(primary, '#A8DADC', 0.45),
@@ -1123,7 +1525,7 @@ export default function CafeApp() {
       typeof window !== 'undefined' && SUPPORTED_LANGUAGES.includes((localStorage.getItem(LANGUAGE_STORAGE_KEY) as AppLanguage) || 'ar')
         ? ((localStorage.getItem(LANGUAGE_STORAGE_KEY) as AppLanguage) || 'ar')
         : ('ar' as AppLanguage),
-    currency: 'د.ت',
+    currency: 'TND',
     logo: '',
     primaryColor: DEFAULT_THEME_COLORS.primaryColor,
     accentColor: DEFAULT_THEME_COLORS.accentColor,
@@ -1265,7 +1667,7 @@ export default function CafeApp() {
     };
   }, [customerTab, trackedOrder]);
 
-  // Fetch table status (occupied/available) - مصدر واحد للطاولات وحالتها
+  // Fetch table status (occupied/available)
   const fetchTablesStatus = useCallback(async () => {
     try {
       const res = await fetch('/api/tables/status', { 
@@ -1275,20 +1677,10 @@ export default function CafeApp() {
         console.error('fetchTablesStatus HTTP error:', res.status);
         return;
       }
-      const data = await res.json();
+      const data = (await res.json()) as TableStatusItem[];
       
-      // تحديث قائمة الطاولات
       if (Array.isArray(data)) {
-        setTables(data.map((t: { id: string; number: number; seats: number; description: string | null; active: boolean }) => ({
-          id: t.id,
-          number: t.number,
-          seats: t.seats,
-          description: t.description,
-          active: t.active
-        })));
-        
-        // تحديث الطاولات المشغولة
-        const occupied = new Set(data.filter((t: { isOccupied: boolean }) => t.isOccupied).map((t: { id: string }) => t.id));
+        const occupied = new Set(data.filter(t => t.isOccupied).map(t => t.id));
         console.log('🔴 Occupied tables:', Array.from(occupied));
         setOccupiedTables(occupied);
       }
@@ -1321,8 +1713,8 @@ export default function CafeApp() {
       if (newOrders.length > 0) {
         playNotificationSound();
         toast({ 
-          title: '🔔 طلب جديد!', 
-          description: `لديك ${newOrders.length} طلب جديد` 
+          title: t('newOrderAlertTitle'),
+          description: `${t('newOrderAlertDesc')} ${newOrders.length} ${t('newOrderCountSuffix')}`
         });
       }
     }
@@ -1349,8 +1741,8 @@ export default function CafeApp() {
     if (trackedOrder && prevTrackedStatus && trackedOrder.status === 'READY' && prevTrackedStatus !== 'READY') {
       playReadySound();
       toast({ 
-        title: '🎉 طلبك جاهز!', 
-        description: 'يمكنك استلام طلبك الآن' 
+        title: t('readyOrderAlertTitle'),
+        description: t('readyOrderAlertDesc')
       });
     }
     if (trackedOrder) {
@@ -1365,8 +1757,8 @@ export default function CafeApp() {
         credentials: 'include'
       });
       if (!res.ok) throw new Error(`Auth check failed: ${res.status}`);
-      const data = await res.json();
-      setIsAdminAuthenticated(data.authenticated);
+      const data = (await res.json()) as AuthCheckResponse;
+      setIsAdminAuthenticated(Boolean(data.authenticated));
     } catch (error) {
       console.error('Auth check error:', error);
       setIsAdminAuthenticated(false);
@@ -1477,12 +1869,12 @@ export default function CafeApp() {
         setTables([]);
         return;
       }
-      const data = await res.json();
+      const data = (await res.json()) as TableWithOccupancy[];
       
       if (Array.isArray(data)) {
         setTables(data);
-        // تحديث occupiedTables من isOccupied
-        const occupied = new Set(data.filter((t: { isOccupied?: boolean }) => t.isOccupied).map((t: { id: string }) => t.id));
+        // Update occupiedTables from isOccupied
+        const occupied = new Set(data.filter(t => t.isOccupied).map(t => t.id));
         setOccupiedTables(occupied);
       } else {
         setTables([]);
@@ -1534,12 +1926,12 @@ export default function CafeApp() {
         setIsAdminAuthenticated(true);
         setShowLoginDialog(false);
         setLoginForm({ email: '', password: '' });
-        toast({ title: '✅ تم تسجيل الدخول', description: 'مرحباً بك في لوحة الإدارة' });
+        toast({ title: t('loginSuccessTitle'), description: t('loginSuccessDesc') });
       } else {
-        toast({ title: '❌ خطأ', description: data.error || 'فشل تسجيل الدخول', variant: 'destructive' });
+        toast({ title: t('loginErrorTitle'), description: data.error || t('loginErrorDesc'), variant: 'destructive' });
       }
     } catch {
-      toast({ title: '❌ خطأ', description: 'فشل تسجيل الدخول', variant: 'destructive' });
+      toast({ title: t('loginErrorTitle'), description: t('loginErrorDesc'), variant: 'destructive' });
     } finally {
       setIsLoggingIn(false);
     }
@@ -1549,9 +1941,9 @@ export default function CafeApp() {
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
       setIsAdminAuthenticated(false);
-      toast({ title: '👋 تم تسجيل الخروج', description: 'تم تسجيل خروجك بنجاح' });
+      toast({ title: t('logoutSuccessTitle'), description: t('logoutSuccessDesc') });
     } catch {
-      toast({ title: '❌ خطأ', description: 'فشل تسجيل الخروج', variant: 'destructive' });
+      toast({ title: t('genericErrorTitle'), description: t('logout'), variant: 'destructive' });
     }
   };
 
@@ -1649,14 +2041,14 @@ export default function CafeApp() {
         setShowOrderDialog(false);
         fetchOrders();
       } else if (res.status === 409) {
-        // خطأ: الطاولة مشغولة
+        // Table occupied
         const data = await res.json();
         console.error('Table occupied:', data);
         
-        // تحديث حالة الطاولات
+        // Refresh table status
         fetchTablesStatus();
         
-        // إغلاق نافذة الطلب وإظهار رسالة واضحة
+        // Close dialog and show clear message
         setShowOrderDialog(false);
         setSelectedTableId('');
         
@@ -1822,7 +2214,7 @@ export default function CafeApp() {
   // Product CRUD
   const saveProduct = async () => {
     if (!productForm.name || !productForm.nameAr || !productForm.price || !productForm.categoryId) {
-      toast({ title: '⚠️ تنبيه', description: 'يرجى ملء جميع الحقول المطلوبة', variant: 'destructive' });
+      toast({ title: t('warningTitle'), description: t('requiredFieldsMsg'), variant: 'destructive' });
       return;
     }
     
@@ -1846,28 +2238,28 @@ export default function CafeApp() {
       });
 
       if (res.ok) {
-        toast({ title: '✅ تم الحفظ', description: editingProduct ? 'تم تعديل المنتج' : 'تم إضافة المنتج' });
+        toast({ title: '✅', description: editingProduct ? t('productUpdatedMsg') : t('productAddedMsg') });
         setIsProductDialogOpen(false);
         resetProductForm();
         fetchProducts();
       } else {
         const data = await res.json();
-        toast({ title: '❌ خطأ', description: data.error || 'فشل في حفظ المنتج', variant: 'destructive' });
+        toast({ title: t('genericErrorTitle'), description: data.error || t('productSaveFailedMsg'), variant: 'destructive' });
       }
     } catch (error) {
       console.error('Save product error:', error);
-      toast({ title: '❌ خطأ', description: 'فشل في الاتصال بالخادم', variant: 'destructive' });
+      toast({ title: t('genericErrorTitle'), description: t('serverConnectionFailedMsg'), variant: 'destructive' });
     }
   };
 
   const deleteProduct = async (id: string) => {
-    if (!confirm('هل أنت متأكد من حذف هذا المنتج؟')) return;
+    if (!confirm(t('confirmDeleteProduct'))) return;
     try {
       await fetch(`/api/products/${id}`, { method: 'DELETE' });
-      toast({ title: '✅ تم الحذف', description: 'تم حذف المنتج' });
+      toast({ title: t('ordersDeletedTitle'), description: t('productDeletedMsg') });
       fetchProducts();
     } catch {
-      toast({ title: '❌ خطأ', description: 'فشل في حذف المنتج', variant: 'destructive' });
+      toast({ title: t('genericErrorTitle'), description: t('productDeleteFailedMsg'), variant: 'destructive' });
     }
   };
 
@@ -1879,7 +2271,7 @@ export default function CafeApp() {
   // Category CRUD
   const saveCategory = async () => {
     if (!categoryForm.name || !categoryForm.nameAr) {
-      toast({ title: '⚠️ تنبيه', description: 'يرجى إدخال اسم الفئة باللغتين', variant: 'destructive' });
+      toast({ title: t('warningTitle'), description: t('categoryNameRequiredMsg'), variant: 'destructive' });
       return;
     }
     
@@ -1898,29 +2290,29 @@ export default function CafeApp() {
       });
 
       if (res.ok) {
-        toast({ title: '✅ تم الحفظ', description: editingCategory ? 'تم تعديل الفئة' : 'تم إضافة الفئة' });
+        toast({ title: '✅', description: editingCategory ? t('categoryUpdatedMsg') : t('categoryAddedMsg') });
         setIsCategoryDialogOpen(false);
         resetCategoryForm();
         fetchCategories();
       } else {
         const data = await res.json();
-        toast({ title: '❌ خطأ', description: data.error || 'فشل في حفظ الفئة', variant: 'destructive' });
+        toast({ title: t('genericErrorTitle'), description: data.error || t('categorySaveFailedMsg'), variant: 'destructive' });
       }
     } catch (error) {
       console.error('Save category error:', error);
-      toast({ title: '❌ خطأ', description: 'فشل في الاتصال بالخادم', variant: 'destructive' });
+      toast({ title: t('genericErrorTitle'), description: t('serverConnectionFailedMsg'), variant: 'destructive' });
     }
   };
 
   const deleteCategory = async (id: string) => {
-    if (!confirm('هل أنت متأكد من حذف هذه الفئة؟ سيتم حذف جميع المنتجات التابعة لها.')) return;
+    if (!confirm(t('confirmDeleteCategory'))) return;
     try {
       await fetch(`/api/categories/${id}`, { method: 'DELETE' });
-      toast({ title: '✅ تم الحذف', description: 'تم حذف الفئة' });
+      toast({ title: t('ordersDeletedTitle'), description: t('categoryDeletedMsg') });
       fetchCategories();
       fetchProducts();
     } catch {
-      toast({ title: '❌ خطأ', description: 'فشل في حذف الفئة', variant: 'destructive' });
+      toast({ title: t('genericErrorTitle'), description: t('categoryDeleteFailedMsg'), variant: 'destructive' });
     }
   };
 
@@ -1933,7 +2325,7 @@ export default function CafeApp() {
   const saveTable = async () => {
     // Validation
     if (!tableForm.number || isNaN(parseInt(tableForm.number))) {
-      toast({ title: '⚠️ تنبيه', description: 'يرجى إدخال رقم صحيح للطاولة', variant: 'destructive' });
+      toast({ title: t('warningTitle'), description: t('invalidTableNumberMsg'), variant: 'destructive' });
       return;
     }
     
@@ -1950,13 +2342,13 @@ export default function CafeApp() {
         });
         
         if (res.ok) {
-          toast({ title: '✅ تم التحديث', description: 'تم تعديل الطاولة' });
+          toast({ title: '✅', description: t('tableUpdatedMsg') });
           setIsTableDialogOpen(false);
           resetTableForm();
           fetchTables();
         } else {
           const data = await res.json();
-          toast({ title: '❌ خطأ', description: data.error || 'فشل في تعديل الطاولة', variant: 'destructive' });
+           toast({ title: t('genericErrorTitle'), description: data.error || t('tableUpdateFailedMsg'), variant: 'destructive' });
         }
       } else {
         const res = await fetch('/api/tables', {
@@ -1970,29 +2362,29 @@ export default function CafeApp() {
         });
         
         if (res.ok) {
-          toast({ title: '✅ تم الإضافة', description: 'تم إضافة الطاولة بنجاح' });
+          toast({ title: '✅', description: t('tableAddedMsg') });
           setIsTableDialogOpen(false);
           resetTableForm();
           fetchTables();
         } else {
           const data = await res.json();
-          toast({ title: '❌ خطأ', description: data.error || 'فشل في إضافة الطاولة', variant: 'destructive' });
+          toast({ title: t('genericErrorTitle'), description: data.error || t('tableAddFailedMsg'), variant: 'destructive' });
         }
       }
     } catch (error) {
       console.error('Save table error:', error);
-      toast({ title: '❌ خطأ', description: 'فشل في الاتصال بالخادم', variant: 'destructive' });
+      toast({ title: t('genericErrorTitle'), description: t('serverConnectionFailedMsg'), variant: 'destructive' });
     }
   };
 
   const deleteTable = async (id: string) => {
-    if (!confirm('هل أنت متأكد من حذف هذه الطاولة؟')) return;
+    if (!confirm(t('confirmDeleteTable'))) return;
     try {
       await fetch(`/api/tables?id=${id}`, { method: 'DELETE' });
-      toast({ title: '✅ تم الحذف', description: 'تم حذف الطاولة' });
+      toast({ title: t('ordersDeletedTitle'), description: t('tableDeletedMsg') });
       fetchTables();
     } catch {
-      toast({ title: '❌ خطأ', description: 'فشل في حذف الطاولة', variant: 'destructive' });
+      toast({ title: t('genericErrorTitle'), description: t('tableDeleteFailedMsg'), variant: 'destructive' });
     }
   };
 
@@ -2034,6 +2426,13 @@ export default function CafeApp() {
   };
   const locale = LOCALE_BY_LANGUAGE[language];
   const appDir: 'rtl' | 'ltr' = language === 'ar' ? 'rtl' : 'ltr';
+  const getPresetText = (preset: ThemePreset) => {
+    const localized = THEME_PRESET_I18N[language]?.[preset.id];
+    if (localized) return localized;
+    return { name: preset.name, description: preset.description };
+  };
+  const getColorOptionLabel = (optionId: string) =>
+    COLOR_MENU_LABELS[language]?.[optionId] || COLOR_MENU_LABELS.ar[optionId] || optionId;
   const localizedCafeName = settings?.cafeName || "L'EscoBar";
   const getCategoryDisplayName = (category: Category) => {
     if (language === 'ar') return category.nameAr;
@@ -2057,7 +2456,7 @@ export default function CafeApp() {
     }
   }, [language, appDir]);
 
-  const currency = settings?.currency || 'د.ت';
+  const currency = settings?.currency || t('currencyPlaceholder');
   const cafeName = localizedCafeName;
 
   // Database Management Functions
@@ -2087,19 +2486,19 @@ export default function CafeApp() {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-        toast({ title: '✅ تم', description: 'تم تحميل النسخة الاحتياطية بنجاح' });
+        toast({ title: t('backupSuccessTitle'), description: t('backupSuccessMsg') });
       } else {
-        toast({ title: '❌ خطأ', description: 'فشل في إنشاء النسخة الاحتياطية', variant: 'destructive' });
+        toast({ title: t('genericErrorTitle'), description: t('backupFailedMsg'), variant: 'destructive' });
       }
     } catch {
-      toast({ title: '❌ خطأ', description: 'فشل في إنشاء النسخة الاحتياطية', variant: 'destructive' });
+      toast({ title: t('genericErrorTitle'), description: t('backupFailedMsg'), variant: 'destructive' });
     } finally {
       setIsDbLoading(false);
     }
   };
 
   const deleteOldOrders = async () => {
-    if (!confirm(`هل أنت متأكد من حذف الطلبات الأقدم من ${deleteOlderThan} يوم؟`)) return;
+    if (!confirm(`${t('confirmDeleteOldOrders')} ${deleteOlderThan} ${t('dayWord')}?`)) return;
     
     try {
       setIsDbLoading(true);
@@ -2114,21 +2513,21 @@ export default function CafeApp() {
       
       const data = await res.json();
       if (res.ok) {
-        toast({ title: '✅ تم الحذف', description: data.message });
+        toast({ title: t('ordersDeletedTitle'), description: data.message });
         fetchDbStats();
         fetchOrders();
       } else {
-        toast({ title: '❌ خطأ', description: data.error, variant: 'destructive' });
+        toast({ title: t('genericErrorTitle'), description: data.error, variant: 'destructive' });
       }
     } catch {
-      toast({ title: '❌ خطأ', description: 'فشل في حذف الطلبات', variant: 'destructive' });
+      toast({ title: t('genericErrorTitle'), description: t('deleteOrdersFailedMsg'), variant: 'destructive' });
     } finally {
       setIsDbLoading(false);
     }
   };
 
   const deleteAllOrders = async () => {
-    if (!confirm('هل أنت متأكد من حذف جميع الطلبات؟ هذا الإجراء لا يمكن التراجع عنه!')) return;
+    if (!confirm(t('confirmDeleteAllOrders'))) return;
     
     try {
       setIsDbLoading(true);
@@ -2143,21 +2542,21 @@ export default function CafeApp() {
       
       const data = await res.json();
       if (res.ok) {
-        toast({ title: '✅ تم الحذف', description: data.message });
+        toast({ title: t('ordersDeletedTitle'), description: data.message });
         fetchDbStats();
         fetchOrders();
       } else {
-        toast({ title: '❌ خطأ', description: data.error, variant: 'destructive' });
+        toast({ title: t('genericErrorTitle'), description: data.error, variant: 'destructive' });
       }
     } catch {
-      toast({ title: '❌ خطأ', description: 'فشل في حذف الطلبات', variant: 'destructive' });
+      toast({ title: t('genericErrorTitle'), description: t('deleteOrdersFailedMsg'), variant: 'destructive' });
     } finally {
       setIsDbLoading(false);
     }
   };
 
   const deleteAllProducts = async () => {
-    if (!confirm('هل أنت متأكد من حذف جميع المنتجات؟ سيتم حذف الطلبات أيضاً!')) return;
+    if (!confirm(t('confirmDeleteAllProducts'))) return;
     
     try {
       setIsDbLoading(true);
@@ -2169,22 +2568,22 @@ export default function CafeApp() {
       
       const data = await res.json();
       if (res.ok) {
-        toast({ title: '✅ تم الحذف', description: data.message });
+        toast({ title: t('ordersDeletedTitle'), description: data.message });
         fetchDbStats();
         fetchProducts();
         fetchOrders();
       } else {
-        toast({ title: '❌ خطأ', description: data.error, variant: 'destructive' });
+        toast({ title: t('genericErrorTitle'), description: data.error, variant: 'destructive' });
       }
     } catch {
-      toast({ title: '❌ خطأ', description: 'فشل في حذف المنتجات', variant: 'destructive' });
+      toast({ title: t('genericErrorTitle'), description: t('deleteProductsFailedMsg'), variant: 'destructive' });
     } finally {
       setIsDbLoading(false);
     }
   };
 
   const deleteAllCategories = async () => {
-    if (!confirm('هل أنت متأكد من حذف جميع الفئات؟ سيتم حذف المنتجات والطلبات أيضاً!')) return;
+    if (!confirm(t('confirmDeleteAllCategories'))) return;
     
     try {
       setIsDbLoading(true);
@@ -2196,23 +2595,23 @@ export default function CafeApp() {
       
       const data = await res.json();
       if (res.ok) {
-        toast({ title: '✅ تم الحذف', description: data.message });
+        toast({ title: t('ordersDeletedTitle'), description: data.message });
         fetchDbStats();
         fetchCategories();
         fetchProducts();
         fetchOrders();
       } else {
-        toast({ title: '❌ خطأ', description: data.error, variant: 'destructive' });
+        toast({ title: t('genericErrorTitle'), description: data.error, variant: 'destructive' });
       }
     } catch {
-      toast({ title: '❌ خطأ', description: 'فشل في حذف الفئات', variant: 'destructive' });
+      toast({ title: t('genericErrorTitle'), description: t('deleteCategoriesFailedMsg'), variant: 'destructive' });
     } finally {
       setIsDbLoading(false);
     }
   };
 
   const deleteAllTables = async () => {
-    if (!confirm('هل أنت متأكد من حذف جميع الطاولات؟ سيتم حذف الطلبات أيضاً!')) return;
+    if (!confirm(t('confirmDeleteAllTables'))) return;
     
     try {
       setIsDbLoading(true);
@@ -2224,23 +2623,23 @@ export default function CafeApp() {
       
       const data = await res.json();
       if (res.ok) {
-        toast({ title: '✅ تم الحذف', description: data.message });
+        toast({ title: t('ordersDeletedTitle'), description: data.message });
         fetchDbStats();
         fetchTables();
         fetchOrders();
       } else {
-        toast({ title: '❌ خطأ', description: data.error, variant: 'destructive' });
+        toast({ title: t('genericErrorTitle'), description: data.error, variant: 'destructive' });
       }
     } catch {
-      toast({ title: '❌ خطأ', description: 'فشل في حذف الطاولات', variant: 'destructive' });
+      toast({ title: t('genericErrorTitle'), description: t('deleteTablesFailedMsg'), variant: 'destructive' });
     } finally {
       setIsDbLoading(false);
     }
   };
 
   const fullDatabaseReset = async () => {
-    if (!confirm('⚠️ تحذير! سيتم حذف جميع البيانات نهائياً!\n\nسيتم حذف:\n- جميع الطلبات\n- جميع المنتجات\n- جميع الفئات\n- جميع الطاولات\n- الإعدادات\n\nلن يتم حذف حساب المسؤول.\n\nهل أنت متأكد؟')) return;
-    if (!confirm('⚠️ هذا الإجراء لا يمكن التراجع عنه!\n\nهل أنت متأكد 100%؟')) return;
+    if (!confirm(t('fullResetConfirmStep1'))) return;
+    if (!confirm(t('fullResetConfirmStep2'))) return;
     
     try {
       setIsDbLoading(true);
@@ -2252,15 +2651,15 @@ export default function CafeApp() {
       
       const data = await res.json();
       if (res.ok) {
-        toast({ title: '✅ تم إعادة الضبط', description: data.message });
+        toast({ title: t('resetDoneTitle'), description: data.message });
         setShowResetConfirm(false);
         fetchDbStats();
         fetchAllData();
       } else {
-        toast({ title: '❌ خطأ', description: data.error, variant: 'destructive' });
+        toast({ title: t('genericErrorTitle'), description: data.error, variant: 'destructive' });
       }
     } catch {
-      toast({ title: '❌ خطأ', description: 'فشل في إعادة ضبط قاعدة البيانات', variant: 'destructive' });
+      toast({ title: t('genericErrorTitle'), description: t('resetFailedMsg'), variant: 'destructive' });
     } finally {
       setIsDbLoading(false);
     }
@@ -2759,7 +3158,7 @@ export default function CafeApp() {
                       </div>
                       <div className="db-stat-content">
                         <div className="db-stat-value">{dbStats?.orders || orders.length || 0}</div>
-                        <div className="db-stat-label">طلبات</div>
+                        <div className="db-stat-label">{t('dbOrdersLabel')}</div>
                       </div>
                     </div>
                     <div className="db-stat-item">
@@ -2768,7 +3167,7 @@ export default function CafeApp() {
                       </div>
                       <div className="db-stat-content">
                         <div className="db-stat-value">{dbStats?.products || products.length || 0}</div>
-                        <div className="db-stat-label">منتجات</div>
+                        <div className="db-stat-label">{t('dbProductsLabel')}</div>
                       </div>
                     </div>
                     <div className="db-stat-item">
@@ -2777,7 +3176,7 @@ export default function CafeApp() {
                       </div>
                       <div className="db-stat-content">
                         <div className="db-stat-value">{dbStats?.categories || categories.length || 0}</div>
-                        <div className="db-stat-label">فئات</div>
+                        <div className="db-stat-label">{t('dbCategoriesLabel')}</div>
                       </div>
                     </div>
                     <div className="db-stat-item">
@@ -2786,7 +3185,7 @@ export default function CafeApp() {
                       </div>
                       <div className="db-stat-content">
                         <div className="db-stat-value">{dbStats?.tables || tables.length || 0}</div>
-                        <div className="db-stat-label">طاولات</div>
+                        <div className="db-stat-label">{t('dbTablesLabel')}</div>
                       </div>
                     </div>
                   </div>
@@ -2807,7 +3206,7 @@ export default function CafeApp() {
                   <div className="db-action-row">
                     <div className="db-action-info">
                       <div className="db-action-title">{t('exportData')}</div>
-                      <div className="db-action-desc">تحميل نسخة احتياطية كاملة بصيغة JSON</div>
+                      <div className="db-action-desc">{t('backupDesc')}</div>
                     </div>
                     <button
                       className="btn btn-success"
@@ -2836,7 +3235,7 @@ export default function CafeApp() {
                     {/* Delete Old Orders */}
                     <div className="grouped-list-item">
                       <div className="grouped-list-item-content">
-                        <div className="grouped-list-item-title">طلبات قديمة</div>
+                        <div className="grouped-list-item-title">{t('oldOrdersTitle')}</div>
                         <div className="flex items-center gap-2 mt-1">
                           <input
                             type="number"
@@ -2846,7 +3245,7 @@ export default function CafeApp() {
                             onChange={(e) => setDeleteOlderThan(parseInt(e.target.value) || 30)}
                             min={1}
                           />
-                          <span className="text-small text-[var(--text-muted)]">يوم وأقدم</span>
+                          <span className="text-small text-[var(--text-muted)]">{t('dayAndOlder')}</span>
                         </div>
                       </div>
                       <button
@@ -2861,8 +3260,8 @@ export default function CafeApp() {
 
                     <div className="grouped-list-item">
                       <div className="grouped-list-item-content">
-                        <div className="grouped-list-item-title">جميع الطلبات</div>
-                        <div className="grouped-list-item-subtitle">{dbStats?.orders || orders.length || 0} طلب</div>
+                        <div className="grouped-list-item-title">{t('allOrdersTitle')}</div>
+                        <div className="grouped-list-item-subtitle">{dbStats?.orders || orders.length || 0} {t('orders')}</div>
                       </div>
                       <button
                         className="btn btn-ghost btn-sm"
@@ -2876,8 +3275,8 @@ export default function CafeApp() {
 
                     <div className="grouped-list-item">
                       <div className="grouped-list-item-content">
-                        <div className="grouped-list-item-title">جميع المنتجات</div>
-                        <div className="grouped-list-item-subtitle">{dbStats?.products || products.length || 0} منتج</div>
+                        <div className="grouped-list-item-title">{t('allProductsTitle')}</div>
+                        <div className="grouped-list-item-subtitle">{dbStats?.products || products.length || 0} {t('productCount')}</div>
                       </div>
                       <button
                         className="btn btn-ghost btn-sm"
@@ -2891,8 +3290,8 @@ export default function CafeApp() {
 
                     <div className="grouped-list-item">
                       <div className="grouped-list-item-content">
-                        <div className="grouped-list-item-title">جميع الفئات</div>
-                        <div className="grouped-list-item-subtitle">{dbStats?.categories || categories.length || 0} فئة</div>
+                        <div className="grouped-list-item-title">{t('allCategoriesTitle')}</div>
+                        <div className="grouped-list-item-subtitle">{dbStats?.categories || categories.length || 0} {t('categories')}</div>
                       </div>
                       <button
                         className="btn btn-ghost btn-sm"
@@ -2906,8 +3305,8 @@ export default function CafeApp() {
 
                     <div className="grouped-list-item">
                       <div className="grouped-list-item-content">
-                        <div className="grouped-list-item-title">جميع الطاولات</div>
-                        <div className="grouped-list-item-subtitle">{dbStats?.tables || tables.length || 0} طاولة</div>
+                        <div className="grouped-list-item-title">{t('allTablesTitle')}</div>
+                        <div className="grouped-list-item-subtitle">{dbStats?.tables || tables.length || 0} {t('tables')}</div>
                       </div>
                       <button
                         className="btn btn-ghost btn-sm"
@@ -2936,12 +3335,12 @@ export default function CafeApp() {
                   {!showResetConfirm ? (
                     <div className="db-danger-zone">
                       <div className="db-danger-info">
-                        <p className="text-body font-medium mb-2">إعادة ضبط المصنع</p>
+                        <p className="text-body font-medium mb-2">{t('factoryResetTitle')}</p>
                         <p className="text-small text-[var(--text-secondary)]">
-                          سيتم حذف جميع البيانات نهائياً: الطلبات، المنتجات، الفئات، الطاولات، الإعدادات
+                          {t('factoryResetDesc')}
                         </p>
                         <p className="text-small mt-2" style={{ color: 'var(--success)' }}>
-                          ✓ حساب المسؤول محمي ولن يتم حذفه
+                          {t('adminProtectedMsg')}
                         </p>
                       </div>
                       <button
@@ -2949,7 +3348,7 @@ export default function CafeApp() {
                         onClick={() => setShowResetConfirm(true)}
                       >
                         <RefreshCcw className="w-4 h-4" />
-                        إعادة ضبط قاعدة البيانات
+                        {t('resetDatabaseBtn')}
                       </button>
                     </div>
                   ) : (
@@ -2957,7 +3356,7 @@ export default function CafeApp() {
                       <div className="db-confirm-warning">
                         <AlertTriangle className="w-8 h-8" style={{ color: 'var(--error)' }} />
                         <p className="text-body font-semibold text-center" style={{ color: 'var(--error)' }}>
-                          تحذير! هذا الإجراء لا يمكن التراجع عنه
+                          {t('resetWarningText')}
                         </p>
                       </div>
                       <div className="flex gap-3">
@@ -2966,14 +3365,14 @@ export default function CafeApp() {
                           onClick={() => setShowResetConfirm(false)}
                           disabled={isDbLoading}
                         >
-                          إلغاء
+                          {t('cancel')}
                         </button>
                         <button
                           className="btn btn-danger flex-1"
                           onClick={fullDatabaseReset}
                           disabled={isDbLoading}
                         >
-                          {isDbLoading ? 'جاري...' : 'تأكيد الحذف'}
+                          {isDbLoading ? t('loadingShort') : t('confirmDeleteBtn')}
                         </button>
                       </div>
                     </div>
@@ -3056,7 +3455,7 @@ export default function CafeApp() {
                         className="settings-input"
                         value={settingsForm.address}
                         onChange={(e) => setSettingsForm({ ...settingsForm, address: e.target.value })}
-                        placeholder="شارع المثال، المدينة"
+                        placeholder={t('addressPlaceholder')}
                       />
                     </div>
                     <div className="settings-field">
@@ -3066,7 +3465,7 @@ export default function CafeApp() {
                         className="settings-input"
                         value={settingsForm.welcomeMessage}
                         onChange={(e) => setSettingsForm({ ...settingsForm, welcomeMessage: e.target.value })}
-                        placeholder="مرحباً بك في مقهانا"
+                        placeholder={t('welcomePlaceholder')}
                       />
                     </div>
                   </div>
@@ -3124,7 +3523,7 @@ export default function CafeApp() {
                         className="settings-input"
                         value={settingsForm.currency}
                         onChange={(e) => setSettingsForm({ ...settingsForm, currency: e.target.value })}
-                        placeholder="د.ت"
+                        placeholder={t('currencyPlaceholder')}
                       />
                     </div>
                   </div>
@@ -3186,8 +3585,8 @@ export default function CafeApp() {
                             <span style={{ backgroundColor: preset.colors.backgroundColor }} />
                             <span style={{ backgroundColor: preset.colors.textPrimaryColor }} />
                           </div>
-                          <div className="theme-preset-name">{preset.name}</div>
-                          <div className="theme-preset-description">{preset.description}</div>
+                          <div className="theme-preset-name">{getPresetText(preset).name}</div>
+                          <div className="theme-preset-description">{getPresetText(preset).description}</div>
                           <div className={`theme-preset-mode ${preset.mode === 'dark' ? 'dark' : 'light'}`}>
                             {preset.mode === 'dark' ? t('darkComfort') : t('lightProfessional')}
                           </div>
@@ -3212,8 +3611,8 @@ export default function CafeApp() {
                             <span style={{ backgroundColor: preset.colors.backgroundColor }} />
                             <span style={{ backgroundColor: preset.colors.textPrimaryColor }} />
                           </div>
-                          <div className="theme-preset-name">{preset.name}</div>
-                          <div className="theme-preset-description">{preset.description}</div>
+                          <div className="theme-preset-name">{getPresetText(preset).name}</div>
+                          <div className="theme-preset-description">{getPresetText(preset).description}</div>
                           <div className={`theme-preset-mode ${preset.mode === 'dark' ? 'dark' : 'light'}`}>
                             {preset.mode === 'dark' ? t('darkComfort') : t('lightProfessional')}
                           </div>
@@ -3233,8 +3632,8 @@ export default function CafeApp() {
                           onClick={() => applyThemePack(suggestion.colors)}
                         >
                           <span className="theme-suggestion-dot" style={{ backgroundColor: suggestion.colors.accentColor }} />
-                          <span>{suggestion.label}</span>
-                          <small>{suggestion.hint}</small>
+                          <span>{t(suggestion.labelKey)}</span>
+                          <small>{t(suggestion.hintKey)}</small>
                         </button>
                       ))}
                     </div>
@@ -3262,7 +3661,7 @@ export default function CafeApp() {
                           <option value="">{t('chooseFromList')}</option>
                           {COLOR_MENU_OPTIONS.map((option) => (
                             <option key={`primary-${option.value}`} value={option.value}>
-                              {option.name} - {option.value}
+                              {getColorOptionLabel(option.id)} - {option.value}
                             </option>
                           ))}
                         </select>
@@ -3298,7 +3697,7 @@ export default function CafeApp() {
                           <option value="">{t('chooseFromList')}</option>
                           {COLOR_MENU_OPTIONS.map((option) => (
                             <option key={`accent-${option.value}`} value={option.value}>
-                              {option.name} - {option.value}
+                              {getColorOptionLabel(option.id)} - {option.value}
                             </option>
                           ))}
                         </select>
@@ -3334,7 +3733,7 @@ export default function CafeApp() {
                           <option value="">{t('chooseFromList')}</option>
                           {COLOR_MENU_OPTIONS.map((option) => (
                             <option key={`background-${option.value}`} value={option.value}>
-                              {option.name} - {option.value}
+                              {getColorOptionLabel(option.id)} - {option.value}
                             </option>
                           ))}
                         </select>
@@ -3370,7 +3769,7 @@ export default function CafeApp() {
                           <option value="">{t('chooseFromList')}</option>
                           {COLOR_MENU_OPTIONS.map((option) => (
                             <option key={`surface-${option.value}`} value={option.value}>
-                              {option.name} - {option.value}
+                              {getColorOptionLabel(option.id)} - {option.value}
                             </option>
                           ))}
                         </select>
@@ -3406,7 +3805,7 @@ export default function CafeApp() {
                           <option value="">{t('chooseFromList')}</option>
                           {COLOR_MENU_OPTIONS.map((option) => (
                             <option key={`text-${option.value}`} value={option.value}>
-                              {option.name} - {option.value}
+                              {getColorOptionLabel(option.id)} - {option.value}
                             </option>
                           ))}
                         </select>
@@ -3563,14 +3962,14 @@ export default function CafeApp() {
             <div className="dialog-content animate-slide-up">
               <div className="dialog-handle" />
               <div className="dialog-header">
-                <h2 className="dialog-title">{editingProduct ? 'تعديل المنتج' : 'إضافة منتج'}</h2>
+                <h2 className="dialog-title">{editingProduct ? t('editProductTitle') : t('addProductTitle')}</h2>
                 <button className="btn btn-ghost btn-icon" onClick={() => setIsProductDialogOpen(false)}>
                   <X className="w-5 h-5" />
                 </button>
               </div>
               <div className="dialog-body space-y-4">
                 <div>
-                  <label className="label">اسم المنتج (عربي)</label>
+                  <label className="label">{t('productNameArLabel')}</label>
                   <input
                     type="text"
                     className="input"
@@ -3579,7 +3978,7 @@ export default function CafeApp() {
                   />
                 </div>
                 <div>
-                  <label className="label">اسم المنتج (إنجليزي)</label>
+                  <label className="label">{t('productNameEnLabel')}</label>
                   <input
                     type="text"
                     className="input"
@@ -3588,7 +3987,7 @@ export default function CafeApp() {
                   />
                 </div>
                 <div>
-                  <label className="label">السعر</label>
+                  <label className="label">{t('priceLabel')}</label>
                   <input
                     type="number"
                     className="input"
@@ -3597,20 +3996,20 @@ export default function CafeApp() {
                   />
                 </div>
                 <div>
-                  <label className="label">الفئة</label>
+                  <label className="label">{t('categoryLabel')}</label>
                   <select
                     className="input"
                     value={productForm.categoryId}
                     onChange={(e) => setProductForm({ ...productForm, categoryId: e.target.value })}
                   >
-                    <option value="">اختر الفئة</option>
+                    <option value="">{t('chooseCategory')}</option>
                     {categories.map(cat => (
-                      <option key={cat.id} value={cat.id}>{cat.nameAr}</option>
+                      <option key={cat.id} value={cat.id}>{getCategoryDisplayName(cat)}</option>
                     ))}
                   </select>
                 </div>
                 <div>
-                  <label className="label">رابط الصورة</label>
+                  <label className="label">{t('imageUrlLabel')}</label>
                   <input
                     type="text"
                     className="input"
@@ -3626,12 +4025,12 @@ export default function CafeApp() {
                     checked={productForm.available}
                     onChange={(e) => setProductForm({ ...productForm, available: e.target.checked })}
                   />
-                  <label htmlFor="available" className="text-small">متوفر</label>
+                  <label htmlFor="available" className="text-small">{t('availableLabel')}</label>
                 </div>
               </div>
               <div className="dialog-footer">
                 <button className="btn btn-primary w-full" onClick={saveProduct}>
-                  {editingProduct ? 'حفظ التغييرات' : 'إضافة المنتج'}
+                  {editingProduct ? t('saveChanges') : t('addProductAction')}
                 </button>
               </div>
             </div>
@@ -3645,14 +4044,14 @@ export default function CafeApp() {
             <div className="dialog-content animate-slide-up">
               <div className="dialog-handle" />
               <div className="dialog-header">
-                <h2 className="dialog-title">{editingCategory ? 'تعديل الفئة' : 'إضافة فئة'}</h2>
+                <h2 className="dialog-title">{editingCategory ? t('editCategoryTitle') : t('addCategoryTitle')}</h2>
                 <button className="btn btn-ghost btn-icon" onClick={() => setIsCategoryDialogOpen(false)}>
                   <X className="w-5 h-5" />
                 </button>
               </div>
               <div className="dialog-body space-y-4">
                 <div>
-                  <label className="label">اسم الفئة (عربي)</label>
+                  <label className="label">{t('categoryNameArLabel')}</label>
                   <input
                     type="text"
                     className="input"
@@ -3661,7 +4060,7 @@ export default function CafeApp() {
                   />
                 </div>
                 <div>
-                  <label className="label">اسم الفئة (إنجليزي)</label>
+                  <label className="label">{t('categoryNameEnLabel')}</label>
                   <input
                     type="text"
                     className="input"
@@ -3670,7 +4069,7 @@ export default function CafeApp() {
                   />
                 </div>
                 <div>
-                  <label className="label">رابط الصورة</label>
+                  <label className="label">{t('imageUrlLabel')}</label>
                   <input
                     type="text"
                     className="input"
@@ -3682,7 +4081,7 @@ export default function CafeApp() {
               </div>
               <div className="dialog-footer">
                 <button className="btn btn-primary w-full" onClick={saveCategory}>
-                  {editingCategory ? 'حفظ التغييرات' : 'إضافة الفئة'}
+                  {editingCategory ? t('saveChanges') : t('addCategoryAction')}
                 </button>
               </div>
             </div>
@@ -3696,14 +4095,14 @@ export default function CafeApp() {
             <div className="dialog-content animate-slide-up">
               <div className="dialog-handle" />
               <div className="dialog-header">
-                <h2 className="dialog-title">{editingTable ? 'تعديل الطاولة' : 'إضافة طاولة'}</h2>
+                <h2 className="dialog-title">{editingTable ? t('editTableTitle') : t('addTableTitle')}</h2>
                 <button className="btn btn-ghost btn-icon" onClick={() => setIsTableDialogOpen(false)}>
                   <X className="w-5 h-5" />
                 </button>
               </div>
               <div className="dialog-body space-y-4">
                 <div>
-                  <label className="label">رقم الطاولة</label>
+                  <label className="label">{t('tableNumber')}</label>
                   <input
                     type="number"
                     className="input"
@@ -3712,7 +4111,7 @@ export default function CafeApp() {
                   />
                 </div>
                 <div>
-                  <label className="label">عدد المقاعد</label>
+                  <label className="label">{t('seatsLabel')}</label>
                   <input
                     type="number"
                     className="input"
@@ -3730,11 +4129,11 @@ export default function CafeApp() {
                       setIsTableDialogOpen(false);
                     }}
                   >
-                    حذف
+                    {t('actionDelete')}
                   </button>
                 )}
                 <button className="btn btn-primary flex-1" onClick={saveTable}>
-                  حفظ
+                  {t('save')}
                 </button>
               </div>
             </div>
@@ -4370,7 +4769,7 @@ export default function CafeApp() {
           <div className="dialog-content animate-slide-up">
             <div className="dialog-handle" />
             <div className="dialog-header">
-              <h2 className="dialog-title text-center w-full">✅ تم إرسال طلبك!</h2>
+              <h2 className="dialog-title text-center w-full">✅ {t('orderSent')}</h2>
             </div>
             <div className="dialog-body text-center">
               <div className="order-success-icon mb-4">
@@ -4378,11 +4777,11 @@ export default function CafeApp() {
               </div>
               
               <p className="text-body text-[var(--text-secondary)] mb-6">
-                احتفظ بكود التتبع لمتابعة طلبك
+                {t('keepTrackingCode')}
               </p>
               
               <div className="order-code-display">
-                <div className="order-code-label">كود التتبع</div>
+                <div className="order-code-label">{t('trackingCode')}</div>
                 <div className="order-code-value">{lastOrderCode}</div>
               </div>
               
@@ -4391,7 +4790,7 @@ export default function CafeApp() {
                 onClick={copyTrackingCode}
               >
                 <Download className="w-4 h-4" />
-                نسخ الكود
+                {t('copyCode')}
               </button>
             </div>
             <div className="dialog-footer flex gap-3">
@@ -4399,13 +4798,13 @@ export default function CafeApp() {
                 className="btn btn-secondary flex-1"
                 onClick={() => setShowOrderSuccess(false)}
               >
-                إغلاق
+                {t('close')}
               </button>
               <button
                 className="btn btn-primary flex-1"
                 onClick={goToTrackOrder}
               >
-                متابعة الطلب
+                {t('continueTracking')}
               </button>
             </div>
           </div>
@@ -4419,14 +4818,14 @@ export default function CafeApp() {
           <div className="dialog-content animate-slide-up">
             <div className="dialog-handle" />
             <div className="dialog-header">
-              <h2 className="dialog-title">تسجيل دخول الإدارة</h2>
+              <h2 className="dialog-title">{t('adminLoginTitle')}</h2>
               <button className="btn btn-ghost btn-icon" onClick={() => setShowLoginDialog(false)}>
                 <X className="w-5 h-5" />
               </button>
             </div>
             <form className="dialog-body space-y-4" onSubmit={handleLogin}>
               <div>
-                <label className="label">البريد الإلكتروني</label>
+                <label className="label">{t('adminEmail')}</label>
                 <input
                   type="email"
                   className="input"
@@ -4437,7 +4836,7 @@ export default function CafeApp() {
                 />
               </div>
               <div>
-                <label className="label">كلمة المرور</label>
+                <label className="label">{t('password')}</label>
                 <input
                   type="password"
                   className="input"
@@ -4457,12 +4856,12 @@ export default function CafeApp() {
                 {isLoggingIn ? (
                   <>
                     <RefreshCw className="w-5 h-5 animate-spin" />
-                    جاري التحقق...
+                    {t('verifyInProgress')}
                   </>
                 ) : (
                   <>
                     <LogIn className="w-5 h-5" />
-                    تسجيل الدخول
+                    {t('signIn')}
                   </>
                 )}
               </button>
@@ -4478,7 +4877,7 @@ export default function CafeApp() {
           <div className="dialog-content animate-slide-up">
             <div className="dialog-handle" />
             <div className="dialog-header">
-              <h2 className="dialog-title">تأكيد الطلب</h2>
+              <h2 className="dialog-title">{t('orderConfirmation')}</h2>
               <button className="btn btn-ghost btn-icon" onClick={() => setShowOrderDialog(false)}>
                 <X className="w-5 h-5" />
               </button>
@@ -4488,13 +4887,13 @@ export default function CafeApp() {
               <div className="order-confirm-section">
                 <div className="order-confirm-section-header">
                   <TableIcon className="w-4 h-4" />
-                  <span>رقم الطاولة</span>
+                  <span>{t('tableNumber')}</span>
                   {isLoadingTablesStatus && <RefreshCw className="w-4 h-4 animate-spin text-[var(--text-muted)]" />}
                 </div>
                 {tables.length === 0 ? (
                   <div className="order-confirm-empty">
                     <AlertTriangle className="w-5 h-5" />
-                    <span>لا توجد طاولات متاحة</span>
+                    <span>{t('noTablesAvailable')}</span>
                   </div>
                 ) : (
                   <>
@@ -4525,7 +4924,7 @@ export default function CafeApp() {
                     {occupiedTables.size > 0 && (
                       <div className="mt-2 text-small text-[var(--text-muted)] flex items-center gap-2">
                         <Ban className="w-4 h-4 text-[var(--error)]" />
-                        <span>الطاولات المحجوبة لديها طلبات جارية</span>
+                        <span>{t('blockedTablesHint')}</span>
                       </div>
                     )}
                   </>
@@ -4536,14 +4935,14 @@ export default function CafeApp() {
               <div className="order-confirm-section">
                 <div className="order-confirm-section-header">
                   <ShoppingCart className="w-4 h-4" />
-                  <span>الطلب</span>
-                  <span className="order-items-count">{getSelectedProductsList().length} منتج</span>
+                  <span>{t('orderLabel')}</span>
+                  <span className="order-items-count">{getSelectedProductsList().length} {t('orderItemWord')}</span>
                 </div>
                 <div className="order-items-list">
                   {getSelectedProductsList().map(({ product, quantity }) => (
                     <div key={product.id} className="order-item-row">
                       <div className="order-item-info">
-                        <span className="order-item-name">{product.nameAr}</span>
+                        <span className="order-item-name">{getProductDisplayName(product)}</span>
                         <span className="order-item-price">{product.price} {currency}</span>
                       </div>
                       <div className="order-item-qty">×{quantity}</div>
@@ -4554,7 +4953,7 @@ export default function CafeApp() {
 
                 {/* Total - moved inside order summary */}
                 <div className="order-total-card">
-                  <span className="order-total-label">المجموع</span>
+                  <span className="order-total-label">{t('total')}</span>
                   <span className="order-total-value">{getOrderTotal().toFixed(2)} {currency}</span>
                 </div>
               </div>
@@ -4570,12 +4969,12 @@ export default function CafeApp() {
                 {isSubmitting ? (
                   <>
                     <RefreshCw className="w-5 h-5 animate-spin" />
-                    <span>جاري الإرسال...</span>
+                    <span>{t('sending')}</span>
                   </>
                 ) : (
                   <>
                     <Check className="w-5 h-5" />
-                    <span>تأكيد الطلب</span>
+                    <span>{t('confirmOrder')}</span>
                   </>
                 )}
               </button>
@@ -4584,7 +4983,7 @@ export default function CafeApp() {
                 onClick={() => setShowOrderDialog(false)}
               >
                 <X className="w-4 h-4" />
-                <span>إلغاء</span>
+                <span>{t('cancel')}</span>
               </button>
             </div>
           </div>
