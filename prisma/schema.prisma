@@ -15,7 +15,6 @@ datasource db {
 model Settings {
   id                  String   @id @default(cuid())
   cafeName            String   @default("L'EscoBar")
-  language            String   @default("ar") // لغة الواجهة (ar/en/fr)
   currency            String   @default("د.ت")
   logo                String?  // شعار المقهى
   primaryColor        String   @default("#6F4E37") // اللون الرئيسي (بني القهوة)
