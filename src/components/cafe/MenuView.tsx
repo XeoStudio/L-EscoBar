@@ -60,6 +60,9 @@ type AppLanguage = 'ar' | 'en' | 'fr';
 
 const SUPPORTED_LANGUAGES: AppLanguage[] = ['ar', 'en', 'fr'];
 const LANGUAGE_STORAGE_KEY = 'lescobar-language';
+const ADMIN_ORDERS_POLL_INTERVAL_MS = 100;
+const TRACKING_POLL_INTERVAL_MS = 100;
+const TABLE_STATUS_POLL_INTERVAL_MS = 50;
 
 const resolveLanguage = (value: string | null | undefined): AppLanguage | null => {
   if (!value) return null;
@@ -1507,6 +1510,9 @@ export default function CafeApp() {
   const customerPollingRef = useRef<NodeJS.Timeout | null>(null);
   const tablePollingRef = useRef<NodeJS.Timeout | null>(null);
   const prevOrdersCountRef = useRef<number>(0);
+  const isFetchingOrdersRef = useRef(false);
+  const isFetchingTrackedOrderRef = useRef(false);
+  const isFetchingTableStatusRef = useRef(false);
   
   // Order tracking states for customer
   const [trackingCode, setTrackingCode] = useState('');
@@ -1519,6 +1525,10 @@ export default function CafeApp() {
   // Table status states
   const [occupiedTables, setOccupiedTables] = useState<Set<string>>(new Set());
   const [isLoadingTablesStatus, setIsLoadingTablesStatus] = useState(false);
+  const [isPageVisible, setIsPageVisible] = useState(() => {
+    if (typeof document === 'undefined') return true;
+    return document.visibilityState === 'visible';
+  });
   
   // Form states
   const [productForm, setProductForm] = useState({
@@ -1648,10 +1658,11 @@ export default function CafeApp() {
 
   // Realtime polling for admin - always poll when authenticated
   useEffect(() => {
-    if (isAdminAuthenticated) {
+    if (isAdminAuthenticated && isPageVisible) {
+      fetchOrders();
       pollingRef.current = setInterval(() => {
         fetchOrders();
-      }, 1000); // Poll every 1 second for real-time updates
+      }, ADMIN_ORDERS_POLL_INTERVAL_MS);
     }
     
     return () => {
@@ -1659,14 +1670,15 @@ export default function CafeApp() {
         clearInterval(pollingRef.current);
       }
     };
-  }, [isAdminAuthenticated]);
+  }, [isAdminAuthenticated, isPageVisible]);
   
   // Realtime polling for customer tracking
   useEffect(() => {
-    if (customerTab === 'track' && trackedOrder) {
+    if (customerTab === 'track' && trackedOrder && isPageVisible) {
+      refreshTrackedOrder();
       customerPollingRef.current = setInterval(() => {
         refreshTrackedOrder();
-      }, 1000); // Poll every 1 second for real-time updates
+      }, TRACKING_POLL_INTERVAL_MS);
     }
     
     return () => {
@@ -1674,10 +1686,13 @@ export default function CafeApp() {
         clearInterval(customerPollingRef.current);
       }
     };
-  }, [customerTab, trackedOrder]);
+  }, [customerTab, trackedOrder, isPageVisible]);
 
   // Fetch table status (occupied/available)
   const fetchTablesStatus = useCallback(async () => {
+    if (isFetchingTableStatusRef.current) return;
+
+    isFetchingTableStatusRef.current = true;
     try {
       const res = await fetch('/api/tables/status', { 
         cache: 'no-store'
@@ -1690,30 +1705,44 @@ export default function CafeApp() {
       
       if (Array.isArray(data)) {
         const occupied = new Set(data.filter(t => t.isOccupied).map(t => t.id));
-        console.log('🔴 Occupied tables:', Array.from(occupied));
         setOccupiedTables(occupied);
       }
     } catch (error) {
       console.error('fetchTablesStatus error:', error);
+    } finally {
+      isFetchingTableStatusRef.current = false;
     }
   }, []);
 
   // Realtime polling for table status (always poll for customers)
   useEffect(() => {
-    // Poll immediately on mount
+    if (isAdminAuthenticated || !isPageVisible || !showOrderDialog) return;
+
     fetchTablesStatus();
-    
-    // Then poll every 200ms for instant table lock (fast response)
+
     tablePollingRef.current = setInterval(() => {
       fetchTablesStatus();
-    }, 200);
+    }, TABLE_STATUS_POLL_INTERVAL_MS);
     
     return () => {
       if (tablePollingRef.current) {
         clearInterval(tablePollingRef.current);
       }
     };
-  }, [fetchTablesStatus]);
+  }, [fetchTablesStatus, isAdminAuthenticated, isPageVisible, showOrderDialog]);
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+
+    const handleVisibilityChange = () => {
+      setIsPageVisible(document.visibilityState === 'visible');
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
 
   // Sound notification for new orders
   useEffect(() => {
@@ -1779,13 +1808,18 @@ export default function CafeApp() {
   const fetchAllData = async () => {
     setIsLoading(true);
     try {
-      await Promise.allSettled([
+      const requests: Promise<unknown>[] = [
         fetchSettings(),
         fetchCategories(),
         fetchProducts(),
         fetchTables(),
-        fetchOrders()
-      ]);
+      ];
+
+      if (isAdminAuthenticated) {
+        requests.push(fetchOrders());
+      }
+
+      await Promise.allSettled(requests);
     } catch (error) {
       console.error('fetchAllData error:', error);
     } finally {
@@ -1892,6 +1926,9 @@ export default function CafeApp() {
   };
 
   const fetchOrders = async () => {
+    if (isFetchingOrdersRef.current) return;
+
+    isFetchingOrdersRef.current = true;
     try {
       const res = await fetch('/api/orders', { cache: 'no-store' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -1899,7 +1936,8 @@ export default function CafeApp() {
       setOrders(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('fetchOrders error:', error);
-      throw error;
+    } finally {
+      isFetchingOrdersRef.current = false;
     }
   };
 
@@ -2045,7 +2083,9 @@ export default function CafeApp() {
         setSelectedProducts(new Map());
         setSelectedTableId('');
         setShowOrderDialog(false);
-        fetchOrders();
+        if (isAdminAuthenticated) {
+          fetchOrders();
+        }
       } else if (res.status === 409) {
         // Table occupied
         const data = await res.json();
@@ -2076,20 +2116,23 @@ export default function CafeApp() {
       console.error('Submit order error:', error);
       toast({ title: '❌', description: t('sending'), variant: 'destructive' });
     } finally {
-      setTimeout(() => setIsSubmitting(false), 1000);
+      setIsSubmitting(false);
     }
-  }, [isSubmitting, selectedTableId, selectedProducts, tables]);
+  }, [isSubmitting, selectedTableId, selectedProducts, tables, isAdminAuthenticated]);
 
   // Track order by code
-  const trackOrder = async () => {
-    if (!trackingCode.trim()) {
+  const trackOrder = async (codeOrEvent?: string | React.MouseEvent<HTMLButtonElement>) => {
+    const code = typeof codeOrEvent === 'string' ? codeOrEvent : trackingCode;
+    const normalizedCode = code.trim().toUpperCase();
+    if (!normalizedCode) {
       toast({ title: '⚠️', description: t('enterTrackingFirst'), variant: 'destructive' });
       return;
     }
     
+    setTrackingCode(normalizedCode);
     setIsTrackingLoading(true);
     try {
-      const res = await fetch(`/api/track?code=${trackingCode.trim().toUpperCase()}`, {
+      const res = await fetch(`/api/track?code=${normalizedCode}`, {
         cache: 'no-store'
       });
       
@@ -2113,6 +2156,9 @@ export default function CafeApp() {
   // Refresh tracked order (for polling)
   const refreshTrackedOrder = async () => {
     if (!trackedOrder?.orderCode) return;
+    if (isFetchingTrackedOrderRef.current) return;
+
+    isFetchingTrackedOrderRef.current = true;
     
     try {
       const res = await fetch(`/api/track?code=${trackedOrder.orderCode}`, {
@@ -2125,6 +2171,8 @@ export default function CafeApp() {
       }
     } catch {
       // Silent fail for polling
+    } finally {
+      isFetchingTrackedOrderRef.current = false;
     }
   };
 
@@ -2147,6 +2195,12 @@ export default function CafeApp() {
 
   // Order Status Update
   const updateOrderStatus = async (orderId: string, status: OrderStatus) => {
+    const previousOrder = orders.find((order) => order.id === orderId);
+    const previousTrackedOrderStatus = trackedOrder?.id === orderId ? trackedOrder.status : null;
+
+    setOrders((prev) => prev.map((order) => (order.id === orderId ? { ...order, status } : order)));
+    setTrackedOrder((prev) => (prev && prev.id === orderId ? { ...prev, status } : prev));
+
     try {
       const res = await fetch(`/api/orders/${orderId}`, {
         method: 'PUT',
@@ -2156,12 +2210,26 @@ export default function CafeApp() {
       
       if (res.ok) {
         toast({ title: '✅', description: t('orders') });
-        fetchOrders();
+        if (isAdminAuthenticated) {
+          fetchOrders();
+        }
       } else {
         const data = await res.json();
+        if (previousOrder) {
+          setOrders((prev) => prev.map((order) => (order.id === orderId ? { ...order, status: previousOrder.status } : order)));
+        }
+        if (previousTrackedOrderStatus) {
+          setTrackedOrder((prev) => (prev && prev.id === orderId ? { ...prev, status: previousTrackedOrderStatus } : prev));
+        }
         toast({ title: '❌', description: data.error || t('orders'), variant: 'destructive' });
       }
     } catch {
+      if (previousOrder) {
+        setOrders((prev) => prev.map((order) => (order.id === orderId ? { ...order, status: previousOrder.status } : order)));
+      }
+      if (previousTrackedOrderStatus) {
+        setTrackedOrder((prev) => (prev && prev.id === orderId ? { ...prev, status: previousTrackedOrderStatus } : prev));
+      }
       toast({ title: '❌', description: t('orders'), variant: 'destructive' });
     }
   };
@@ -4455,7 +4523,7 @@ export default function CafeApp() {
                     className="track-last-order-btn"
                     onClick={() => {
                       setTrackingCode(lastOrderCode);
-                      setTimeout(trackOrder, 100);
+                      trackOrder(lastOrderCode);
                     }}
                   >
                     <ClipboardList className="w-4 h-4" />
