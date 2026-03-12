@@ -15,19 +15,19 @@ export function Toaster() {
   const { toasts } = useToast()
 
   return (
-    <ToastProvider swipeDirection="down">
+    <ToastProvider swipeDirection="down" duration={3800}>
       {toasts.map(function ({ id, title, description, action, variant, ...props }) {
         return (
           <Toast key={id} variant={variant || "default"} {...props}>
-            <div className="flex items-center gap-3 w-full pr-6">
+            <div className="flex w-full items-start gap-3 pr-8">
               <ToastIcon variant={variant as "default" | "success" | "destructive" | "warning" | "info"} />
-              <div className="grid gap-1 flex-1">
+              <div className="grid flex-1 gap-1.5">
                 {title && <ToastTitle>{title}</ToastTitle>}
                 {description && (
                   <ToastDescription>{description}</ToastDescription>
                 )}
+                {action ? <div className="pt-1">{action}</div> : null}
               </div>
-              {action}
             </div>
             <ToastClose />
           </Toast>
