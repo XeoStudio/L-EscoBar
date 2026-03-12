@@ -59,6 +59,7 @@ import {
 type AppLanguage = 'ar' | 'en' | 'fr';
 
 const SUPPORTED_LANGUAGES: AppLanguage[] = ['ar', 'en', 'fr'];
+const LANGUAGE_STORAGE_KEY = 'lescobar-language';
 
 const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
   ar: {
@@ -1118,7 +1119,10 @@ export default function CafeApp() {
   const [tableForm, setTableForm] = useState({ number: '', seats: '4', description: '' });
   const [settingsForm, setSettingsForm] = useState({ 
     cafeName: '', 
-    language: 'ar' as AppLanguage,
+    language:
+      typeof window !== 'undefined' && SUPPORTED_LANGUAGES.includes((localStorage.getItem(LANGUAGE_STORAGE_KEY) as AppLanguage) || 'ar')
+        ? ((localStorage.getItem(LANGUAGE_STORAGE_KEY) as AppLanguage) || 'ar')
+        : ('ar' as AppLanguage),
     currency: 'د.ت',
     logo: '',
     primaryColor: DEFAULT_THEME_COLORS.primaryColor,
@@ -1393,10 +1397,19 @@ export default function CafeApp() {
       const res = await fetch('/api/settings', { cache: 'no-store' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
+      const storedLanguage = typeof window !== 'undefined' ? localStorage.getItem(LANGUAGE_STORAGE_KEY) : null;
+      const languageFromSettings = SUPPORTED_LANGUAGES.includes(data.language as AppLanguage)
+        ? (data.language as AppLanguage)
+        : null;
+      const languageFromStorage = SUPPORTED_LANGUAGES.includes((storedLanguage as AppLanguage) || 'ar')
+        ? (storedLanguage as AppLanguage)
+        : null;
+      const effectiveLanguage = languageFromSettings || languageFromStorage || 'ar';
+
       setSettings(data);
       setSettingsForm({ 
         cafeName: data.cafeName, 
-        language: SUPPORTED_LANGUAGES.includes(data.language as AppLanguage) ? data.language : 'ar',
+        language: effectiveLanguage,
         currency: data.currency,
         logo: data.logo || '',
         primaryColor: data.primaryColor || DEFAULT_THEME_COLORS.primaryColor,
@@ -1413,6 +1426,9 @@ export default function CafeApp() {
         enableTableService: data.enableTableService ?? true,
         enableDelivery: data.enableDelivery ?? false
       });
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(LANGUAGE_STORAGE_KEY, effectiveLanguage);
+      }
       applyThemeColors({
         primaryColor: data.primaryColor,
         accentColor: data.accentColor,
@@ -1778,6 +1794,13 @@ export default function CafeApp() {
       if (res.ok) {
         const data = await res.json();
         setSettings(data);
+        const savedLanguage = SUPPORTED_LANGUAGES.includes(data.language as AppLanguage)
+          ? (data.language as AppLanguage)
+          : settingsForm.language;
+        if (typeof window !== 'undefined') {
+          localStorage.setItem(LANGUAGE_STORAGE_KEY, savedLanguage);
+        }
+        setSettingsForm((prev) => ({ ...prev, language: savedLanguage }));
         applyThemeColors({
           primaryColor: data.primaryColor,
           accentColor: data.accentColor,
@@ -2029,6 +2052,9 @@ export default function CafeApp() {
     if (typeof document === 'undefined') return;
     document.documentElement.lang = language;
     document.documentElement.dir = appDir;
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+    }
   }, [language, appDir]);
 
   const currency = settings?.currency || 'د.ت';
@@ -2984,6 +3010,7 @@ export default function CafeApp() {
                           const nextForm = { ...settingsForm, language: nextLanguage };
                           setSettingsForm(nextForm);
                           setSettings((prev) => (prev ? { ...prev, language: nextLanguage } : prev));
+                          localStorage.setItem(LANGUAGE_STORAGE_KEY, nextLanguage);
                         }}
                       >
                         <option value="ar">{t('arabic')}</option>
