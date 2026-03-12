@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Settings, Category, Product, Table, Order, OrderStatus, Reports, ORDER_STATUS_AR } from '@/types';
 import { toast } from '@/hooks/use-toast';
 import { 
@@ -145,6 +145,154 @@ const DEFAULT_THEME_COLORS = {
   textPrimaryColor: '#3D2314',
 };
 
+const THEME_PRESETS = [
+  {
+    id: 'coffee-classic',
+    name: 'قهوة كلاسيك',
+    description: 'دافئ واحترافي للمقاهي',
+    colors: {
+      primaryColor: '#6F4E37',
+      accentColor: '#D4A574',
+      backgroundColor: '#FDF8F3',
+      surfaceColor: '#FFFFFF',
+      textPrimaryColor: '#3D2314',
+    },
+  },
+  {
+    id: 'emerald-fresh',
+    name: 'زمردي منعش',
+    description: 'إحساس عصري وحيوي',
+    colors: {
+      primaryColor: '#1F7A5A',
+      accentColor: '#48BFA3',
+      backgroundColor: '#F2FBF8',
+      surfaceColor: '#FFFFFF',
+      textPrimaryColor: '#123B2E',
+    },
+  },
+  {
+    id: 'midnight-lounge',
+    name: 'ليلي أنيق',
+    description: 'ستايل فاخر للمقاهي الراقية',
+    colors: {
+      primaryColor: '#243447',
+      accentColor: '#C9A227',
+      backgroundColor: '#F4F7FA',
+      surfaceColor: '#FFFFFF',
+      textPrimaryColor: '#182430',
+    },
+  },
+  {
+    id: 'sunset-vibe',
+    name: 'غروب دافئ',
+    description: 'ألوان ناعمة ومبهجة',
+    colors: {
+      primaryColor: '#B55239',
+      accentColor: '#F3A357',
+      backgroundColor: '#FFF7F1',
+      surfaceColor: '#FFFFFF',
+      textPrimaryColor: '#4B241A',
+    },
+  },
+];
+
+const COLOR_MENU_OPTIONS = [
+  { name: 'قهوة', value: '#6F4E37' },
+  { name: 'ذهبي', value: '#C9A227' },
+  { name: 'كهرماني', value: '#D4A574' },
+  { name: 'أخضر', value: '#1F7A5A' },
+  { name: 'فيروزي', value: '#2D9C95' },
+  { name: 'كحلي', value: '#243447' },
+  { name: 'أزرق ملكي', value: '#365DA8' },
+  { name: 'بنفسجي غامق', value: '#52407A' },
+  { name: 'أحمر نبيذي', value: '#8B2E3D' },
+  { name: 'رمادي فحمي', value: '#2E2E32' },
+  { name: 'أبيض', value: '#FFFFFF' },
+  { name: 'كريمي', value: '#FDF8F3' },
+];
+
+const normalizeHex = (value: string) => {
+  const hex = value.trim();
+  const match = /^#([\da-fA-F]{6})$/.exec(hex);
+  return match ? `#${match[1].toUpperCase()}` : null;
+};
+
+const hexToRgb = (hex: string) => {
+  const normalized = normalizeHex(hex);
+  if (!normalized) return null;
+  const raw = normalized.slice(1);
+  const r = parseInt(raw.slice(0, 2), 16);
+  const g = parseInt(raw.slice(2, 4), 16);
+  const b = parseInt(raw.slice(4, 6), 16);
+  return { r, g, b };
+};
+
+const rgbToHex = (r: number, g: number, b: number) => {
+  const toHex = (v: number) => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0').toUpperCase();
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+};
+
+const mixHex = (base: string, other: string, ratio: number) => {
+  const a = hexToRgb(base);
+  const b = hexToRgb(other);
+  if (!a || !b) return base;
+  const clamped = Math.max(0, Math.min(1, ratio));
+  return rgbToHex(
+    a.r * (1 - clamped) + b.r * clamped,
+    a.g * (1 - clamped) + b.g * clamped,
+    a.b * (1 - clamped) + b.b * clamped
+  );
+};
+
+const getContrastText = (background: string) => {
+  const rgb = hexToRgb(background);
+  if (!rgb) return '#1F1F1F';
+  const luminance = (0.299 * rgb.r + 0.587 * rgb.g + 0.114 * rgb.b) / 255;
+  return luminance > 0.62 ? '#1F1F1F' : '#FFFFFF';
+};
+
+const buildThemeSuggestions = (primaryColor: string) => {
+  const primary = normalizeHex(primaryColor) || DEFAULT_THEME_COLORS.primaryColor;
+  return [
+    {
+      id: 'balanced',
+      label: 'متوازن',
+      hint: 'متزن ومريح للعين',
+      colors: {
+        primaryColor: primary,
+        accentColor: mixHex(primary, '#FFFFFF', 0.4),
+        backgroundColor: mixHex(primary, '#FFFFFF', 0.9),
+        surfaceColor: '#FFFFFF',
+        textPrimaryColor: mixHex(primary, '#000000', 0.55),
+      },
+    },
+    {
+      id: 'bold',
+      label: 'جريء',
+      hint: 'تباين أوضح وحضور أقوى',
+      colors: {
+        primaryColor: primary,
+        accentColor: mixHex(primary, '#FFD166', 0.55),
+        backgroundColor: mixHex(primary, '#FFFFFF', 0.84),
+        surfaceColor: mixHex(primary, '#FFFFFF', 0.96),
+        textPrimaryColor: mixHex(primary, '#000000', 0.65),
+      },
+    },
+    {
+      id: 'soft',
+      label: 'ناعم',
+      hint: 'ألوان هادئة وتجربة لطيفة',
+      colors: {
+        primaryColor: primary,
+        accentColor: mixHex(primary, '#A8DADC', 0.45),
+        backgroundColor: mixHex(primary, '#FFFFFF', 0.93),
+        surfaceColor: mixHex(primary, '#FFFFFF', 0.985),
+        textPrimaryColor: mixHex(primary, '#000000', 0.48),
+      },
+    },
+  ];
+};
+
 export default function CafeApp() {
   const THEME_STORAGE_KEY = 'lescobar-theme';
 
@@ -267,6 +415,36 @@ export default function CafeApp() {
     rootStyle.setProperty('--surface', surface);
     rootStyle.setProperty('--text-primary', textPrimary);
   }, []);
+
+  const themeSuggestions = useMemo(
+    () => buildThemeSuggestions(settingsForm.primaryColor),
+    [settingsForm.primaryColor]
+  );
+
+  const updateThemeColor = (
+    key: 'primaryColor' | 'accentColor' | 'backgroundColor' | 'surfaceColor' | 'textPrimaryColor',
+    value: string,
+    allowInvalidHex: boolean = false
+  ) => {
+    const nextValue = allowInvalidHex ? value : normalizeHex(value);
+    if (!nextValue) return;
+
+    const nextForm = { ...settingsForm, [key]: nextValue };
+    setSettingsForm(nextForm);
+    applyThemeColors(nextForm);
+  };
+
+  const applyThemePack = (colors: {
+    primaryColor: string;
+    accentColor: string;
+    backgroundColor: string;
+    surfaceColor: string;
+    textPrimaryColor: string;
+  }) => {
+    const nextForm = { ...settingsForm, ...colors };
+    setSettingsForm(nextForm);
+    applyThemeColors(nextForm);
+  };
 
   // Check auth on mount
   useEffect(() => {
@@ -2129,9 +2307,50 @@ export default function CafeApp() {
                   <div className="settings-section-icon">
                     <SettingsIcon className="w-5 h-5" />
                   </div>
-                  <div className="settings-section-title">المظهر</div>
+                <div className="settings-section-title">المظهر</div>
                 </div>
                 <div className="settings-section-body">
+                  <div className="settings-field">
+                    <label className="settings-label">قوالب جاهزة</label>
+                    <div className="theme-preset-grid">
+                      {THEME_PRESETS.map((preset) => (
+                        <button
+                          key={preset.id}
+                          type="button"
+                          className="theme-preset-card"
+                          onClick={() => applyThemePack(preset.colors)}
+                        >
+                          <div className="theme-preset-swatches">
+                            <span style={{ backgroundColor: preset.colors.primaryColor }} />
+                            <span style={{ backgroundColor: preset.colors.accentColor }} />
+                            <span style={{ backgroundColor: preset.colors.backgroundColor }} />
+                            <span style={{ backgroundColor: preset.colors.textPrimaryColor }} />
+                          </div>
+                          <div className="theme-preset-name">{preset.name}</div>
+                          <div className="theme-preset-description">{preset.description}</div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="settings-field">
+                    <label className="settings-label">اقتراحات ذكية حسب اللون الرئيسي</label>
+                    <div className="theme-suggestion-row">
+                      {themeSuggestions.map((suggestion) => (
+                        <button
+                          key={suggestion.id}
+                          type="button"
+                          className="theme-suggestion-chip"
+                          onClick={() => applyThemePack(suggestion.colors)}
+                        >
+                          <span className="theme-suggestion-dot" style={{ backgroundColor: suggestion.colors.accentColor }} />
+                          <span>{suggestion.label}</span>
+                          <small>{suggestion.hint}</small>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
                   <div className="settings-row">
                     <div className="settings-field">
                       <label className="settings-label">اللون الرئيسي</label>
@@ -2140,17 +2359,30 @@ export default function CafeApp() {
                           type="color"
                           className="color-picker-preview"
                           value={settingsForm.primaryColor}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            setSettingsForm({ ...settingsForm, primaryColor: value });
-                            applyThemeColors({ ...settingsForm, primaryColor: value });
-                          }}
+                          onChange={(e) => updateThemeColor('primaryColor', e.target.value)}
                         />
+                        <select
+                          className="settings-input color-menu-select"
+                          value=""
+                          onChange={(e) => {
+                            if (!e.target.value) return;
+                            updateThemeColor('primaryColor', e.target.value);
+                            e.currentTarget.value = '';
+                          }}
+                        >
+                          <option value="">اختر من القائمة</option>
+                          {COLOR_MENU_OPTIONS.map((option) => (
+                            <option key={`primary-${option.value}`} value={option.value}>
+                              {option.name} - {option.value}
+                            </option>
+                          ))}
+                        </select>
                         <input
                           type="text"
                           className="settings-input color-picker-input"
                           value={settingsForm.primaryColor}
-                          onChange={(e) => setSettingsForm({ ...settingsForm, primaryColor: e.target.value })}
+                          onChange={(e) => updateThemeColor('primaryColor', e.target.value, true)}
+                          onBlur={(e) => updateThemeColor('primaryColor', e.target.value)}
                           placeholder="#6F4E37"
                         />
                       </div>
@@ -2163,17 +2395,30 @@ export default function CafeApp() {
                           type="color"
                           className="color-picker-preview"
                           value={settingsForm.accentColor}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            setSettingsForm({ ...settingsForm, accentColor: value });
-                            applyThemeColors({ ...settingsForm, accentColor: value });
-                          }}
+                          onChange={(e) => updateThemeColor('accentColor', e.target.value)}
                         />
+                        <select
+                          className="settings-input color-menu-select"
+                          value=""
+                          onChange={(e) => {
+                            if (!e.target.value) return;
+                            updateThemeColor('accentColor', e.target.value);
+                            e.currentTarget.value = '';
+                          }}
+                        >
+                          <option value="">اختر من القائمة</option>
+                          {COLOR_MENU_OPTIONS.map((option) => (
+                            <option key={`accent-${option.value}`} value={option.value}>
+                              {option.name} - {option.value}
+                            </option>
+                          ))}
+                        </select>
                         <input
                           type="text"
                           className="settings-input color-picker-input"
                           value={settingsForm.accentColor}
-                          onChange={(e) => setSettingsForm({ ...settingsForm, accentColor: e.target.value })}
+                          onChange={(e) => updateThemeColor('accentColor', e.target.value, true)}
+                          onBlur={(e) => updateThemeColor('accentColor', e.target.value)}
                           placeholder="#D4A574"
                         />
                       </div>
@@ -2186,17 +2431,30 @@ export default function CafeApp() {
                           type="color"
                           className="color-picker-preview"
                           value={settingsForm.backgroundColor}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            setSettingsForm({ ...settingsForm, backgroundColor: value });
-                            applyThemeColors({ ...settingsForm, backgroundColor: value });
-                          }}
+                          onChange={(e) => updateThemeColor('backgroundColor', e.target.value)}
                         />
+                        <select
+                          className="settings-input color-menu-select"
+                          value=""
+                          onChange={(e) => {
+                            if (!e.target.value) return;
+                            updateThemeColor('backgroundColor', e.target.value);
+                            e.currentTarget.value = '';
+                          }}
+                        >
+                          <option value="">اختر من القائمة</option>
+                          {COLOR_MENU_OPTIONS.map((option) => (
+                            <option key={`background-${option.value}`} value={option.value}>
+                              {option.name} - {option.value}
+                            </option>
+                          ))}
+                        </select>
                         <input
                           type="text"
                           className="settings-input color-picker-input"
                           value={settingsForm.backgroundColor}
-                          onChange={(e) => setSettingsForm({ ...settingsForm, backgroundColor: e.target.value })}
+                          onChange={(e) => updateThemeColor('backgroundColor', e.target.value, true)}
+                          onBlur={(e) => updateThemeColor('backgroundColor', e.target.value)}
                           placeholder="#FDF8F3"
                         />
                       </div>
@@ -2209,17 +2467,30 @@ export default function CafeApp() {
                           type="color"
                           className="color-picker-preview"
                           value={settingsForm.surfaceColor}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            setSettingsForm({ ...settingsForm, surfaceColor: value });
-                            applyThemeColors({ ...settingsForm, surfaceColor: value });
-                          }}
+                          onChange={(e) => updateThemeColor('surfaceColor', e.target.value)}
                         />
+                        <select
+                          className="settings-input color-menu-select"
+                          value=""
+                          onChange={(e) => {
+                            if (!e.target.value) return;
+                            updateThemeColor('surfaceColor', e.target.value);
+                            e.currentTarget.value = '';
+                          }}
+                        >
+                          <option value="">اختر من القائمة</option>
+                          {COLOR_MENU_OPTIONS.map((option) => (
+                            <option key={`surface-${option.value}`} value={option.value}>
+                              {option.name} - {option.value}
+                            </option>
+                          ))}
+                        </select>
                         <input
                           type="text"
                           className="settings-input color-picker-input"
                           value={settingsForm.surfaceColor}
-                          onChange={(e) => setSettingsForm({ ...settingsForm, surfaceColor: e.target.value })}
+                          onChange={(e) => updateThemeColor('surfaceColor', e.target.value, true)}
+                          onBlur={(e) => updateThemeColor('surfaceColor', e.target.value)}
                           placeholder="#FFFFFF"
                         />
                       </div>
@@ -2232,19 +2503,53 @@ export default function CafeApp() {
                           type="color"
                           className="color-picker-preview"
                           value={settingsForm.textPrimaryColor}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            setSettingsForm({ ...settingsForm, textPrimaryColor: value });
-                            applyThemeColors({ ...settingsForm, textPrimaryColor: value });
-                          }}
+                          onChange={(e) => updateThemeColor('textPrimaryColor', e.target.value)}
                         />
+                        <select
+                          className="settings-input color-menu-select"
+                          value=""
+                          onChange={(e) => {
+                            if (!e.target.value) return;
+                            updateThemeColor('textPrimaryColor', e.target.value);
+                            e.currentTarget.value = '';
+                          }}
+                        >
+                          <option value="">اختر من القائمة</option>
+                          {COLOR_MENU_OPTIONS.map((option) => (
+                            <option key={`text-${option.value}`} value={option.value}>
+                              {option.name} - {option.value}
+                            </option>
+                          ))}
+                        </select>
                         <input
                           type="text"
                           className="settings-input color-picker-input"
                           value={settingsForm.textPrimaryColor}
-                          onChange={(e) => setSettingsForm({ ...settingsForm, textPrimaryColor: e.target.value })}
+                          onChange={(e) => updateThemeColor('textPrimaryColor', e.target.value, true)}
+                          onBlur={(e) => updateThemeColor('textPrimaryColor', e.target.value)}
                           placeholder="#3D2314"
                         />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="theme-live-preview" style={{ backgroundColor: settingsForm.backgroundColor }}>
+                    <div className="theme-live-surface" style={{ backgroundColor: settingsForm.surfaceColor, color: settingsForm.textPrimaryColor }}>
+                      <div className="theme-live-title">معاينة مباشرة للألوان</div>
+                      <div className="theme-live-text">هذا مثال سريع لكيف سيظهر التصميم للزوار.</div>
+                      <div className="theme-live-actions">
+                        <span
+                          className="theme-live-badge"
+                          style={{ backgroundColor: settingsForm.primaryColor, color: getContrastText(settingsForm.primaryColor) }}
+                        >
+                          اللون الرئيسي
+                        </span>
+                        <span
+                          className="theme-live-badge"
+                          style={{ backgroundColor: settingsForm.accentColor, color: getContrastText(settingsForm.accentColor) }}
+                        >
+                          لون الإبراز
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -2252,13 +2557,7 @@ export default function CafeApp() {
                   <button
                     className="btn btn-secondary w-full mt-2"
                     type="button"
-                    onClick={() => {
-                      setSettingsForm({
-                        ...settingsForm,
-                        ...DEFAULT_THEME_COLORS,
-                      });
-                      applyThemeColors(DEFAULT_THEME_COLORS);
-                    }}
+                    onClick={() => applyThemePack(DEFAULT_THEME_COLORS)}
                   >
                     إعادة ألوان الثيم الافتراضية
                   </button>
