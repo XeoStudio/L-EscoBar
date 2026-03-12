@@ -1489,7 +1489,6 @@ export default function CafeApp() {
   const [isTableDialogOpen, setIsTableDialogOpen] = useState(false);
   const [reportPeriod, setReportPeriod] = useState('today');
   const [soundEnabled, setSoundEnabled] = useState(true);
-  const darkMode = false;
   const [orderFilter, setOrderFilter] = useState<OrderStatus | 'all'>('all');
   
   // Database management states
@@ -1604,15 +1603,7 @@ export default function CafeApp() {
     [settingsForm.primaryColor]
   );
 
-  const recommendedThemePresets = useMemo(
-    () => THEME_PRESETS.filter((preset) => preset.mode === (darkMode ? 'dark' : 'light')),
-    [darkMode]
-  );
-
-  const alternativeThemePresets = useMemo(
-    () => THEME_PRESETS.filter((preset) => preset.mode !== (darkMode ? 'dark' : 'light')),
-    [darkMode]
-  );
+  const recommendedThemePresets = useMemo(() => THEME_PRESETS, []);
 
   const updateThemeColor = (
     key: 'primaryColor' | 'accentColor' | 'backgroundColor' | 'surfaceColor' | 'textPrimaryColor',
@@ -3614,14 +3605,6 @@ export default function CafeApp() {
                 <div className="settings-section-body">
                   <div className="settings-field">
                     <label className="settings-label">{t('templatesSmart')}</label>
-                    <div className="theme-preset-hint">
-                      {darkMode
-                        ? t('darkActiveHint')
-                        : t('lightActiveHint')}
-                    </div>
-                    <div className="theme-preset-group-title">
-                      {darkMode ? t('darkRecommended') : t('lightRecommended')}
-                    </div>
                     <div className="theme-preset-grid">
                       {recommendedThemePresets.map((preset) => (
                         <button
@@ -3638,35 +3621,6 @@ export default function CafeApp() {
                           </div>
                           <div className="theme-preset-name">{getPresetText(preset).name}</div>
                           <div className="theme-preset-description">{getPresetText(preset).description}</div>
-                          <div className={`theme-preset-mode ${preset.mode === 'dark' ? 'dark' : 'light'}`}>
-                            {preset.mode === 'dark' ? t('darkComfort') : t('lightProfessional')}
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-
-                    <div className="theme-preset-group-title theme-preset-group-title-alt">
-                      {darkMode ? t('altLight') : t('altDark')}
-                    </div>
-                    <div className="theme-preset-grid">
-                      {alternativeThemePresets.map((preset) => (
-                        <button
-                          key={`alt-${preset.id}`}
-                          type="button"
-                          className="theme-preset-card"
-                          onClick={() => applyThemePack(preset.colors)}
-                        >
-                          <div className="theme-preset-swatches">
-                            <span style={{ backgroundColor: preset.colors.primaryColor }} />
-                            <span style={{ backgroundColor: preset.colors.accentColor }} />
-                            <span style={{ backgroundColor: preset.colors.backgroundColor }} />
-                            <span style={{ backgroundColor: preset.colors.textPrimaryColor }} />
-                          </div>
-                          <div className="theme-preset-name">{getPresetText(preset).name}</div>
-                          <div className="theme-preset-description">{getPresetText(preset).description}</div>
-                          <div className={`theme-preset-mode ${preset.mode === 'dark' ? 'dark' : 'light'}`}>
-                            {preset.mode === 'dark' ? t('darkComfort') : t('lightProfessional')}
-                          </div>
                         </button>
                       ))}
                     </div>
