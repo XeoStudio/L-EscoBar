@@ -138,6 +138,8 @@ type CustomerTab = 'home' | 'cart' | 'track' | 'more';
 type AdminTab = 'dashboard' | 'orders' | 'menu' | 'database' | 'settings';
 
 export default function CafeApp() {
+  const THEME_STORAGE_KEY = 'lescobar-theme';
+
   // Settings State
   const [settings, setSettings] = useState<Settings | null>(null);
   
@@ -175,7 +177,10 @@ export default function CafeApp() {
   const [isTableDialogOpen, setIsTableDialogOpen] = useState(false);
   const [reportPeriod, setReportPeriod] = useState('today');
   const [soundEnabled, setSoundEnabled] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return localStorage.getItem(THEME_STORAGE_KEY) === 'dark';
+  });
   const [orderFilter, setOrderFilter] = useState<OrderStatus | 'all'>('all');
   
   // Database management states
@@ -331,12 +336,18 @@ export default function CafeApp() {
     prevOrdersCountRef.current = orders.length;
   }, [orders, isAdminAuthenticated, soundEnabled]);
 
-  // Dark mode effect
+  const toggleDarkMode = () => {
+    setDarkMode((prev) => !prev);
+  };
+
+  // Dark mode effect (device-local only)
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark');
+      localStorage.setItem(THEME_STORAGE_KEY, 'dark');
     } else {
       document.documentElement.classList.remove('dark');
+      localStorage.setItem(THEME_STORAGE_KEY, 'light');
     }
   }, [darkMode]);
 
@@ -1234,7 +1245,7 @@ export default function CafeApp() {
             <div className="flex items-center gap-2">
               <button 
                 className="btn btn-ghost btn-icon"
-                onClick={() => setDarkMode(!darkMode)}
+                onClick={toggleDarkMode}
               >
                 {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
               </button>
@@ -2089,7 +2100,7 @@ export default function CafeApp() {
                     </div>
                     <div 
                       className={`settings-toggle-switch ${darkMode ? 'active' : ''}`}
-                      onClick={() => setDarkMode(!darkMode)}
+                      onClick={toggleDarkMode}
                     />
                   </div>
                   <div className="settings-toggle">
@@ -2933,7 +2944,7 @@ export default function CafeApp() {
                   </div>
                   <div 
                     className={`settings-toggle-switch ${darkMode ? 'active' : ''}`}
-                    onClick={() => setDarkMode(!darkMode)}
+                    onClick={toggleDarkMode}
                   />
                 </div>
               </div>
