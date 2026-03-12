@@ -345,6 +345,7 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     driveLinkPrompt: 'الصق رابط مشاركة Google Drive هنا',
     invalidDriveLinkMsg: 'رابط Google Drive غير صالح',
     imageUploadFailedMsg: 'فشل في تحميل الصورة',
+    imageUploadSuccessMsg: 'تم تحديث الصورة',
   },
   en: {
     loading: 'Loading...',
@@ -619,6 +620,7 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     driveLinkPrompt: 'Paste a Google Drive share link',
     invalidDriveLinkMsg: 'Invalid Google Drive link',
     imageUploadFailedMsg: 'Failed to load image',
+    imageUploadSuccessMsg: 'Image updated',
   },
   fr: {
     loading: 'Chargement...',
@@ -893,6 +895,7 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     driveLinkPrompt: 'Collez un lien Google Drive partage',
     invalidDriveLinkMsg: 'Lien Google Drive invalide',
     imageUploadFailedMsg: 'Echec du chargement de l\'image',
+    imageUploadSuccessMsg: 'Image mise a jour',
   },
 };
 
@@ -2006,6 +2009,7 @@ export default function CafeApp() {
         reader.readAsDataURL(file);
       });
       onChange(dataUrl);
+      toast({ title: '✅', description: t('imageUploadSuccessMsg') });
     } catch {
       toast({ title: t('genericErrorTitle'), description: t('imageUploadFailedMsg'), variant: 'destructive' });
     }
@@ -2021,6 +2025,7 @@ export default function CafeApp() {
       return;
     }
     onChange(normalized);
+    toast({ title: '✅', description: t('imageUploadSuccessMsg') });
   };
 
   const fetchAdminAccount = async () => {
