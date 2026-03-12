@@ -2415,8 +2415,9 @@ export default function CafeApp() {
   const preparingOrdersCount = orders.filter(o => o.status === 'PREPARING' || o.status === 'ACCEPTED').length;
   const readyOrdersCount = orders.filter(o => o.status === 'READY').length;
 
-  const language: AppLanguage = SUPPORTED_LANGUAGES.includes((settings?.language || 'ar') as AppLanguage)
-    ? ((settings?.language || 'ar') as AppLanguage)
+  const languageSource = settingsForm.language || settings?.language || 'ar';
+  const language: AppLanguage = SUPPORTED_LANGUAGES.includes(languageSource as AppLanguage)
+    ? (languageSource as AppLanguage)
     : 'ar';
   const t = (key: string) => UI_TEXT[language][key] || UI_TEXT.ar[key] || key;
   const getStatusLabel = (status: OrderStatus) => ORDER_STATUS_LABELS[language]?.[status] || ORDER_STATUS_AR[status];
