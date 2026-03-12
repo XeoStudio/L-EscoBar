@@ -6,8 +6,22 @@ const globalForPrisma = globalThis as unknown as {
 
 // Configure Prisma for serverless environments (Vercel + Supabase)
 // Connection pool optimization for Supabase free tier
+export function resolveDatabaseUrl() {
+  return (
+    process.env.DATABASE_URL ||
+    process.env.POSTGRES_PRISMA_URL ||
+    process.env.POSTGRES_URL ||
+    process.env.SUPABASE_DB_URL ||
+    ''
+  )
+}
+
+export function hasDatabaseConfig() {
+  return Boolean(resolveDatabaseUrl())
+}
+
 function createPrismaClient() {
-  const connectionString = process.env.DATABASE_URL
+  const connectionString = resolveDatabaseUrl()
 
   if (!connectionString) {
     return new PrismaClient({

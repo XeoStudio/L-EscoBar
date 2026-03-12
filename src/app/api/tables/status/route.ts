@@ -1,10 +1,6 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { db, hasDatabaseConfig } from '@/lib/db';
 import { Prisma } from '@prisma/client';
-
-function hasDatabaseConfig() {
-  return Boolean(process.env.DATABASE_URL);
-}
 
 // GET - جلب الطاولات مع حالتها (مشغولة/متاحة) - محسّن للسرعة
 export async function GET() {

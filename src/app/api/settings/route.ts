@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { db, hasDatabaseConfig } from '@/lib/db';
 
 const DEFAULT_SETTINGS = {
   cafeName: "L'EscoBar",
@@ -17,10 +17,6 @@ const DEFAULT_SETTINGS = {
   enableTableService: true,
   enableDelivery: false,
 };
-
-function hasDatabaseConfig() {
-  return Boolean(process.env.DATABASE_URL);
-}
 
 // GET - جلب الإعدادات
 export async function GET() {

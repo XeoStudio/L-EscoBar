@@ -1,9 +1,5 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-
-function hasDatabaseConfig() {
-  return Boolean(process.env.DATABASE_URL);
-}
+import { db, hasDatabaseConfig } from '@/lib/db';
 
 // GET - جلب جميع الفئات
 export async function GET() {
