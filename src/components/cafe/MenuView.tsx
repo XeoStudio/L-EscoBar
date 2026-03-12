@@ -61,6 +61,15 @@ type AppLanguage = 'ar' | 'en' | 'fr';
 const SUPPORTED_LANGUAGES: AppLanguage[] = ['ar', 'en', 'fr'];
 const LANGUAGE_STORAGE_KEY = 'lescobar-language';
 
+const resolveLanguage = (value: string | null | undefined): AppLanguage | null => {
+  if (!value) return null;
+  const normalized = value.toLowerCase();
+  if (normalized.startsWith('ar')) return 'ar';
+  if (normalized.startsWith('en')) return 'en';
+  if (normalized.startsWith('fr')) return 'fr';
+  return null;
+};
+
 const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
   ar: {
     loading: 'جاري التحميل...',
@@ -1519,12 +1528,12 @@ export default function CafeApp() {
   
   const [categoryForm, setCategoryForm] = useState({ name: '', nameAr: '', image: '' });
   const [tableForm, setTableForm] = useState({ number: '', seats: '4', description: '' });
+  const [appLanguage, setAppLanguage] = useState<AppLanguage>(
+    () => (typeof window !== 'undefined' ? (resolveLanguage(localStorage.getItem(LANGUAGE_STORAGE_KEY)) || 'ar') : 'ar')
+  );
   const [settingsForm, setSettingsForm] = useState({ 
     cafeName: '', 
-    language:
-      typeof window !== 'undefined' && SUPPORTED_LANGUAGES.includes((localStorage.getItem(LANGUAGE_STORAGE_KEY) as AppLanguage) || 'ar')
-        ? ((localStorage.getItem(LANGUAGE_STORAGE_KEY) as AppLanguage) || 'ar')
-        : ('ar' as AppLanguage),
+    language: typeof window !== 'undefined' ? (resolveLanguage(localStorage.getItem(LANGUAGE_STORAGE_KEY)) || 'ar') : ('ar' as AppLanguage),
     currency: 'TND',
     logo: '',
     primaryColor: DEFAULT_THEME_COLORS.primaryColor,
@@ -1790,15 +1799,12 @@ export default function CafeApp() {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       const storedLanguage = typeof window !== 'undefined' ? localStorage.getItem(LANGUAGE_STORAGE_KEY) : null;
-      const languageFromSettings = SUPPORTED_LANGUAGES.includes(data.language as AppLanguage)
-        ? (data.language as AppLanguage)
-        : null;
-      const languageFromStorage = SUPPORTED_LANGUAGES.includes((storedLanguage as AppLanguage) || 'ar')
-        ? (storedLanguage as AppLanguage)
-        : null;
+      const languageFromSettings = resolveLanguage(data.language);
+      const languageFromStorage = resolveLanguage(storedLanguage);
       const effectiveLanguage = languageFromSettings || languageFromStorage || 'ar';
 
       setSettings(data);
+      setAppLanguage(effectiveLanguage);
       setSettingsForm({ 
         cafeName: data.cafeName, 
         language: effectiveLanguage,
@@ -2186,9 +2192,8 @@ export default function CafeApp() {
       if (res.ok) {
         const data = await res.json();
         setSettings(data);
-        const savedLanguage = SUPPORTED_LANGUAGES.includes(data.language as AppLanguage)
-          ? (data.language as AppLanguage)
-          : settingsForm.language;
+        const savedLanguage = resolveLanguage(data.language) || settingsForm.language;
+        setAppLanguage(savedLanguage);
         if (typeof window !== 'undefined') {
           localStorage.setItem(LANGUAGE_STORAGE_KEY, savedLanguage);
         }
@@ -2415,10 +2420,7 @@ export default function CafeApp() {
   const preparingOrdersCount = orders.filter(o => o.status === 'PREPARING' || o.status === 'ACCEPTED').length;
   const readyOrdersCount = orders.filter(o => o.status === 'READY').length;
 
-  const languageSource = settingsForm.language || settings?.language || 'ar';
-  const language: AppLanguage = SUPPORTED_LANGUAGES.includes(languageSource as AppLanguage)
-    ? (languageSource as AppLanguage)
-    : 'ar';
+  const language: AppLanguage = appLanguage;
   const t = (key: string) => UI_TEXT[language][key] || UI_TEXT.ar[key] || key;
   const getStatusLabel = (status: OrderStatus) => ORDER_STATUS_LABELS[language]?.[status] || ORDER_STATUS_AR[status];
   const getStatusActionLabel = (status: OrderStatus) => {
@@ -3409,6 +3411,7 @@ export default function CafeApp() {
                           if (!SUPPORTED_LANGUAGES.includes(nextLanguage)) return;
                           const nextForm = { ...settingsForm, language: nextLanguage };
                           setSettingsForm(nextForm);
+                          setAppLanguage(nextLanguage);
                           setSettings((prev) => (prev ? { ...prev, language: nextLanguage } : prev));
                           localStorage.setItem(LANGUAGE_STORAGE_KEY, nextLanguage);
                         }}
