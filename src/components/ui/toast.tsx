@@ -16,7 +16,7 @@ const ToastViewport = React.forwardRef<
   <ToastPrimitives.Viewport
     ref={ref}
     className={cn(
-      "fixed top-3 left-1/2 z-[100] flex w-full max-w-[calc(100vw-1rem)] -translate-x-1/2 flex-col gap-2 p-0 sm:left-auto sm:right-4 sm:top-4 sm:w-auto sm:max-w-sm sm:translate-x-0",
+      "fixed left-1/2 top-[max(0.75rem,env(safe-area-inset-top))] z-[120] flex w-[min(92vw,28rem)] -translate-x-1/2 flex-col gap-3 p-0 sm:left-auto sm:right-5 sm:top-5 sm:w-[24rem] sm:translate-x-0",
       className
     )}
     {...props}
@@ -25,15 +25,15 @@ const ToastViewport = React.forwardRef<
 ToastViewport.displayName = ToastPrimitives.Viewport.displayName
 
 const toastVariants = cva(
-  "group pointer-events-auto relative flex w-full items-start gap-3 overflow-hidden rounded-2xl border px-4 py-3 shadow-[0_18px_45px_-24px_rgba(15,23,42,0.55)] backdrop-blur-xl transition-all duration-300 data-[swipe=cancel]:translate-y-0 data-[swipe=end]:translate-y-[var(--radix-toast-swipe-end-y)] data-[swipe=move]:translate-y-[var(--radix-toast-swipe-move-y)] data-[swipe=move]:transition-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out data-[state=closed]:fade-out-50 data-[state=closed]:slide-out-to-top-4 data-[state=open]:slide-in-from-top-4",
+  "group pointer-events-auto relative flex w-full items-start gap-3 overflow-hidden rounded-xl border px-4 py-3 shadow-[0_24px_55px_-30px_rgba(15,23,42,0.65)] backdrop-blur-md ring-1 ring-black/5 transition-all duration-300 before:absolute before:inset-y-0 before:left-0 before:w-1 data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=move]:transition-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out data-[state=closed]:fade-out-40 data-[state=closed]:slide-out-to-right-full data-[state=open]:slide-in-from-right-3",
   {
     variants: {
       variant: {
-        default: "border-slate-200/80 bg-white/95 text-slate-900 dark:border-slate-700/70 dark:bg-slate-900/95 dark:text-slate-100",
-        success: "border-emerald-200/80 bg-emerald-50/95 text-emerald-900 dark:border-emerald-800/80 dark:bg-emerald-950/80 dark:text-emerald-100",
-        destructive: "border-red-200/80 bg-red-50/95 text-red-900 dark:border-red-800/80 dark:bg-red-950/80 dark:text-red-100",
-        warning: "border-amber-200/80 bg-amber-50/95 text-amber-900 dark:border-amber-800/80 dark:bg-amber-950/80 dark:text-amber-100",
-        info: "border-sky-200/80 bg-sky-50/95 text-sky-900 dark:border-sky-800/80 dark:bg-sky-950/80 dark:text-sky-100",
+        default: "border-slate-200/90 bg-white/98 text-slate-900 before:bg-slate-400 dark:border-slate-700/80 dark:bg-slate-900/95 dark:text-slate-100 dark:before:bg-slate-500",
+        success: "border-emerald-200/90 bg-white/98 text-slate-900 before:bg-emerald-500 dark:border-emerald-800/80 dark:bg-slate-900/95 dark:text-slate-100 dark:before:bg-emerald-400",
+        destructive: "border-red-200/90 bg-white/98 text-slate-900 before:bg-red-500 dark:border-red-800/80 dark:bg-slate-900/95 dark:text-slate-100 dark:before:bg-red-400",
+        warning: "border-amber-200/90 bg-white/98 text-slate-900 before:bg-amber-500 dark:border-amber-800/80 dark:bg-slate-900/95 dark:text-slate-100 dark:before:bg-amber-400",
+        info: "border-sky-200/90 bg-white/98 text-slate-900 before:bg-sky-500 dark:border-sky-800/80 dark:bg-slate-900/95 dark:text-slate-100 dark:before:bg-sky-400",
       },
     },
     defaultVariants: {
@@ -64,7 +64,7 @@ const ToastAction = React.forwardRef<
   <ToastPrimitives.Action
     ref={ref}
     className={cn(
-      "inline-flex h-8 shrink-0 items-center justify-center rounded-lg border border-current/20 bg-current/10 px-3 text-xs font-semibold transition-colors hover:bg-current/15 focus:outline-none focus:ring-2 focus:ring-current/30",
+      "inline-flex h-8 shrink-0 items-center justify-center rounded-md border border-slate-300 bg-slate-100 px-3 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-400/40 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700",
       className
     )}
     {...props}
@@ -79,7 +79,7 @@ const ToastClose = React.forwardRef<
   <ToastPrimitives.Close
     ref={ref}
     className={cn(
-      "absolute right-2 top-2 rounded-full p-1.5 text-current/60 transition-colors hover:bg-black/5 hover:text-current dark:hover:bg-white/10",
+      "absolute right-2.5 top-2.5 rounded-md p-1 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-800 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100",
       className
     )}
     toast-close=""
@@ -96,7 +96,7 @@ const ToastTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <ToastPrimitives.Title
     ref={ref}
-    className={cn("text-[13px] font-semibold leading-tight tracking-tight", className)}
+    className={cn("text-[13px] font-semibold leading-tight tracking-tight text-slate-900 dark:text-slate-100", className)}
     {...props}
   />
 ))
@@ -108,7 +108,7 @@ const ToastDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <ToastPrimitives.Description
     ref={ref}
-    className={cn("text-[13px] leading-snug opacity-80", className)}
+    className={cn("text-[12.5px] leading-snug text-slate-600 dark:text-slate-300", className)}
     {...props}
   />
 ))
@@ -122,11 +122,11 @@ type ToastActionElement = React.ReactElement<typeof ToastAction>
 const ToastIcon = ({ variant }: { variant?: "default" | "success" | "destructive" | "warning" | "info" }) => {
   const iconClass = "h-4 w-4"
   const iconWrapClass = {
-    default: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200",
-    success: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/80 dark:text-emerald-200",
-    destructive: "bg-red-100 text-red-700 dark:bg-red-900/80 dark:text-red-200",
-    warning: "bg-amber-100 text-amber-700 dark:bg-amber-900/80 dark:text-amber-200",
-    info: "bg-sky-100 text-sky-700 dark:bg-sky-900/80 dark:text-sky-200",
+    default: "bg-slate-100 text-slate-700 ring-1 ring-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:ring-slate-700",
+    success: "bg-emerald-100 text-emerald-700 ring-1 ring-emerald-200 dark:bg-emerald-900/50 dark:text-emerald-200 dark:ring-emerald-800",
+    destructive: "bg-red-100 text-red-700 ring-1 ring-red-200 dark:bg-red-900/50 dark:text-red-200 dark:ring-red-800",
+    warning: "bg-amber-100 text-amber-700 ring-1 ring-amber-200 dark:bg-amber-900/50 dark:text-amber-200 dark:ring-amber-800",
+    info: "bg-sky-100 text-sky-700 ring-1 ring-sky-200 dark:bg-sky-900/50 dark:text-sky-200 dark:ring-sky-800",
   };
   const selectedVariant = variant || "default";
   let icon: React.ReactNode = <CheckCircle className={iconClass} />;
