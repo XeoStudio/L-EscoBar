@@ -332,6 +332,14 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     seatsLabel: 'عدد المقاعد',
     save: 'حفظ',
     actionDelete: 'حذف',
+    adminAccountSection: 'حساب الإدارة',
+    adminAccountDesc: 'تحديث بريد وكلمة مرور حساب المسؤول',
+    adminEmailLabel: 'بريد الإدارة',
+    newPasswordLabel: 'كلمة مرور جديدة',
+    newPasswordPlaceholder: 'اتركها فارغة للإبقاء على الحالية',
+    adminAccountSave: 'تحديث حساب الإدارة',
+    adminAccountUpdatedMsg: 'تم تحديث حساب الإدارة',
+    adminAccountUpdateFailedMsg: 'فشل في تحديث حساب الإدارة',
   },
   en: {
     loading: 'Loading...',
@@ -593,6 +601,14 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     seatsLabel: 'Seats',
     save: 'Save',
     actionDelete: 'Delete',
+    adminAccountSection: 'Admin account',
+    adminAccountDesc: 'Update the admin email and password',
+    adminEmailLabel: 'Admin email',
+    newPasswordLabel: 'New password',
+    newPasswordPlaceholder: 'Leave blank to keep current password',
+    adminAccountSave: 'Update admin account',
+    adminAccountUpdatedMsg: 'Admin account updated',
+    adminAccountUpdateFailedMsg: 'Failed to update admin account',
   },
   fr: {
     loading: 'Chargement...',
@@ -854,6 +870,14 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     seatsLabel: 'Nombre de places',
     save: 'Enregistrer',
     actionDelete: 'Supprimer',
+    adminAccountSection: 'Compte admin',
+    adminAccountDesc: 'Mettre a jour email et mot de passe admin',
+    adminEmailLabel: 'Email admin',
+    newPasswordLabel: 'Nouveau mot de passe',
+    newPasswordPlaceholder: 'Laisser vide pour conserver le mot de passe actuel',
+    adminAccountSave: 'Mettre a jour le compte admin',
+    adminAccountUpdatedMsg: 'Compte admin mis a jour',
+    adminAccountUpdateFailedMsg: 'Echec de mise a jour du compte admin',
   },
 };
 
@@ -1490,6 +1514,8 @@ export default function CafeApp() {
   const [reportPeriod, setReportPeriod] = useState('today');
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [orderFilter, setOrderFilter] = useState<OrderStatus | 'all'>('all');
+  const [adminAccountForm, setAdminAccountForm] = useState({ email: '', password: '' });
+  const [isAdminAccountLoading, setIsAdminAccountLoading] = useState(false);
   
   // Database management states
   const [dbStats, setDbStats] = useState<{orders: number, products: number, categories: number, tables: number, admins: number, oldestOrder: string | null} | null>(null);
@@ -1919,6 +1945,52 @@ export default function CafeApp() {
       setReports(data);
     } catch (error) {
       console.error('fetchReports error:', error);
+    }
+  };
+
+  const fetchAdminAccount = async () => {
+    try {
+      const res = await fetch('/api/admin/account', { cache: 'no-store' });
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data?.admin?.email) {
+        setAdminAccountForm((prev) => ({ ...prev, email: data.admin.email }));
+      }
+    } catch (error) {
+      console.error('Fetch admin account error:', error);
+    }
+  };
+
+  const saveAdminAccount = async () => {
+    if (!adminAccountForm.email.trim()) {
+      toast({ title: t('warningTitle'), description: t('adminEmailLabel'), variant: 'destructive' });
+      return;
+    }
+
+    try {
+      setIsAdminAccountLoading(true);
+      const res = await fetch('/api/admin/account', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: adminAccountForm.email.trim(),
+          password: adminAccountForm.password.trim() || undefined
+        })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setAdminAccountForm({ email: data?.admin?.email || adminAccountForm.email, password: '' });
+        toast({ title: '✅', description: t('adminAccountUpdatedMsg') });
+      } else {
+        const errorData = await res.json();
+        toast({ title: t('genericErrorTitle'), description: errorData.error || t('adminAccountUpdateFailedMsg'), variant: 'destructive' });
+      }
+    } catch (error) {
+      console.error('Update admin account error:', error);
+      toast({ title: t('genericErrorTitle'), description: t('adminAccountUpdateFailedMsg'), variant: 'destructive' });
+    } finally {
+      setIsAdminAccountLoading(false);
     }
   };
 
@@ -2452,6 +2524,12 @@ export default function CafeApp() {
       fetchReports(reportPeriod);
     }
   }, [adminTab, reportPeriod, isAdminAuthenticated]);
+
+  useEffect(() => {
+    if (adminTab === 'settings' && isAdminAuthenticated) {
+      fetchAdminAccount();
+    }
+  }, [adminTab, isAdminAuthenticated]);
 
   // Count orders by status
   const newOrdersCount = orders.filter(o => o.status === 'NEW').length;
@@ -3590,6 +3668,50 @@ export default function CafeApp() {
                       className={`settings-toggle-switch ${settingsForm.acceptOrders ? 'active' : ''}`}
                       onClick={() => setSettingsForm({ ...settingsForm, acceptOrders: !settingsForm.acceptOrders })}
                     />
+                  </div>
+                </div>
+              </div>
+
+              {/* Admin Account */}
+              <div className="settings-section">
+                <div className="settings-section-header">
+                  <div className="settings-section-icon">
+                    <Lock className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="settings-section-title">{t('adminAccountSection')}</div>
+                    <p className="settings-help-text">{t('adminAccountDesc')}</p>
+                  </div>
+                </div>
+                <div className="settings-section-body">
+                  <div className="space-y-4">
+                    <div className="settings-field">
+                      <label className="settings-label">{t('adminEmailLabel')}</label>
+                      <input
+                        type="email"
+                        className="settings-input"
+                        value={adminAccountForm.email}
+                        onChange={(e) => setAdminAccountForm({ ...adminAccountForm, email: e.target.value })}
+                        placeholder="admin@cafe.com"
+                      />
+                    </div>
+                    <div className="settings-field">
+                      <label className="settings-label">{t('newPasswordLabel')}</label>
+                      <input
+                        type="password"
+                        className="settings-input"
+                        value={adminAccountForm.password}
+                        onChange={(e) => setAdminAccountForm({ ...adminAccountForm, password: e.target.value })}
+                        placeholder={t('newPasswordPlaceholder')}
+                      />
+                    </div>
+                    <button
+                      className="btn btn-primary w-full"
+                      onClick={saveAdminAccount}
+                      disabled={isAdminAccountLoading}
+                    >
+                      {isAdminAccountLoading ? t('loadingShort') : t('adminAccountSave')}
+                    </button>
                   </div>
                 </div>
               </div>
