@@ -28,7 +28,6 @@ model Settings {
   address             String?  // العنوان
   welcomeMessage      String?  @default("مرحباً بك في مقهانا") // رسالة الترحيب
   acceptOrders        Boolean  @default(true) // تفعيل/تعطيل الطلبات
-  taxRate             Float    @default(0) // نسبة الضريبة
   enableTableService  Boolean  @default(true) // تفعيل خدمة الطاولات
   enableDelivery      Boolean  @default(false) // تفعيل خدمة التوصيل
   createdAt           DateTime @default(now())

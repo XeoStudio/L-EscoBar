@@ -1132,7 +1132,6 @@ export default function CafeApp() {
     address: '',
     welcomeMessage: '',
     acceptOrders: true,
-    taxRate: 0,
     enableTableService: true,
     enableDelivery: false
   });
@@ -1411,7 +1410,6 @@ export default function CafeApp() {
         address: data.address || '',
         welcomeMessage: data.welcomeMessage || '',
         acceptOrders: data.acceptOrders ?? true,
-        taxRate: data.taxRate ?? 0,
         enableTableService: data.enableTableService ?? true,
         enableDelivery: data.enableDelivery ?? false
       });
@@ -3947,21 +3945,10 @@ export default function CafeApp() {
                       <span className="cart-total-label">{t('subtotal')}</span>
                       <span className="cart-total-value" style={{ fontSize: '16px' }}>{getOrderTotal().toFixed(2)} {currency}</span>
                     </div>
-                    {settings && settings.taxRate > 0 && (
-                      <div className="cart-total-row" style={{ marginBottom: '8px' }}>
-                          <span className="cart-total-label">{t('tax')} ({settings.taxRate}%)</span>
-                        <span className="cart-total-value" style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>
-                          {(getOrderTotal() * settings.taxRate / 100).toFixed(2)} {currency}
-                        </span>
-                      </div>
-                    )}
                     <div className="cart-total-row" style={{ paddingTop: '12px', borderTop: '1px solid var(--border)' }}>
-                      <span className="cart-total-label" style={{ fontWeight: 600 }}>{t('totalWithTax')}</span>
+                      <span className="cart-total-label" style={{ fontWeight: 600 }}>{t('total')}</span>
                       <span className="cart-total-value">
-                        {settings?.taxRate 
-                          ? (getOrderTotal() * (1 + settings.taxRate / 100)).toFixed(2)
-                          : getOrderTotal().toFixed(2)
-                        } {currency}
+                        {getOrderTotal().toFixed(2)} {currency}
                       </span>
                     </div>
                     <button

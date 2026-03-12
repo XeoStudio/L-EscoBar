@@ -15,7 +15,6 @@ export interface Settings {
   address?: string | null;
   welcomeMessage?: string | null;
   acceptOrders: boolean;
-  taxRate: number;
   enableTableService: boolean;
   enableDelivery: boolean;
   createdAt: string;

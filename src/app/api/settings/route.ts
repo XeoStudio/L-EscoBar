@@ -13,7 +13,6 @@ const DEFAULT_SETTINGS = {
   closingHours: '23:00',
   welcomeMessage: 'مرحباً بك في مقهانا',
   acceptOrders: true,
-  taxRate: 0,
   enableTableService: true,
   enableDelivery: false,
 };
@@ -66,7 +65,6 @@ export async function PUT(request: Request) {
       address,
       welcomeMessage,
       acceptOrders,
-      taxRate,
       enableTableService,
       enableDelivery
     } = body;
@@ -91,7 +89,6 @@ export async function PUT(request: Request) {
           address: address || null,
           welcomeMessage: welcomeMessage || DEFAULT_SETTINGS.welcomeMessage,
           acceptOrders: acceptOrders !== undefined ? acceptOrders : DEFAULT_SETTINGS.acceptOrders,
-          taxRate: taxRate !== undefined ? taxRate : DEFAULT_SETTINGS.taxRate,
           enableTableService: enableTableService !== undefined ? enableTableService : DEFAULT_SETTINGS.enableTableService,
           enableDelivery: enableDelivery !== undefined ? enableDelivery : DEFAULT_SETTINGS.enableDelivery
         }
@@ -114,7 +111,6 @@ export async function PUT(request: Request) {
           ...(address !== undefined && { address }),
           ...(welcomeMessage !== undefined && { welcomeMessage }),
           ...(acceptOrders !== undefined && { acceptOrders }),
-          ...(taxRate !== undefined && { taxRate }),
           ...(enableTableService !== undefined && { enableTableService }),
           ...(enableDelivery !== undefined && { enableDelivery })
         }
