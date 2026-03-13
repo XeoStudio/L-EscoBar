@@ -345,7 +345,6 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     invalidDriveLinkMsg: 'رابط Google Drive غير صالح',
     imageUploadFailedMsg: 'فشل في تحميل الصورة',
     imageUploadSuccessMsg: 'تم تحديث الصورة',
-    imageUploadInProgressMsg: 'جاري رفع الصورة...',
   },
   en: {
     loading: 'Loading...',
@@ -620,7 +619,6 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     invalidDriveLinkMsg: 'Invalid Google Drive link',
     imageUploadFailedMsg: 'Failed to load image',
     imageUploadSuccessMsg: 'Image updated',
-    imageUploadInProgressMsg: 'Uploading image...',
   },
   fr: {
     loading: 'Chargement...',
@@ -895,7 +893,6 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     invalidDriveLinkMsg: 'Lien Google Drive invalide',
     imageUploadFailedMsg: 'Echec du chargement de l\'image',
     imageUploadSuccessMsg: 'Image mise a jour',
-    imageUploadInProgressMsg: 'Telechargement en cours...',
   },
 };
 
@@ -1992,6 +1989,17 @@ export default function CafeApp() {
     return `https://drive.google.com/uc?export=view&id=${fileId}`;
   };
 
+  const normalizeImageUrl = (value: string) => {
+    const trimmed = value.trim();
+    if (!trimmed) return '';
+    const driveUrl = normalizeDriveImageUrl(trimmed);
+    if (driveUrl) return driveUrl;
+    if (trimmed.startsWith('http://')) {
+      return `https://${trimmed.slice(7)}`;
+    }
+    return trimmed;
+  };
+
 
   const handleDriveLink = async (onChange: (url: string) => void) => {
     if (typeof window === 'undefined') return;
@@ -2002,29 +2010,8 @@ export default function CafeApp() {
       toast({ title: t('warningTitle'), description: t('invalidDriveLinkMsg'), variant: 'destructive' });
       return;
     }
-    try {
-      toast({ title: '⏳', description: t('imageUploadInProgressMsg') });
-
-      const res = await fetch('/api/uploads', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sourceUrl: normalized })
-      });
-
-      if (!res.ok) {
-        throw new Error('Upload failed');
-      }
-
-      const data = await res.json();
-      if (!data?.url) {
-        throw new Error('Upload failed');
-      }
-
-      onChange(data.url);
-      toast({ title: '✅', description: t('imageUploadSuccessMsg') });
-    } catch {
-      toast({ title: t('genericErrorTitle'), description: t('imageUploadFailedMsg'), variant: 'destructive' });
-    }
+    onChange(normalized);
+    toast({ title: '✅', description: t('imageUploadSuccessMsg') });
   };
 
   const fetchAdminAccount = async () => {
@@ -3633,7 +3620,7 @@ export default function CafeApp() {
                         type="text"
                         className="settings-input"
                         value={settingsForm.logo}
-                        onChange={(e) => setSettingsForm({ ...settingsForm, logo: e.target.value })}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, logo: normalizeImageUrl(e.target.value) })}
                         placeholder="https://example.com/logo.png"
                       />
                       <div className="flex flex-wrap gap-2 mt-2">
@@ -4219,7 +4206,7 @@ export default function CafeApp() {
                     type="text"
                     className="input"
                     value={productForm.image}
-                    onChange={(e) => setProductForm({ ...productForm, image: e.target.value })}
+                    onChange={(e) => setProductForm({ ...productForm, image: normalizeImageUrl(e.target.value) })}
                     placeholder="https://..."
                   />
                   <div className="flex flex-wrap gap-2 mt-2">
@@ -4288,7 +4275,7 @@ export default function CafeApp() {
                     type="text"
                     className="input"
                     value={categoryForm.image}
-                    onChange={(e) => setCategoryForm({ ...categoryForm, image: e.target.value })}
+                    onChange={(e) => setCategoryForm({ ...categoryForm, image: normalizeImageUrl(e.target.value) })}
                     placeholder="https://..."
                   />
                   <div className="flex flex-wrap gap-2 mt-2">
