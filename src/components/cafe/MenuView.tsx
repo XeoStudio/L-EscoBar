@@ -346,6 +346,7 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     invalidDriveLinkMsg: 'رابط Google Drive غير صالح',
     imageUploadFailedMsg: 'فشل في تحميل الصورة',
     imageUploadSuccessMsg: 'تم تحديث الصورة',
+    imageUploadInProgressMsg: 'جاري رفع الصورة...',
   },
   en: {
     loading: 'Loading...',
@@ -621,6 +622,7 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     invalidDriveLinkMsg: 'Invalid Google Drive link',
     imageUploadFailedMsg: 'Failed to load image',
     imageUploadSuccessMsg: 'Image updated',
+    imageUploadInProgressMsg: 'Uploading image...',
   },
   fr: {
     loading: 'Chargement...',
@@ -896,6 +898,7 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     invalidDriveLinkMsg: 'Lien Google Drive invalide',
     imageUploadFailedMsg: 'Echec du chargement de l\'image',
     imageUploadSuccessMsg: 'Image mise a jour',
+    imageUploadInProgressMsg: 'Telechargement en cours...',
   },
 };
 
@@ -2002,20 +2005,33 @@ export default function CafeApp() {
     }
 
     try {
-      const dataUrl = await new Promise<string>((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(String(reader.result));
-        reader.onerror = () => reject(new Error('read_failed'));
-        reader.readAsDataURL(file);
+      toast({ title: '⏳', description: t('imageUploadInProgressMsg') });
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await fetch('/api/uploads', {
+        method: 'POST',
+        body: formData
       });
-      onChange(dataUrl);
+
+      if (!res.ok) {
+        throw new Error('Upload failed');
+      }
+
+      const data = await res.json();
+      if (!data?.url) {
+        throw new Error('Upload failed');
+      }
+
+      onChange(data.url);
       toast({ title: '✅', description: t('imageUploadSuccessMsg') });
     } catch {
       toast({ title: t('genericErrorTitle'), description: t('imageUploadFailedMsg'), variant: 'destructive' });
     }
   };
 
-  const handleDriveLink = (onChange: (url: string) => void) => {
+  const handleDriveLink = async (onChange: (url: string) => void) => {
     if (typeof window === 'undefined') return;
     const link = window.prompt(t('driveLinkPrompt'))?.trim();
     if (!link) return;
@@ -2024,8 +2040,29 @@ export default function CafeApp() {
       toast({ title: t('warningTitle'), description: t('invalidDriveLinkMsg'), variant: 'destructive' });
       return;
     }
-    onChange(normalized);
-    toast({ title: '✅', description: t('imageUploadSuccessMsg') });
+    try {
+      toast({ title: '⏳', description: t('imageUploadInProgressMsg') });
+
+      const res = await fetch('/api/uploads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sourceUrl: normalized })
+      });
+
+      if (!res.ok) {
+        throw new Error('Upload failed');
+      }
+
+      const data = await res.json();
+      if (!data?.url) {
+        throw new Error('Upload failed');
+      }
+
+      onChange(data.url);
+      toast({ title: '✅', description: t('imageUploadSuccessMsg') });
+    } catch {
+      toast({ title: t('genericErrorTitle'), description: t('imageUploadFailedMsg'), variant: 'destructive' });
+    }
   };
 
   const fetchAdminAccount = async () => {
