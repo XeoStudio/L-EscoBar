@@ -3429,20 +3429,20 @@ export default function CafeApp() {
                   </div>
                 </div>
                 <div className="section-card-body">
-                <div className="db-action-row">
-                  <div className="db-action-info">
-                    <div className="db-action-title">{t('exportData')}</div>
-                    <div className="db-action-desc">{t('backupDesc')}</div>
+                  <div className="db-action-row">
+                    <div className="db-action-info">
+                      <div className="db-action-title">{t('exportData')}</div>
+                      <div className="db-action-desc">{t('backupDesc')}</div>
+                    </div>
+                    <button
+                      className="btn btn-success"
+                      onClick={downloadBackup}
+                      disabled={isDbLoading}
+                    >
+                      <FileJson className="w-4 h-4" />
+                      {isDbLoading ? t('loadingShort') : t('download')}
+                    </button>
                   </div>
-                  <button
-                    className="btn btn-success"
-                    onClick={downloadBackup}
-                    disabled={isDbLoading}
-                  >
-                    <FileJson className="w-4 h-4" />
-                    {isDbLoading ? t('loadingShort') : t('download')}
-                  </button>
-                </div>
                 </div>
               </div>
 
@@ -3462,11 +3462,11 @@ export default function CafeApp() {
                     <div className="grouped-list-item">
                       <div className="grouped-list-item-content">
                         <div className="grouped-list-item-title">{t('oldOrdersTitle')}</div>
-                        <div className="flex flex-wrap items-center gap-2 mt-1">
+                        <div className="flex items-center gap-2 mt-1">
                           <input
                             type="number"
                             className="input input-sm"
-                            style={{ width: '80px', textAlign: 'center' }}
+                            style={{ width: '60px', textAlign: 'center' }}
                             value={deleteOlderThan}
                             onChange={(e) => setDeleteOlderThan(parseInt(e.target.value) || 30)}
                             min={1}
@@ -4446,39 +4446,41 @@ export default function CafeApp() {
           <>
             {/* Hero Section - Always Show */}
             <div className="hero-section">
-              <div className="hero-content">
-                {settings?.logo ? (
-                  <div className="hero-logo">
-                    <img src={settings.logo} alt={cafeName} />
-                  </div>
-                ) : (
-                  <div className="hero-logo-placeholder">
-                    <Coffee className="w-10 h-10" />
-                  </div>
-                )}
-                <h2 className="hero-title">{cafeName}</h2>
-                <p className="hero-subtitle">{settings?.welcomeMessage || t('welcomeDefault')}</p>
-                {settings?.openingHours && settings?.closingHours && (
-                  <div className="hero-status">
-                    <Clock className="w-4 h-4" />
-                    <span>{t('workingHoursLabel')}: {settings.openingHours} - {settings.closingHours}</span>
-                  </div>
-                )}
-                {settings && !settings.acceptOrders && (
-                  <div className="hero-status closed" style={{ marginTop: '8px' }}>
-                    <Ban className="w-4 h-4" />
-                    <span>{t('notAcceptingOrdersNow')}</span>
-                  </div>
-                )}
-                {settings?.phone && (
-                  <div className="hero-contact">
-                    <a href={`tel:${settings.phone}`} className="hero-phone">
-                      <Volume2 className="w-4 h-4" />
-                      <span>{settings.phone}</span>
-                    </a>
-                  </div>
-                )}
-              </div>
+              {settings?.logo ? (
+                <div className="hero-logo">
+                  <img src={settings.logo} alt={cafeName} />
+                </div>
+              ) : (
+                <div className="hero-logo-placeholder">
+                  <Coffee className="w-10 h-10" />
+                </div>
+              )}
+              <h2 className="hero-title">{cafeName}</h2>
+              {settings?.welcomeMessage && (
+                <p className="hero-subtitle">{settings.welcomeMessage}</p>
+              ) || (
+                 <p className="hero-subtitle">{settings?.welcomeMessage || t('welcomeDefault')}</p>
+              )}
+              {settings?.openingHours && settings?.closingHours && (
+                <div className="hero-status">
+                  <Clock className="w-4 h-4" />
+                  <span>{t('workingHoursLabel')}: {settings.openingHours} - {settings.closingHours}</span>
+                </div>
+              )}
+              {settings && !settings.acceptOrders && (
+                <div className="hero-status closed" style={{ marginTop: '8px' }}>
+                  <Ban className="w-4 h-4" />
+                  <span>{t('notAcceptingOrdersNow')}</span>
+                </div>
+              )}
+              {settings?.phone && (
+                <div className="hero-contact">
+                  <a href={`tel:${settings.phone}`} className="hero-phone">
+                    <Volume2 className="w-4 h-4" />
+                    <span>{settings.phone}</span>
+                  </a>
+                </div>
+              )}
             </div>
 
             {/* Category Chips */}
