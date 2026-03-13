@@ -345,6 +345,9 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     invalidDriveLinkMsg: 'رابط Google Drive غير صالح',
     imageUploadFailedMsg: 'فشل في تحميل الصورة',
     imageUploadSuccessMsg: 'تم تحديث الصورة',
+    imageLinkSetMsg: 'تم حفظ رابط الصورة',
+    imageLinkInvalidMsg: 'يرجى إدخال رابط صالح يبدأ بـ http',
+    imageLinkUnreachableMsg: 'تعذر الوصول إلى رابط الصورة',
   },
   en: {
     loading: 'Loading...',
@@ -619,6 +622,9 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     invalidDriveLinkMsg: 'Invalid Google Drive link',
     imageUploadFailedMsg: 'Failed to load image',
     imageUploadSuccessMsg: 'Image updated',
+    imageLinkSetMsg: 'Image link saved',
+    imageLinkInvalidMsg: 'Please enter a valid link starting with http',
+    imageLinkUnreachableMsg: 'Image link could not be reached',
   },
   fr: {
     loading: 'Chargement...',
@@ -893,6 +899,9 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     invalidDriveLinkMsg: 'Lien Google Drive invalide',
     imageUploadFailedMsg: 'Echec du chargement de l\'image',
     imageUploadSuccessMsg: 'Image mise a jour',
+    imageLinkSetMsg: 'Lien image enregistre',
+    imageLinkInvalidMsg: 'Veuillez saisir un lien valide commençant par http',
+    imageLinkUnreachableMsg: 'Lien image inaccessible',
   },
 };
 
@@ -2000,6 +2009,34 @@ export default function CafeApp() {
     return trimmed;
   };
 
+  const validateImageUrl = async (value: string) => {
+    const normalized = normalizeImageUrl(value);
+    if (!normalized) return '';
+    if (!normalized.startsWith('http://') && !normalized.startsWith('https://')) {
+      toast({ title: t('warningTitle'), description: t('imageLinkInvalidMsg'), variant: 'destructive' });
+      return '';
+    }
+
+    try {
+      const response = await fetch(normalized, { method: 'GET' });
+      if (!response.ok) {
+        toast({ title: t('warningTitle'), description: t('imageLinkUnreachableMsg'), variant: 'destructive' });
+        return '';
+      }
+
+      const contentType = response.headers.get('content-type') || '';
+      if (!contentType.startsWith('image/')) {
+        toast({ title: t('warningTitle'), description: t('imageLinkInvalidMsg'), variant: 'destructive' });
+        return '';
+      }
+    } catch {
+      toast({ title: t('warningTitle'), description: t('imageLinkUnreachableMsg'), variant: 'destructive' });
+      return '';
+    }
+
+    toast({ title: '✅', description: t('imageLinkSetMsg') });
+    return normalized;
+  };
 
   const handleDriveLink = async (onChange: (url: string) => void) => {
     if (typeof window === 'undefined') return;
@@ -2011,7 +2048,7 @@ export default function CafeApp() {
       return;
     }
     onChange(normalized);
-    toast({ title: '✅', description: t('imageUploadSuccessMsg') });
+    toast({ title: '✅', description: t('imageLinkSetMsg') });
   };
 
   const fetchAdminAccount = async () => {
@@ -3620,7 +3657,13 @@ export default function CafeApp() {
                         type="text"
                         className="settings-input"
                         value={settingsForm.logo}
-                        onChange={(e) => setSettingsForm({ ...settingsForm, logo: normalizeImageUrl(e.target.value) })}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, logo: e.target.value })}
+                        onBlur={async (e) => {
+                          const validated = await validateImageUrl(e.target.value);
+                          if (validated) {
+                            setSettingsForm({ ...settingsForm, logo: validated });
+                          }
+                        }}
                         placeholder="https://example.com/logo.png"
                       />
                       <div className="flex flex-wrap gap-2 mt-2">
@@ -4206,7 +4249,13 @@ export default function CafeApp() {
                     type="text"
                     className="input"
                     value={productForm.image}
-                    onChange={(e) => setProductForm({ ...productForm, image: normalizeImageUrl(e.target.value) })}
+                    onChange={(e) => setProductForm({ ...productForm, image: e.target.value })}
+                    onBlur={async (e) => {
+                      const validated = await validateImageUrl(e.target.value);
+                      if (validated) {
+                        setProductForm({ ...productForm, image: validated });
+                      }
+                    }}
                     placeholder="https://..."
                   />
                   <div className="flex flex-wrap gap-2 mt-2">
@@ -4275,7 +4324,13 @@ export default function CafeApp() {
                     type="text"
                     className="input"
                     value={categoryForm.image}
-                    onChange={(e) => setCategoryForm({ ...categoryForm, image: normalizeImageUrl(e.target.value) })}
+                    onChange={(e) => setCategoryForm({ ...categoryForm, image: e.target.value })}
+                    onBlur={async (e) => {
+                      const validated = await validateImageUrl(e.target.value);
+                      if (validated) {
+                        setCategoryForm({ ...categoryForm, image: validated });
+                      }
+                    }}
                     placeholder="https://..."
                   />
                   <div className="flex flex-wrap gap-2 mt-2">
