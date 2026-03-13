@@ -340,7 +340,6 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     adminAccountSave: 'تحديث حساب الإدارة',
     adminAccountUpdatedMsg: 'تم تحديث حساب الإدارة',
     adminAccountUpdateFailedMsg: 'فشل في تحديث حساب الإدارة',
-    uploadImageBtn: 'رفع من الجهاز',
     driveLinkBtn: 'رابط Google Drive',
     driveLinkPrompt: 'الصق رابط مشاركة Google Drive هنا',
     invalidDriveLinkMsg: 'رابط Google Drive غير صالح',
@@ -616,7 +615,6 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     adminAccountSave: 'Update admin account',
     adminAccountUpdatedMsg: 'Admin account updated',
     adminAccountUpdateFailedMsg: 'Failed to update admin account',
-    uploadImageBtn: 'Upload from device',
     driveLinkBtn: 'Google Drive link',
     driveLinkPrompt: 'Paste a Google Drive share link',
     invalidDriveLinkMsg: 'Invalid Google Drive link',
@@ -892,7 +890,6 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     adminAccountSave: 'Mettre a jour le compte admin',
     adminAccountUpdatedMsg: 'Compte admin mis a jour',
     adminAccountUpdateFailedMsg: 'Echec de mise a jour du compte admin',
-    uploadImageBtn: 'Importer depuis l\'appareil',
     driveLinkBtn: 'Lien Google Drive',
     driveLinkPrompt: 'Collez un lien Google Drive partage',
     invalidDriveLinkMsg: 'Lien Google Drive invalide',
@@ -1537,9 +1534,6 @@ export default function CafeApp() {
   const [orderFilter, setOrderFilter] = useState<OrderStatus | 'all'>('all');
   const [adminAccountForm, setAdminAccountForm] = useState({ email: '', password: '' });
   const [isAdminAccountLoading, setIsAdminAccountLoading] = useState(false);
-  const logoFileRef = useRef<HTMLInputElement | null>(null);
-  const productImageRef = useRef<HTMLInputElement | null>(null);
-  const categoryImageRef = useRef<HTMLInputElement | null>(null);
   
   // Database management states
   const [dbStats, setDbStats] = useState<{orders: number, products: number, categories: number, tables: number, admins: number, oldestOrder: string | null} | null>(null);
@@ -1998,38 +1992,6 @@ export default function CafeApp() {
     return `https://drive.google.com/uc?export=view&id=${fileId}`;
   };
 
-  const handleImageFile = async (file: File, onChange: (url: string) => void) => {
-    if (!file.type.startsWith('image/')) {
-      toast({ title: t('warningTitle'), description: t('imageUploadFailedMsg'), variant: 'destructive' });
-      return;
-    }
-
-    try {
-      toast({ title: '⏳', description: t('imageUploadInProgressMsg') });
-
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const res = await fetch('/api/uploads', {
-        method: 'POST',
-        body: formData
-      });
-
-      if (!res.ok) {
-        throw new Error('Upload failed');
-      }
-
-      const data = await res.json();
-      if (!data?.url) {
-        throw new Error('Upload failed');
-      }
-
-      onChange(data.url);
-      toast({ title: '✅', description: t('imageUploadSuccessMsg') });
-    } catch {
-      toast({ title: t('genericErrorTitle'), description: t('imageUploadFailedMsg'), variant: 'destructive' });
-    }
-  };
 
   const handleDriveLink = async (onChange: (url: string) => void) => {
     if (typeof window === 'undefined') return;
@@ -3678,30 +3640,10 @@ export default function CafeApp() {
                         <button
                           type="button"
                           className="btn btn-secondary btn-sm"
-                          onClick={() => logoFileRef.current?.click()}
-                        >
-                          {t('uploadImageBtn')}
-                        </button>
-                        <button
-                          type="button"
-                          className="btn btn-secondary btn-sm"
                           onClick={() => handleDriveLink((url) => setSettingsForm({ ...settingsForm, logo: url }))}
                         >
                           {t('driveLinkBtn')}
                         </button>
-                        <input
-                          ref={logoFileRef}
-                          type="file"
-                          accept="image/*"
-                          className="sr-only"
-                          onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            if (file) {
-                              handleImageFile(file, (url) => setSettingsForm({ ...settingsForm, logo: url }));
-                            }
-                            e.currentTarget.value = '';
-                          }}
-                        />
                       </div>
                     </div>
                     <div className="settings-field">
@@ -4284,30 +4226,10 @@ export default function CafeApp() {
                     <button
                       type="button"
                       className="btn btn-secondary btn-sm"
-                      onClick={() => productImageRef.current?.click()}
-                    >
-                      {t('uploadImageBtn')}
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-secondary btn-sm"
                       onClick={() => handleDriveLink((url) => setProductForm({ ...productForm, image: url }))}
                     >
                       {t('driveLinkBtn')}
                     </button>
-                    <input
-                      ref={productImageRef}
-                      type="file"
-                      accept="image/*"
-                      className="sr-only"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          handleImageFile(file, (url) => setProductForm({ ...productForm, image: url }));
-                        }
-                        e.currentTarget.value = '';
-                      }}
-                    />
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
@@ -4373,30 +4295,10 @@ export default function CafeApp() {
                     <button
                       type="button"
                       className="btn btn-secondary btn-sm"
-                      onClick={() => categoryImageRef.current?.click()}
-                    >
-                      {t('uploadImageBtn')}
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-secondary btn-sm"
                       onClick={() => handleDriveLink((url) => setCategoryForm({ ...categoryForm, image: url }))}
                     >
                       {t('driveLinkBtn')}
                     </button>
-                    <input
-                      ref={categoryImageRef}
-                      type="file"
-                      accept="image/*"
-                      className="sr-only"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          handleImageFile(file, (url) => setCategoryForm({ ...categoryForm, image: url }));
-                        }
-                        e.currentTarget.value = '';
-                      }}
-                    />
                   </div>
                 </div>
               </div>
