@@ -2003,9 +2003,6 @@ export default function CafeApp() {
     if (!trimmed) return '';
     const driveUrl = normalizeDriveImageUrl(trimmed);
     if (driveUrl) return driveUrl;
-    if (trimmed.startsWith('http://')) {
-      return `https://${trimmed.slice(7)}`;
-    }
     return trimmed;
   };
 
@@ -2017,21 +2014,28 @@ export default function CafeApp() {
       return '';
     }
 
-    try {
-      const response = await fetch(normalized, { method: 'GET' });
-      if (!response.ok) {
+    if (typeof window !== 'undefined') {
+      try {
+        await new Promise<void>((resolve, reject) => {
+          const img = new Image();
+          const timer = window.setTimeout(() => {
+            img.src = '';
+            reject(new Error('timeout'));
+          }, 8000);
+          img.onload = () => {
+            window.clearTimeout(timer);
+            resolve();
+          };
+          img.onerror = () => {
+            window.clearTimeout(timer);
+            reject(new Error('invalid'));
+          };
+          img.src = normalized;
+        });
+      } catch {
         toast({ title: t('warningTitle'), description: t('imageLinkUnreachableMsg'), variant: 'destructive' });
         return '';
       }
-
-      const contentType = response.headers.get('content-type') || '';
-      if (!contentType.startsWith('image/')) {
-        toast({ title: t('warningTitle'), description: t('imageLinkInvalidMsg'), variant: 'destructive' });
-        return '';
-      }
-    } catch {
-      toast({ title: t('warningTitle'), description: t('imageLinkUnreachableMsg'), variant: 'destructive' });
-      return '';
     }
 
     toast({ title: '✅', description: t('imageLinkSetMsg') });
