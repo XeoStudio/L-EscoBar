@@ -14,6 +14,7 @@ export interface Settings {
   phone?: string | null;
   address?: string | null;
   welcomeMessage?: string | null;
+  siteDescription?: string | null;
   acceptOrders: boolean;
   enableTableService: boolean;
   enableDelivery: boolean;

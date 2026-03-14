@@ -13,38 +13,39 @@ datasource db {
 
 // Application settings
 model Settings {
-  id                  String   @id @default(cuid())
-  cafeName            String   @default("L'EscoBar")
-  language            String   @default("ar")
-  currency            String   @default("TND")
-  logo                String?  // Cafe logo
-  primaryColor        String   @default("#6F4E37") // Primary color
-  accentColor         String   @default("#D4A574") // Accent color
-  backgroundColor     String   @default("#FDF8F3") // App background color
-  surfaceColor        String   @default("#FFFFFF") // Card and surface color
-  textPrimaryColor    String   @default("#3D2314") // Primary text color
-  openingHours        String?  @default("08:00") // Opening time
-  closingHours        String?  @default("23:00") // Closing time
-  phone               String?  // Phone number
-  address             String?  // Address
-  welcomeMessage      String?  @default("Welcome to our cafe") // Welcome message
-  acceptOrders        Boolean  @default(true) // Enable/disable orders
-  enableTableService  Boolean  @default(true) // Enable table service
-  enableDelivery      Boolean  @default(false) // Enable delivery service
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  id                 String   @id @default(cuid())
+  cafeName           String   @default("L'EscoBar")
+  language           String   @default("ar")
+  currency           String   @default("TND")
+  logo               String? // Cafe logo
+  primaryColor       String   @default("#6F4E37") // Primary color
+  accentColor        String   @default("#D4A574") // Accent color
+  backgroundColor    String   @default("#FDF8F3") // App background color
+  surfaceColor       String   @default("#FFFFFF") // Card and surface color
+  textPrimaryColor   String   @default("#3D2314") // Primary text color
+  openingHours       String?  @default("08:00") // Opening time
+  closingHours       String?  @default("23:00") // Closing time
+  phone              String? // Phone number
+  address            String? // Address
+  welcomeMessage     String?  @default("Welcome to our cafe") // Welcome message
+  siteDescription    String?  @default("Complete cafe management app for menu, orders, and table operations") // Metadata description
+  acceptOrders       Boolean  @default(true) // Enable/disable orders
+  enableTableService Boolean  @default(true) // Enable table service
+  enableDelivery     Boolean  @default(false) // Enable delivery service
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   @@map("settings")
 }
 
 // Product categories
 model Category {
-  id        String     @id @default(cuid())
+  id        String    @id @default(cuid())
   name      String
   nameAr    String
   image     String?
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   products  Product[]
 
   @@map("categories")
@@ -125,12 +126,12 @@ model OrderItem {
 
 // Order status workflow
 enum OrderStatus {
-  NEW       // New order
-  ACCEPTED  // Accepted
+  NEW // New order
+  ACCEPTED // Accepted
   PREPARING // Preparing
-  READY     // Ready for pickup
-  SERVED    // Served
-  PAID      // Paid
+  READY // Ready for pickup
+  SERVED // Served
+  PAID // Paid
   CANCELLED // Cancelled
 }
 
