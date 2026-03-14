@@ -103,13 +103,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    
-    // Delete order items first
-    await db.orderItem.deleteMany({
-      where: { orderId: id }
-    });
-    
-    // Then delete the order
+    // Then delete the order (order items cascade via relation)
     await db.order.delete({
       where: { id }
     });

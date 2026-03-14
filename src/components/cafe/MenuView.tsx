@@ -197,6 +197,7 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     sending: 'جاري الإرسال...',
     cancel: 'إلغاء',
     loadingShort: 'جاري...',
+    updating: 'جاري التحديث...',
     acceptOrder: 'قبول الطلب',
     startPreparing: 'بدء التحضير',
     prepared: 'تم التحضير',
@@ -474,6 +475,7 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     sending: 'Sending...',
     cancel: 'Cancel',
     loadingShort: 'Loading...',
+    updating: 'Updating...',
     acceptOrder: 'Accept order',
     startPreparing: 'Start preparation',
     prepared: 'Prepared',
@@ -751,6 +753,7 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     sending: 'Envoi en cours...',
     cancel: 'Annuler',
     loadingShort: 'Chargement...',
+    updating: 'Mise à jour...',
     acceptOrder: 'Accepter commande',
     startPreparing: 'Demarrer preparation',
     prepared: 'Preparation terminee',
@@ -1549,6 +1552,7 @@ export default function CafeApp() {
   
   // Submit protection
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [updatingOrderIds, setUpdatingOrderIds] = useState<Set<string>>(new Set());
   const pollingRef = useRef<NodeJS.Timeout | null>(null);
   const customerPollingRef = useRef<NodeJS.Timeout | null>(null);
   const tablePollingRef = useRef<NodeJS.Timeout | null>(null);
@@ -2349,6 +2353,11 @@ export default function CafeApp() {
 
     setOrders((prev) => prev.map((order) => (order.id === orderId ? { ...order, status } : order)));
     setTrackedOrder((prev) => (prev && prev.id === orderId ? { ...prev, status } : prev));
+    setUpdatingOrderIds((prev) => {
+      const next = new Set(prev);
+      next.add(orderId);
+      return next;
+    });
 
     try {
       const res = await fetch(`/api/orders/${orderId}`, {
@@ -2380,6 +2389,12 @@ export default function CafeApp() {
         setTrackedOrder((prev) => (prev && prev.id === orderId ? { ...prev, status: previousTrackedOrderStatus } : prev));
       }
       toast({ title: '❌', description: t('orders'), variant: 'destructive' });
+    } finally {
+      setUpdatingOrderIds((prev) => {
+        const next = new Set(prev);
+        next.delete(orderId);
+        return next;
+      });
     }
   };
 
@@ -3111,6 +3126,7 @@ export default function CafeApp() {
               <div className="space-y-3 mt-4">
                 {filteredOrders.map(order => {
                   const action = STATUS_ACTIONS[order.status];
+                  const isUpdatingOrder = updatingOrderIds.has(order.id);
                   return (
                     <div key={order.id} className="order-group">
                       <div className="order-group-header">
@@ -3119,6 +3135,11 @@ export default function CafeApp() {
                           <span className={`order-status-badge ${STATUS_CLASSES[order.status]}`}>
                             {getStatusLabel(order.status)}
                           </span>
+                          {isUpdatingOrder && (
+                            <span className="text-small text-[var(--text-muted)]">
+                              {t('updating')}
+                            </span>
+                          )}
                         </div>
                         <span className="order-group-time">
                           {new Date(order.createdAt).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })}
@@ -3141,6 +3162,7 @@ export default function CafeApp() {
                           <button
                             className="btn btn-primary flex-1"
                             onClick={() => advanceOrderStatus(order.id, order.status)}
+                            disabled={isUpdatingOrder}
                           >
                             <action.icon className="w-4 h-4" />
                             {getStatusActionLabel(order.status)}
@@ -3149,6 +3171,7 @@ export default function CafeApp() {
                             <button
                               className="btn btn-danger btn-icon"
                               onClick={() => cancelOrder(order.id)}
+                              disabled={isUpdatingOrder}
                             >
                               <X className="w-5 h-5" />
                             </button>
@@ -5154,7 +5177,7 @@ export default function CafeApp() {
                             type="button"
                             className={`order-table-btn ${isSelected ? 'selected' : ''} ${isOccupied ? 'occupied' : ''}`}
                             onClick={() => !isOccupied && setSelectedTableId(table.id)}
-                            disabled={isOccupied}
+                            disabled={isOccupied || isLoadingTablesStatus}
                           >
                             {isOccupied ? (
                               <>
@@ -5228,6 +5251,7 @@ export default function CafeApp() {
               <button
                 className="order-cancel-btn"
                 onClick={() => setShowOrderDialog(false)}
+                disabled={isSubmitting}
               >
                 <X className="w-4 h-4" />
                 <span>{t('cancel')}</span>

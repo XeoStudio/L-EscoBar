@@ -56,7 +56,7 @@ export async function GET() {
 
     return NextResponse.json(tablesWithStatus, {
       headers: {
-        'Cache-Control': 'no-store, max-age=0',
+        'Cache-Control': 'private, max-age=2, stale-while-revalidate=1',
       }
     });
   } catch (error) {

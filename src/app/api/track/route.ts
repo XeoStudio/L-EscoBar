@@ -6,6 +6,8 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const code = searchParams.get('code');
+    const detailsFlag = searchParams.get('details');
+    const includeDetails = detailsFlag === '1' || detailsFlag === 'true';
 
     if (!code) {
       return NextResponse.json({ error: 'Please enter a tracking code' }, { status: 400 });
@@ -16,14 +18,30 @@ export async function GET(request: Request) {
 
     const order = await db.order.findUnique({
       where: { orderCode },
-      include: {
-        table: true,
-        orderItems: {
-          include: {
-            product: true
+      ...(includeDetails
+        ? {
+            include: {
+              table: true,
+              orderItems: {
+                include: {
+                  product: true,
+                },
+              },
+            },
           }
-        }
-      }
+        : {
+            select: {
+              id: true,
+              orderCode: true,
+              tableId: true,
+              tableNumber: true,
+              status: true,
+              total: true,
+              notes: true,
+              createdAt: true,
+              updatedAt: true,
+            },
+          }),
     });
 
     if (!order) {
