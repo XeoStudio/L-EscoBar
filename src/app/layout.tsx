@@ -5,6 +5,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { QueryProvider } from "@/providers/QueryProvider";
 import { db, hasDatabaseConfig } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -29,13 +31,16 @@ export async function generateMetadata(): Promise<Metadata> {
 
   try {
     const settings = await db.settings.findFirst({
-      select: { siteDescription: true },
+      select: { cafeName: true, siteDescription: true },
     });
 
+    const cafeName = settings?.cafeName?.trim();
     const description = settings?.siteDescription?.trim() || DEFAULT_METADATA.description;
+    const title = cafeName ? `${cafeName} - Cafe Management` : DEFAULT_METADATA.title;
 
     return {
       ...DEFAULT_METADATA,
+      title,
       description,
     };
   } catch (error) {
