@@ -34,15 +34,17 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { name, nameAr, description, descriptionAr, price, image, categoryId, available } = body;
+    const { name, nameAr, nameFr, description, descriptionAr, descriptionFr, price, image, categoryId, available } = body;
 
     const product = await db.product.update({
       where: { id },
       data: {
         name,
         nameAr,
+        nameFr,
         description,
         descriptionAr,
+        descriptionFr,
         price: price ? parseFloat(price) : undefined,
         image,
         categoryId,

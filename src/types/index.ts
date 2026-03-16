@@ -14,6 +14,7 @@ export interface Settings {
   phone?: string | null;
   address?: string | null;
   welcomeMessage?: string | null;
+  siteDescription?: string | null;
   acceptOrders: boolean;
   enableTableService: boolean;
   enableDelivery: boolean;
@@ -35,8 +36,10 @@ export interface Product {
   id: string;
   name: string;
   nameAr: string;
+  nameFr?: string | null;
   description?: string | null;
   descriptionAr?: string | null;
+  descriptionFr?: string | null;
   price: number;
   image?: string | null;
   available: boolean;

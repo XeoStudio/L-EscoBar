@@ -28,6 +28,7 @@ model Settings {
   phone              String? // Phone number
   address            String? // Address
   welcomeMessage     String?  @default("Welcome to our cafe") // Welcome message
+  siteDescription    String?  // Metadata description
   acceptOrders       Boolean  @default(true) // Enable/disable orders
   enableTableService Boolean  @default(true) // Enable table service
   enableDelivery     Boolean  @default(false) // Enable delivery service
@@ -55,8 +56,10 @@ model Product {
   id            String      @id @default(cuid())
   name          String
   nameAr        String
+  nameFr        String?
   description   String?
   descriptionAr String?
+  descriptionFr String?
   price         Float
   image         String?
   available     Boolean     @default(true)
