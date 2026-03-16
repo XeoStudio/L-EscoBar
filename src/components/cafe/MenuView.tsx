@@ -210,9 +210,6 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     cafeLogoLabel: 'شعار المقهى (رابط صورة)',
     phoneLabel: 'رقم الهاتف',
     welcomeMessageLabel: 'رسالة الترحيب',
-    siteDescriptionLabel: 'وصف الموقع (لسان المتصفح)',
-    siteDescriptionHelp: 'يظهر في وصف صفحة المتصفح ومحركات البحث.',
-    siteDescriptionPlaceholder: 'وصف قصير للمقهى وخدماته',
     openingHoursSection: 'أوقات العمل',
     openingTime: 'وقت الفتح',
     closingTime: 'وقت الإغلاق',
@@ -491,9 +488,6 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     cafeLogoLabel: 'Cafe logo (image URL)',
     phoneLabel: 'Phone number',
     welcomeMessageLabel: 'Welcome message',
-    siteDescriptionLabel: 'Site description (browser tab)',
-    siteDescriptionHelp: 'Shown as the page description in the browser and search engines.',
-    siteDescriptionPlaceholder: 'Short description of the cafe and services',
     openingHoursSection: 'Opening hours',
     openingTime: 'Opening time',
     closingTime: 'Closing time',
@@ -772,9 +766,6 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     cafeLogoLabel: 'Logo du cafe (URL image)',
     phoneLabel: 'Numero de telephone',
     welcomeMessageLabel: 'Message de bienvenue',
-    siteDescriptionLabel: 'Description du site (onglet navigateur)',
-    siteDescriptionHelp: "Affichee comme description de page dans le navigateur et les moteurs de recherche.",
-    siteDescriptionPlaceholder: 'Description courte du cafe et de ses services',
     openingHoursSection: 'Horaires',
     openingTime: 'Heure d\'ouverture',
     closingTime: 'Heure de fermeture',
@@ -1612,7 +1603,6 @@ export default function CafeApp() {
     phone: '',
     address: '',
     welcomeMessage: '',
-    siteDescription: '',
     acceptOrders: true,
     enableTableService: true,
     enableDelivery: false
@@ -1888,7 +1878,6 @@ export default function CafeApp() {
         phone: data.phone || '',
         address: data.address || '',
         welcomeMessage: data.welcomeMessage || '',
-        siteDescription: data.siteDescription || '',
         acceptOrders: data.acceptOrders ?? true,
         enableTableService: data.enableTableService ?? true,
         enableDelivery: data.enableDelivery ?? false
@@ -3742,17 +3731,6 @@ export default function CafeApp() {
                         value={settingsForm.welcomeMessage}
                         onChange={(e) => setSettingsForm({ ...settingsForm, welcomeMessage: e.target.value })}
                         placeholder={t('welcomePlaceholder')}
-                      />
-                    </div>
-                    <div className="settings-field">
-                      <label className="settings-label">{t('siteDescriptionLabel')}</label>
-                      <p className="settings-help-text">{t('siteDescriptionHelp')}</p>
-                      <textarea
-                        className="settings-input"
-                        rows={3}
-                        value={settingsForm.siteDescription}
-                        onChange={(e) => setSettingsForm({ ...settingsForm, siteDescription: e.target.value })}
-                        placeholder={t('siteDescriptionPlaceholder')}
                       />
                     </div>
                   </div>

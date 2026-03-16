@@ -24,8 +24,7 @@ async function main() {
     data: {
       id: 'settings-1',
       cafeName: "L'EscoBar",
-      currency: 'TND',
-      siteDescription: 'Complete cafe management app for menu, orders, and table operations'
+      currency: 'TND'
     }
   });
   console.log('✅ Settings created');

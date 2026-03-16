@@ -13,7 +13,6 @@ const DEFAULT_SETTINGS = {
   openingHours: '08:00',
   closingHours: '23:00',
   welcomeMessage: 'Welcome to our cafe',
-  siteDescription: "Complete cafe management app for menu, orders, and table operations",
   acceptOrders: true,
   enableTableService: true,
   enableDelivery: false,
@@ -67,7 +66,6 @@ export async function PUT(request: Request) {
       phone,
       address,
       welcomeMessage,
-      siteDescription,
       acceptOrders,
       enableTableService,
       enableDelivery
@@ -93,7 +91,6 @@ export async function PUT(request: Request) {
           phone: phone || null,
           address: address || null,
           welcomeMessage: welcomeMessage || DEFAULT_SETTINGS.welcomeMessage,
-          siteDescription: siteDescription || DEFAULT_SETTINGS.siteDescription,
           acceptOrders: acceptOrders !== undefined ? acceptOrders : DEFAULT_SETTINGS.acceptOrders,
           enableTableService: enableTableService !== undefined ? enableTableService : DEFAULT_SETTINGS.enableTableService,
           enableDelivery: enableDelivery !== undefined ? enableDelivery : DEFAULT_SETTINGS.enableDelivery
@@ -117,7 +114,6 @@ export async function PUT(request: Request) {
           ...(phone !== undefined && { phone }),
           ...(address !== undefined && { address }),
           ...(welcomeMessage !== undefined && { welcomeMessage }),
-          ...(siteDescription !== undefined && { siteDescription }),
           ...(acceptOrders !== undefined && { acceptOrders }),
           ...(enableTableService !== undefined && { enableTableService }),
           ...(enableDelivery !== undefined && { enableDelivery })
