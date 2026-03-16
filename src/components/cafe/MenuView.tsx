@@ -2385,9 +2385,6 @@ export default function CafeApp() {
       
       if (res.ok) {
         toast({ title: '✅', description: t('orders') });
-        if (isAdminAuthenticated) {
-          fetchOrders();
-        }
       } else {
         const data = await res.json();
         if (previousOrder) {
@@ -3191,7 +3188,7 @@ export default function CafeApp() {
                           <button
                             className="btn btn-primary flex-1"
                             onClick={() => advanceOrderStatus(order.id, order.status)}
-                            disabled={isUpdatingOrder}
+                            disabled={updatingOrderIds.has(order.id)}
                           >
                             <action.icon className="w-4 h-4" />
                             {getStatusActionLabel(order.status)}
@@ -3200,7 +3197,7 @@ export default function CafeApp() {
                             <button
                               className="btn btn-danger btn-icon"
                               onClick={() => cancelOrder(order.id)}
-                              disabled={isUpdatingOrder}
+                              disabled={updatingOrderIds.has(order.id)}
                             >
                               <X className="w-5 h-5" />
                             </button>
