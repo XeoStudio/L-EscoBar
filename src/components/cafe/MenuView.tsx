@@ -2722,20 +2722,6 @@ export default function CafeApp() {
     }
     return item.productName;
   };
-  const getProductDisplayName = (product: Product) => {
-    if (language === 'ar') return product.nameAr;
-    return product.name;
-  };
-  const getProductDescription = (product: Product) => {
-    if (language === 'ar') return product.descriptionAr || product.description || '';
-    return product.description || product.descriptionAr || '';
-  };
-  const getOrderItemDisplayName = (item: OrderItem) => {
-    if (item.product) {
-      return language === 'ar' ? item.product.nameAr : item.product.name;
-    }
-    return item.productName;
-  };
 
   useEffect(() => {
     if (typeof document === 'undefined') return;
