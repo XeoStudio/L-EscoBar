@@ -34,7 +34,7 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const { name, nameAr, image } = body;
+    const { name, nameAr, nameFr, image } = body;
 
     if (!name || !nameAr) {
       return NextResponse.json({ error: 'Category name is required' }, { status: 400 });
@@ -44,6 +44,7 @@ export async function POST(request: Request) {
       data: {
         name,
         nameAr,
+        nameFr,
         image
       }
     });

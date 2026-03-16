@@ -43,6 +43,7 @@ model Category {
   id        String    @id @default(cuid())
   name      String
   nameAr    String
+  nameFr    String?
   image     String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt

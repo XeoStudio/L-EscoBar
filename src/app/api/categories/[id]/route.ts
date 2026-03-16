@@ -34,13 +34,14 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { name, nameAr, image } = body;
+    const { name, nameAr, nameFr, image } = body;
 
     const category = await db.category.update({
       where: { id },
       data: {
         name,
         nameAr,
+        nameFr,
         image
       }
     });

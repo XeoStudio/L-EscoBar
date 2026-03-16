@@ -26,6 +26,7 @@ export interface Category {
   id: string;
   name: string;
   nameAr: string;
+  nameFr?: string | null;
   image?: string | null;
   products?: Product[];
   createdAt: string;

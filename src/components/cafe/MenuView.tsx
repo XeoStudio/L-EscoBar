@@ -331,6 +331,7 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     addCategoryTitle: 'إضافة فئة',
     categoryNameArLabel: 'اسم الفئة (عربي)',
     categoryNameEnLabel: 'اسم الفئة (إنجليزي)',
+    categoryNameFrLabel: 'اسم الفئة (فرنسي)',
     addCategoryAction: 'إضافة الفئة',
     editTableTitle: 'تعديل الطاولة',
     addTableTitle: 'إضافة طاولة',
@@ -613,6 +614,7 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     addCategoryTitle: 'Add category',
     categoryNameArLabel: 'Category name (Arabic)',
     categoryNameEnLabel: 'Category name (English)',
+    categoryNameFrLabel: 'Category name (French)',
     addCategoryAction: 'Add category',
     editTableTitle: 'Edit table',
     addTableTitle: 'Add table',
@@ -895,6 +897,7 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     addCategoryTitle: 'Ajouter une categorie',
     categoryNameArLabel: 'Nom de categorie (Arabe)',
     categoryNameEnLabel: 'Nom de categorie (Anglais)',
+    categoryNameFrLabel: 'Nom de categorie (Francais)',
     addCategoryAction: 'Ajouter la categorie',
     editTableTitle: 'Modifier la table',
     addTableTitle: 'Ajouter une table',
@@ -1595,7 +1598,7 @@ export default function CafeApp() {
     price: '', image: '', categoryId: '', available: true
   });
   
-  const [categoryForm, setCategoryForm] = useState({ name: '', nameAr: '', image: '' });
+  const [categoryForm, setCategoryForm] = useState({ name: '', nameAr: '', nameFr: '', image: '' });
   const [tableForm, setTableForm] = useState({ number: '', seats: '4', description: '' });
   const [appLanguage, setAppLanguage] = useState<AppLanguage>(
     () => (typeof window !== 'undefined' ? (resolveLanguage(localStorage.getItem(LANGUAGE_STORAGE_KEY)) || 'ar') : 'ar')
@@ -2538,6 +2541,7 @@ export default function CafeApp() {
         body: JSON.stringify({
           name: categoryForm.name,
           nameAr: categoryForm.nameAr,
+          nameFr: categoryForm.nameFr || null,
           image: categoryForm.image
         })
       });
@@ -2570,7 +2574,7 @@ export default function CafeApp() {
   };
 
   const resetCategoryForm = () => {
-    setCategoryForm({ name: '', nameAr: '', image: '' });
+    setCategoryForm({ name: '', nameAr: '', nameFr: '', image: '' });
     setEditingCategory(null);
   };
 
@@ -2692,8 +2696,31 @@ export default function CafeApp() {
     COLOR_MENU_LABELS[language]?.[optionId] || COLOR_MENU_LABELS.ar[optionId] || optionId;
   const localizedCafeName = settings?.cafeName || "L'EscoBar";
   const getCategoryDisplayName = (category: Category) => {
+    if (!category) return '';
     if (language === 'ar') return category.nameAr;
+    if (language === 'fr') return category.nameFr || category.name;
     return category.name;
+  };
+  const getProductDisplayName = (product: Product) => {
+    if (!product) return '';
+    if (language === 'ar') return product.nameAr;
+    if (language === 'fr') return product.nameFr || product.name;
+    return product.name;
+  };
+  const getProductDescription = (product: Product) => {
+    if (!product) return '';
+    if (language === 'ar') return product.descriptionAr || product.description || '';
+    if (language === 'fr') return product.descriptionFr || product.description || '';
+    return product.description || product.descriptionAr || '';
+  };
+  const getOrderItemDisplayName = (item: OrderItem) => {
+    if (!item) return '';
+    if (item.product) {
+      if (language === 'ar') return item.product.nameAr;
+      if (language === 'fr') return item.product.nameFr || item.product.name;
+      return item.product.name;
+    }
+    return item.productName;
   };
   const getProductDisplayName = (product: Product) => {
     if (language === 'ar') return product.nameAr;
@@ -3249,7 +3276,7 @@ export default function CafeApp() {
                           className="btn btn-ghost btn-icon"
                           onClick={() => {
                             setEditingCategory(category);
-                            setCategoryForm({ name: category.name, nameAr: category.nameAr, image: category.image || '' });
+                            setCategoryForm({ name: category.name, nameAr: category.nameAr, nameFr: category.nameFr || '', image: category.image || '' });
                             setIsCategoryDialogOpen(true);
                           }}
                         >
@@ -4381,6 +4408,15 @@ export default function CafeApp() {
                     className="input"
                     value={categoryForm.name}
                     onChange={(e) => setCategoryForm({ ...categoryForm, name: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label className="label">{t('categoryNameFrLabel')}</label>
+                  <input
+                    type="text"
+                    className="input"
+                    value={categoryForm.nameFr}
+                    onChange={(e) => setCategoryForm({ ...categoryForm, nameFr: e.target.value })}
                   />
                 </div>
                 <div>
