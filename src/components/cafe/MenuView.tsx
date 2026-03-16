@@ -3053,7 +3053,7 @@ export default function CafeApp() {
                     <div key={order.id} className="grouped-list-item">
                       <div className="grouped-list-item-content">
                         <div className="grouped-list-item-title">{t('table')} {order.tableNumber}</div>
-                        <div className="grouped-list-item-subtitle">{order.orderItems.length} {t('productCount')}</div>
+                        <div className="grouped-list-item-subtitle">{(order.orderItems?.length || 0)} {t('productCount')}</div>
                       </div>
                       <span className={`order-status-badge ${STATUS_CLASSES[order.status]}`}>
                         {getStatusLabel(order.status)}
@@ -3146,7 +3146,7 @@ export default function CafeApp() {
                         </span>
                       </div>
                       <div className="order-group-items">
-                        {order.orderItems.map(item => (
+                        {(order.orderItems || []).map(item => (
                           <div key={item.id} className="order-group-item">
                             <span className="order-group-item-name">{getOrderItemDisplayName(item)}</span>
                             <span className="order-group-item-qty">×{item.quantity}</span>
@@ -4833,10 +4833,10 @@ export default function CafeApp() {
                   <div className="track-section-header">
                     <Coffee className="w-4 h-4" />
                     <span>{t('items')}</span>
-                    <span className="track-count-badge">{trackedOrder.orderItems.length}</span>
+                    <span className="track-count-badge">{trackedOrder.orderItems?.length || 0}</span>
                   </div>
                   <div className="track-items">
-                    {trackedOrder.orderItems.map((item) => (
+                    {(trackedOrder.orderItems || []).map((item) => (
                       <div key={item.id} className="track-item">
                         <div className="track-item-info">
                           <span className="track-item-name">{getOrderItemDisplayName(item)}</span>
