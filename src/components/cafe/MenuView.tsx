@@ -192,6 +192,7 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     orderConfirmation: 'تأكيد الطلب',
     tableNumber: 'رقم الطاولة',
     orderNumber: 'رقم الطلب',
+    quantityLabel: 'الكمية',
     noTablesAvailable: 'لا توجد طاولات متاحة',
     blockedTablesHint: 'الطاولات المحجوبة لديها طلبات جارية',
     orderLabel: 'الطلب',
@@ -476,6 +477,7 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     orderConfirmation: 'Order confirmation',
     tableNumber: 'Table number',
     orderNumber: 'Order number',
+    quantityLabel: 'Quantity',
     noTablesAvailable: 'No tables available',
     blockedTablesHint: 'Blocked tables have active orders',
     orderLabel: 'Order',
@@ -760,6 +762,7 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     orderConfirmation: 'Confirmation commande',
     tableNumber: 'Numero de table',
     orderNumber: 'Numero de commande',
+    quantityLabel: 'Quantite',
     noTablesAvailable: 'Aucune table disponible',
     blockedTablesHint: 'Les tables bloquees ont des commandes actives',
     orderLabel: 'Commande',
@@ -3195,6 +3198,8 @@ export default function CafeApp() {
                         ))}
                       </div>
                       <div className="order-group-total">
+                        <span className="order-group-total-label">{t('quantityLabel')}</span>
+                        <span className="order-group-total-value">{getOrderTotalQuantity(order)} {t('orderItemWord')}</span>
                         <span className="order-group-total-label">{t('total')}</span>
                         <span className="order-group-total-value">{order.total.toFixed(2)} {currency}</span>
                       </div>
@@ -4905,7 +4910,7 @@ export default function CafeApp() {
                   <div className="track-section-header">
                     <Coffee className="w-4 h-4" />
                     <span>{t('items')}</span>
-                    <span className="track-count-badge">{trackedOrder.orderItems?.length || 0}</span>
+                    <span className="track-count-badge">{getOrderTotalQuantity(trackedOrder)}</span>
                   </div>
                   <div className="track-items">
                     {(trackedOrder.orderItems || []).map((item) => (
@@ -4920,6 +4925,8 @@ export default function CafeApp() {
                     ))}
                   </div>
                   <div className="track-total">
+                    <span>{t('quantityLabel')}</span>
+                    <span>{getOrderTotalQuantity(trackedOrder)} {t('orderItemWord')}</span>
                     <span>{t('total')}</span>
                     <span>{trackedOrder.total.toFixed(2)} {currency}</span>
                   </div>
