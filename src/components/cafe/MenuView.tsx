@@ -126,6 +126,13 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     manageOrders: 'إدارة الطلبات',
     manageMenu: 'إدارة القائمة',
     recentOrders: 'الطلبات الأخيرة',
+    topRequestedProducts: 'المنتجات الاكثر طلباً',
+    requestCount: 'عدد الطلبات',
+    demandScore: 'درجة الطلب',
+    customerNotes: 'ملاحظات العميل',
+    noCustomerNotes: 'لا توجد ملاحظات',
+    orderNotesLabel: 'ملاحظات الطلب',
+    orderNotesPlaceholder: 'مثال: بيتزا بدون زيتون',
     noOrders: 'لا توجد طلبات',
     noOrdersInFilter: 'لم يتم العثور على طلبات بهذا التصنيف',
     filterAll: 'الكل',
@@ -411,6 +418,13 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     manageOrders: 'Manage orders',
     manageMenu: 'Manage menu',
     recentOrders: 'Recent orders',
+    topRequestedProducts: 'Most requested products',
+    requestCount: 'Order count',
+    demandScore: 'Demand score',
+    customerNotes: 'Customer notes',
+    noCustomerNotes: 'No notes',
+    orderNotesLabel: 'Order notes',
+    orderNotesPlaceholder: 'Example: Pizza without olive',
     noOrders: 'No orders yet',
     noOrdersInFilter: 'No orders found for this filter',
     filterAll: 'All',
@@ -696,6 +710,13 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     manageOrders: 'Gerer commandes',
     manageMenu: 'Gerer menu',
     recentOrders: 'Commandes recentes',
+    topRequestedProducts: 'Produits les plus demandes',
+    requestCount: 'Nombre de commandes',
+    demandScore: 'Score de demande',
+    customerNotes: 'Notes du client',
+    noCustomerNotes: 'Aucune note',
+    orderNotesLabel: 'Notes de commande',
+    orderNotesPlaceholder: 'Exemple: Pizza sans olive',
     noOrders: 'Aucune commande',
     noOrdersInFilter: 'Aucune commande pour ce filtre',
     filterAll: 'Tout',
@@ -1551,6 +1572,7 @@ export default function CafeApp() {
   const [selectedProducts, setSelectedProducts] = useState<Map<string, number>>(new Map());
   const [showOrderDialog, setShowOrderDialog] = useState(false);
   const [selectedTableId, setSelectedTableId] = useState<string>('');
+  const [orderNotes, setOrderNotes] = useState('');
   
   // Admin states
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -2239,6 +2261,7 @@ export default function CafeApp() {
         body: JSON.stringify({
           tableId: selectedTableId,
           tableNumber: table?.number,
+          notes: orderNotes.trim() || null,
           items: items.map(item => ({
             productId: item.product.id,
             quantity: item.quantity
@@ -2258,6 +2281,7 @@ export default function CafeApp() {
         
         setSelectedProducts(new Map());
         setSelectedTableId('');
+        setOrderNotes('');
         setShowOrderDialog(false);
         if (isAdminAuthenticated) {
           fetchOrders();
@@ -2273,6 +2297,7 @@ export default function CafeApp() {
         // Close dialog and show clear message
         setShowOrderDialog(false);
         setSelectedTableId('');
+        setOrderNotes('');
         
         toast({ 
           title: '🚫', 
@@ -2294,7 +2319,7 @@ export default function CafeApp() {
     } finally {
       setIsSubmitting(false);
     }
-  }, [isSubmitting, selectedTableId, selectedProducts, tables, isAdminAuthenticated]);
+  }, [isSubmitting, selectedTableId, selectedProducts, tables, isAdminAuthenticated, orderNotes]);
 
   // Track order by code
   const trackOrder = async (codeOrEvent?: string | React.MouseEvent<HTMLButtonElement>) => {
@@ -3119,6 +3144,38 @@ export default function CafeApp() {
                   )}
                 </div>
               </div>
+
+              {/* Most Requested Products */}
+              <div className="section-card mt-4">
+                <div className="section-card-header">
+                  <div className="section-card-title">
+                    <div className="section-card-title-icon">
+                      <TrendingUp className="w-4 h-4" />
+                    </div>
+                    {t('topRequestedProducts')}
+                  </div>
+                </div>
+                <div className="grouped-list">
+                  {(reports?.topProducts || []).map((product) => (
+                    <div key={product.id} className="grouped-list-item">
+                      <div className="grouped-list-item-content">
+                        <div className="grouped-list-item-title">{product.name}</div>
+                        <div className="grouped-list-item-subtitle">
+                          {product.quantity} {t('orderItemWord')} • {t('requestCount')}: {product.ordersCount}
+                        </div>
+                      </div>
+                      <div className="text-small font-semibold text-[var(--primary)]">
+                        {t('demandScore')}: {product.demandScore}
+                      </div>
+                    </div>
+                  ))}
+                  {(!reports?.topProducts || reports.topProducts.length === 0) && (
+                    <div className="empty-state" style={{ padding: '24px' }}>
+                      <div className="empty-state-title">{t('noProducts')}</div>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           )}
 
@@ -3202,6 +3259,10 @@ export default function CafeApp() {
                             <span className="order-group-item-qty">×{Number(item.quantity) || 0}</span>
                           </div>
                         ))}
+                      </div>
+                      <div className="order-group-total">
+                        <span className="order-group-total-label">{t('customerNotes')}</span>
+                        <span className="order-group-total-value">{order.notes?.trim() || t('noCustomerNotes')}</span>
                       </div>
                       <div className="order-group-total">
                         <span className="order-group-total-label">{t('quantityLabel')}</span>
@@ -4758,6 +4819,7 @@ export default function CafeApp() {
                       className="btn btn-primary btn-lg w-full"
                       onClick={() => {
                         fetchTablesStatus();
+                        setOrderNotes('');
                         setShowOrderDialog(true);
                       }}
                     >
@@ -5232,12 +5294,12 @@ export default function CafeApp() {
       {/* Order Dialog */}
       {showOrderDialog && (
         <>
-          <div className="dialog-overlay" onClick={() => setShowOrderDialog(false)} />
+          <div className="dialog-overlay" onClick={() => { setShowOrderDialog(false); setOrderNotes(''); }} />
           <div className="dialog-content animate-slide-up">
             <div className="dialog-handle" />
             <div className="dialog-header">
               <h2 className="dialog-title">{t('orderConfirmation')}</h2>
-              <button className="btn btn-ghost btn-icon" onClick={() => setShowOrderDialog(false)}>
+              <button className="btn btn-ghost btn-icon" onClick={() => { setShowOrderDialog(false); setOrderNotes(''); }}>
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -5315,6 +5377,17 @@ export default function CafeApp() {
                   <span className="order-total-label">{t('total')}</span>
                   <span className="order-total-value">{getOrderTotal().toFixed(2)} {currency}</span>
                 </div>
+
+                <div className="mt-3">
+                  <label className="label">{t('orderNotesLabel')}</label>
+                  <textarea
+                    className="input"
+                    rows={3}
+                    value={orderNotes}
+                    onChange={(e) => setOrderNotes(e.target.value)}
+                    placeholder={t('orderNotesPlaceholder')}
+                  />
+                </div>
               </div>
             </div>
             
@@ -5339,7 +5412,7 @@ export default function CafeApp() {
               </button>
               <button
                 className="order-cancel-btn"
-                onClick={() => setShowOrderDialog(false)}
+                onClick={() => { setShowOrderDialog(false); setOrderNotes(''); }}
                 disabled={isSubmitting}
               >
                 <X className="w-4 h-4" />

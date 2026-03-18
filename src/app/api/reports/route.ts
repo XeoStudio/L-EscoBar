@@ -55,7 +55,7 @@ export async function GET(request: Request) {
     const uniqueTables = new Set(orders.map(o => o.tableNumber)).size;
 
     // Top-selling products
-    const productSales: Record<string, { name: string; quantity: number; revenue: number }> = {};
+    const productSales: Record<string, { name: string; quantity: number; revenue: number; orders: Set<string> }> = {};
     
     orders.forEach(order => {
       order.orderItems.forEach(item => {
@@ -63,17 +63,30 @@ export async function GET(request: Request) {
           productSales[item.productId] = {
             name: item.productName,
             quantity: 0,
-            revenue: 0
+            revenue: 0,
+            orders: new Set<string>()
           };
         }
         productSales[item.productId].quantity += item.quantity;
         productSales[item.productId].revenue += item.price * item.quantity;
+        productSales[item.productId].orders.add(order.id);
       });
     });
 
     const topProducts = Object.entries(productSales)
-      .map(([id, data]) => ({ id, ...data }))
-      .sort((a, b) => b.quantity - a.quantity)
+      .map(([id, data]) => {
+        const ordersCount = data.orders.size;
+        const demandScore = data.quantity * 2 + ordersCount;
+        return {
+          id,
+          name: data.name,
+          quantity: data.quantity,
+          revenue: data.revenue,
+          ordersCount,
+          demandScore,
+        };
+      })
+      .sort((a, b) => b.demandScore - a.demandScore)
       .slice(0, 5);
 
     // Status distribution

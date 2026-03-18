@@ -141,6 +141,8 @@ export interface Reports {
     name: string;
     quantity: number;
     revenue: number;
+    ordersCount: number;
+    demandScore: number;
   }>;
   ordersByStatus: {
     new: number;
