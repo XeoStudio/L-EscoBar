@@ -1817,106 +1817,6 @@ body {
 }
 
 /* ============================================
-   ORDER GROUP - Professional Order Card
-   ============================================ */
-
-.order-group {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  margin-bottom: 14px;
-  box-shadow: var(--shadow-sm);
-  transition: all 0.2s ease;
-}
-
-.order-group:hover {
-  box-shadow: var(--shadow-md);
-}
-
-.order-group-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 18px 22px;
-  border-bottom: 1px solid var(--border);
-  background: var(--surface-raised);
-}
-
-.order-group-info {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.order-group-table {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-.order-group-time {
-  font-size: 13px;
-  color: var(--text-muted);
-}
-
-.order-group-items {
-  padding: 18px 22px;
-}
-
-.order-group-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.order-group-item:last-child {
-  border-bottom: none;
-}
-
-.order-group-item-name {
-  font-size: 15px;
-  color: var(--text-primary);
-  font-weight: 500;
-}
-
-.order-group-item-qty {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-secondary);
-}
-
-.order-group-total {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 22px;
-  border-top: 1px solid var(--border);
-  background: var(--surface-raised);
-}
-
-.order-group-total-label {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-secondary);
-}
-
-.order-group-total-value {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--primary);
-}
-
-.order-group-actions {
-  padding: 18px 22px;
-  border-top: 1px solid var(--border);
-  display: flex;
-  gap: 12px;
-}
-
-/* ============================================
    CATEGORIES SECTION - Professional Categories
    ============================================ */
 
@@ -3212,21 +3112,44 @@ body {
   overflow: hidden;
   margin-bottom: 14px;
   box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.order-group:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
 .order-group-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  padding: 14px 18px;
+  gap: 12px;
+  padding: 18px 22px;
   background: var(--surface-raised);
   border-bottom: 1px solid var(--border);
 }
 
 .order-group-info {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+}
+
+.order-group-primary {
+  display: flex;
   align-items: center;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.order-group-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .order-group-table {
@@ -3235,20 +3158,33 @@ body {
   color: var(--text-primary);
 }
 
-.order-group-time {
+.order-group-order-number {
   font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+
+.order-group-time {
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
   color: var(--text-muted);
 }
 
 .order-group-items {
-  padding: 12px 18px;
+  padding: 16px 22px;
 }
 
 .order-group-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 0;
+  gap: 12px;
+  padding: 11px 0;
   border-bottom: 1px dashed var(--border);
 }
 
@@ -3257,41 +3193,90 @@ body {
 }
 
 .order-group-item-name {
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 500;
   color: var(--text-primary);
 }
 
 .order-group-item-qty {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
-  color: var(--primary);
+  color: var(--text-secondary);
 }
 
 .order-group-total {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  padding: 12px 18px;
+  gap: 12px;
+  padding: 14px 22px;
   background: var(--surface-raised);
   border-top: 1px solid var(--border);
 }
 
 .order-group-total-label {
   font-size: 14px;
+  font-weight: 600;
   color: var(--text-secondary);
 }
 
 .order-group-total-value {
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 800;
   color: var(--primary);
+}
+
+.order-group-note-value {
+  font-size: 14px;
+  line-height: 1.45;
+  max-width: min(60%, 380px);
+  text-align: end;
+  color: var(--text-primary);
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.order-group-note-value.is-empty {
+  color: var(--text-muted);
+  font-weight: 400;
 }
 
 .order-group-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
-  padding: 12px 18px;
+  padding: 14px 22px;
   border-top: 1px solid var(--border);
+}
+
+.order-group-cooldown-msg {
+  flex-basis: 100%;
+  font-size: 12px;
+  color: var(--warning);
+}
+
+@media (max-width: 640px) {
+  .order-group-header,
+  .order-group-items,
+  .order-group-total,
+  .order-group-actions {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .order-group-time {
+    font-size: 11px;
+  }
+
+  .order-group-total {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .order-group-note-value {
+    max-width: 100%;
+    text-align: start;
+  }
 }
 
 /* ============================================

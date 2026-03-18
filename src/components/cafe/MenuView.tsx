@@ -58,9 +58,10 @@ type AppLanguage = 'ar' | 'en' | 'fr';
 
 const SUPPORTED_LANGUAGES: AppLanguage[] = ['ar', 'en', 'fr'];
 const LANGUAGE_STORAGE_KEY = 'lescobar-language';
-const ADMIN_ORDERS_POLL_INTERVAL_MS = 100;
-const TRACKING_POLL_INTERVAL_MS = 100;
-const TABLE_STATUS_POLL_INTERVAL_MS = 50;
+const ADMIN_ORDERS_POLL_INTERVAL_MS = 3000;
+const TRACKING_POLL_INTERVAL_MS = 3000;
+const TABLE_STATUS_POLL_INTERVAL_MS = 2000;
+const STATUS_CHANGE_COOLDOWN_MS = 2500;
 
 const resolveLanguage = (value: string | null | undefined): AppLanguage | null => {
   if (!value) return null;
@@ -207,6 +208,7 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     cancel: 'إلغاء',
     loadingShort: 'جاري...',
     updating: 'جاري التحديث...',
+    statusUpdateCooldownMsg: 'انتظر قليلا قبل تغيير حالة الطلب مرة اخرى',
     acceptOrder: 'قبول الطلب',
     startPreparing: 'بدء التحضير',
     prepared: 'تم التحضير',
@@ -499,6 +501,7 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     cancel: 'Cancel',
     loadingShort: 'Loading...',
     updating: 'Updating...',
+    statusUpdateCooldownMsg: 'Please wait before changing this order status again',
     acceptOrder: 'Accept order',
     startPreparing: 'Start preparation',
     prepared: 'Prepared',
@@ -791,6 +794,7 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     cancel: 'Annuler',
     loadingShort: 'Chargement...',
     updating: 'Mise à jour...',
+    statusUpdateCooldownMsg: 'Veuillez patienter avant de changer a nouveau le statut de la commande',
     acceptOrder: 'Accepter commande',
     startPreparing: 'Demarrer preparation',
     prepared: 'Preparation terminee',
@@ -1596,6 +1600,7 @@ export default function CafeApp() {
   // Submit protection
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [updatingOrderIds, setUpdatingOrderIds] = useState<Set<string>>(new Set());
+  const [statusCooldownUntil, setStatusCooldownUntil] = useState<Record<string, number>>({});
   const pollingRef = useRef<NodeJS.Timeout | null>(null);
   const customerPollingRef = useRef<NodeJS.Timeout | null>(null);
   const tablePollingRef = useRef<NodeJS.Timeout | null>(null);
@@ -2396,8 +2401,19 @@ export default function CafeApp() {
 
   // Order Status Update
   const updateOrderStatus = async (orderId: string, status: OrderStatus) => {
+    const cooldownUntil = statusCooldownUntil[orderId] || 0;
+    if (Date.now() < cooldownUntil) {
+      toast({ title: t('warningTitle'), description: t('statusUpdateCooldownMsg'), variant: 'destructive' });
+      return;
+    }
+
     const previousOrder = orders.find((order) => order.id === orderId);
     const previousTrackedOrderStatus = trackedOrder?.id === orderId ? trackedOrder.status : null;
+
+    setStatusCooldownUntil((prev) => ({
+      ...prev,
+      [orderId]: Date.now() + STATUS_CHANGE_COOLDOWN_MS,
+    }));
 
     setOrders((prev) => prev.map((order) => (order.id === orderId ? { ...order, status } : order)));
     setTrackedOrder((prev) => (prev && prev.id === orderId ? { ...prev, status } : prev));
@@ -2418,6 +2434,7 @@ export default function CafeApp() {
         toast({ title: '✅', description: t('orders') });
       } else {
         const data = await res.json();
+        setStatusCooldownUntil((prev) => ({ ...prev, [orderId]: 0 }));
         if (previousOrder) {
           setOrders((prev) => prev.map((order) => (order.id === orderId ? { ...order, status: previousOrder.status } : order)));
         }
@@ -2427,6 +2444,7 @@ export default function CafeApp() {
         toast({ title: '❌', description: data.error || t('orders'), variant: 'destructive' });
       }
     } catch {
+      setStatusCooldownUntil((prev) => ({ ...prev, [orderId]: 0 }));
       if (previousOrder) {
         setOrders((prev) => prev.map((order) => (order.id === orderId ? { ...order, status: previousOrder.status } : order)));
       }
@@ -3233,20 +3251,25 @@ export default function CafeApp() {
                 {filteredOrders.map(order => {
                   const action = STATUS_ACTIONS[order.status];
                   const isUpdatingOrder = updatingOrderIds.has(order.id);
+                  const isInStatusCooldown = (statusCooldownUntil[order.id] || 0) > Date.now();
                   return (
                     <div key={order.id} className="order-group">
                       <div className="order-group-header">
                         <div className="order-group-info">
-                          <span className="order-group-table">{t('table')} {order.tableNumber}</span>
-                          <span className="text-small font-semibold text-[var(--text-primary)]">{t('orderNumber')}: {getOrderNumber(order)}</span>
-                          <span className={`order-status-badge ${STATUS_CLASSES[order.status]}`}>
-                            {getStatusLabel(order.status)}
-                          </span>
-                          {isUpdatingOrder && (
-                            <span className="text-small text-[var(--text-muted)]">
-                              {t('updating')}
+                          <div className="order-group-primary">
+                            <span className="order-group-table">{t('table')} {order.tableNumber}</span>
+                            <span className="order-group-order-number">{t('orderNumber')}: {getOrderNumber(order)}</span>
+                          </div>
+                          <div className="order-group-meta">
+                            <span className={`order-status-badge ${STATUS_CLASSES[order.status]}`}>
+                              {getStatusLabel(order.status)}
                             </span>
-                          )}
+                            {isUpdatingOrder && (
+                              <span className="text-small text-[var(--text-muted)]">
+                                {t('updating')}
+                              </span>
+                            )}
+                          </div>
                         </div>
                         <span className="order-group-time">
                           {new Date(order.createdAt).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })}
@@ -3262,7 +3285,7 @@ export default function CafeApp() {
                       </div>
                       <div className="order-group-total">
                         <span className="order-group-total-label">{t('customerNotes')}</span>
-                        <span className="order-group-total-value">{order.notes?.trim() || t('noCustomerNotes')}</span>
+                        <span className={`order-group-note-value ${order.notes?.trim() ? '' : 'is-empty'}`}>{order.notes?.trim() || t('noCustomerNotes')}</span>
                       </div>
                       <div className="order-group-total">
                         <span className="order-group-total-label">{t('quantityLabel')}</span>
@@ -3277,7 +3300,7 @@ export default function CafeApp() {
                           <button
                             className="btn btn-primary flex-1"
                             onClick={() => advanceOrderStatus(order.id, order.status)}
-                            disabled={updatingOrderIds.has(order.id)}
+                            disabled={updatingOrderIds.has(order.id) || isInStatusCooldown}
                           >
                             <action.icon className="w-4 h-4" />
                             {getStatusActionLabel(order.status)}
@@ -3286,10 +3309,13 @@ export default function CafeApp() {
                             <button
                               className="btn btn-danger btn-icon"
                               onClick={() => cancelOrder(order.id)}
-                              disabled={updatingOrderIds.has(order.id)}
+                              disabled={updatingOrderIds.has(order.id) || isInStatusCooldown}
                             >
                               <X className="w-5 h-5" />
                             </button>
+                          )}
+                          {isInStatusCooldown && (
+                            <div className="order-group-cooldown-msg">{t('statusUpdateCooldownMsg')}</div>
                           )}
                         </div>
                       )}
