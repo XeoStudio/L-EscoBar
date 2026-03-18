@@ -191,6 +191,7 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     verifyInProgress: 'جاري التحقق...',
     orderConfirmation: 'تأكيد الطلب',
     tableNumber: 'رقم الطاولة',
+    orderNumber: 'رقم الطلب',
     noTablesAvailable: 'لا توجد طاولات متاحة',
     blockedTablesHint: 'الطاولات المحجوبة لديها طلبات جارية',
     orderLabel: 'الطلب',
@@ -474,6 +475,7 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     verifyInProgress: 'Verifying...',
     orderConfirmation: 'Order confirmation',
     tableNumber: 'Table number',
+    orderNumber: 'Order number',
     noTablesAvailable: 'No tables available',
     blockedTablesHint: 'Blocked tables have active orders',
     orderLabel: 'Order',
@@ -757,6 +759,7 @@ const UI_TEXT: Record<AppLanguage, Record<string, string>> = {
     verifyInProgress: 'Verification...',
     orderConfirmation: 'Confirmation commande',
     tableNumber: 'Numero de table',
+    orderNumber: 'Numero de commande',
     noTablesAvailable: 'Aucune table disponible',
     blockedTablesHint: 'Les tables bloquees ont des commandes actives',
     orderLabel: 'Commande',
@@ -2719,6 +2722,15 @@ export default function CafeApp() {
     }
     return item.productName;
   };
+  const getOrderTotalQuantity = (order: Order) => {
+    if (!order?.orderItems || !Array.isArray(order.orderItems)) return 0;
+    return order.orderItems.reduce((sum, item) => sum + (item?.quantity || 0), 0);
+  };
+  const getOrderNumber = (order: Order) => {
+    if (!order) return '';
+    if (order.orderCode && order.orderCode.trim()) return order.orderCode;
+    return `#${order.id.slice(-6).toUpperCase()}`;
+  };
 
   useEffect(() => {
     if (typeof document === 'undefined') return;
@@ -3079,7 +3091,8 @@ export default function CafeApp() {
                     <div key={order.id} className="grouped-list-item">
                       <div className="grouped-list-item-content">
                         <div className="grouped-list-item-title">{t('table')} {order.tableNumber}</div>
-                        <div className="grouped-list-item-subtitle">{(order.orderItems?.length || 0)} {t('productCount')}</div>
+                        <div className="grouped-list-item-subtitle">{t('orderNumber')}: {getOrderNumber(order)}</div>
+                        <div className="grouped-list-item-subtitle">{getOrderTotalQuantity(order)} {t('orderItemWord')}</div>
                       </div>
                       <span className={`order-status-badge ${STATUS_CLASSES[order.status]}`}>
                         {getStatusLabel(order.status)}
@@ -3158,6 +3171,8 @@ export default function CafeApp() {
                       <div className="order-group-header">
                         <div className="order-group-info">
                           <span className="order-group-table">{t('table')} {order.tableNumber}</span>
+                          <span className="text-small font-semibold text-[var(--text-primary)]">{t('orderNumber')}: {getOrderNumber(order)}</span>
+                          <span className="text-small text-[var(--text-secondary)]">{getOrderTotalQuantity(order)} {t('orderItemWord')}</span>
                           <span className={`order-status-badge ${STATUS_CLASSES[order.status]}`}>
                             {getStatusLabel(order.status)}
                           </span>
