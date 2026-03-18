@@ -1977,7 +1977,7 @@ export default function CafeApp() {
 
     isFetchingOrdersRef.current = true;
     try {
-      const res = await fetch('/api/orders', { cache: 'no-store' });
+      const res = await fetch('/api/orders?details=1', { cache: 'no-store' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       setOrders(Array.isArray(data) ? data : []);
@@ -2725,9 +2725,16 @@ export default function CafeApp() {
     }
     return item.productName;
   };
-  const getOrderTotalQuantity = (order: Order) => {
+  const getOrderTotalQuantity = (order: Order | null | undefined) => {
     if (!order?.orderItems || !Array.isArray(order.orderItems)) return 0;
-    return order.orderItems.reduce((sum, item) => sum + (item?.quantity || 0), 0);
+    return order.orderItems.reduce((sum, item) => {
+      const quantity = Number(item?.quantity);
+      return sum + (Number.isFinite(quantity) && quantity > 0 ? quantity : 0);
+    }, 0);
+  };
+  const toSafeNumber = (value: unknown) => {
+    const numericValue = Number(value);
+    return Number.isFinite(numericValue) ? numericValue : 0;
   };
   const getOrderNumber = (order: Order) => {
     if (!order) return '';
@@ -3175,7 +3182,6 @@ export default function CafeApp() {
                         <div className="order-group-info">
                           <span className="order-group-table">{t('table')} {order.tableNumber}</span>
                           <span className="text-small font-semibold text-[var(--text-primary)]">{t('orderNumber')}: {getOrderNumber(order)}</span>
-                          <span className="text-small text-[var(--text-secondary)]">{getOrderTotalQuantity(order)} {t('orderItemWord')}</span>
                           <span className={`order-status-badge ${STATUS_CLASSES[order.status]}`}>
                             {getStatusLabel(order.status)}
                           </span>
@@ -3193,15 +3199,17 @@ export default function CafeApp() {
                         {(order.orderItems || []).map(item => (
                           <div key={item.id} className="order-group-item">
                             <span className="order-group-item-name">{getOrderItemDisplayName(item)}</span>
-                            <span className="order-group-item-qty">×{item.quantity}</span>
+                            <span className="order-group-item-qty">×{Number(item.quantity) || 0}</span>
                           </div>
                         ))}
                       </div>
                       <div className="order-group-total">
                         <span className="order-group-total-label">{t('quantityLabel')}</span>
                         <span className="order-group-total-value">{getOrderTotalQuantity(order)} {t('orderItemWord')}</span>
+                      </div>
+                      <div className="order-group-total">
                         <span className="order-group-total-label">{t('total')}</span>
-                        <span className="order-group-total-value">{order.total.toFixed(2)} {currency}</span>
+                        <span className="order-group-total-value">{toSafeNumber(order.total).toFixed(2)} {currency}</span>
                       </div>
                       {action && (
                         <div className="order-group-actions">
@@ -4919,16 +4927,18 @@ export default function CafeApp() {
                           <span className="track-item-name">{getOrderItemDisplayName(item)}</span>
                           <span className="track-item-price">{item.price} {currency}</span>
                         </div>
-                        <span className="track-item-qty">×{item.quantity}</span>
-                        <span className="track-item-total">{(item.price * item.quantity).toFixed(2)}</span>
+                        <span className="track-item-qty">×{Number(item.quantity) || 0}</span>
+                        <span className="track-item-total">{(item.price * (Number(item.quantity) || 0)).toFixed(2)}</span>
                       </div>
                     ))}
                   </div>
                   <div className="track-total">
                     <span>{t('quantityLabel')}</span>
                     <span>{getOrderTotalQuantity(trackedOrder)} {t('orderItemWord')}</span>
+                  </div>
+                  <div className="track-total">
                     <span>{t('total')}</span>
-                    <span>{trackedOrder.total.toFixed(2)} {currency}</span>
+                    <span>{toSafeNumber(trackedOrder.total).toFixed(2)} {currency}</span>
                   </div>
                 </div>
 
